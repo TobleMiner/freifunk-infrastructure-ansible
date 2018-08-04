@@ -1,0 +1,13 @@
+---
+- name: Ensure build-firewall script is installed
+  copy:
+    src: usr/local/bin/build-firewall
+    dest: /usr/local/bin/build-firewall
+    mode: 0755
+
+- name: Ensure firewall rules are deployed
+  template:
+    src: src={{ item }}
+    dest: /etc/iptables.d/{{ item | basename | regex_replace('\.j2','') }}
+    with_fileglob:
+      - ../templates/etc/iptables.d/

@@ -1,0 +1,7 @@
+---
+- name: setup gateways
+  hosts: debian9-ansible
+  roles:
+    - common
+    - gateway
+  tags: gateway

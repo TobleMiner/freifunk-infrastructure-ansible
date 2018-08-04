@@ -1,0 +1,6 @@
+---
+# This role configures the basic, always required interfaces
+- name: ensure bridge interface is present
+  template:
+    src: etc/network/interfaces.d/bridge.j2
+    dest: /etc/network/interfaces.d/br-{{ site.code }}

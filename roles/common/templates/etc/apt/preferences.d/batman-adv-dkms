@@ -1,0 +1,3 @@
+Package: batman-adv-dkms
+Pin: version {{ batman.version }}
+Pin-Priority: 1000

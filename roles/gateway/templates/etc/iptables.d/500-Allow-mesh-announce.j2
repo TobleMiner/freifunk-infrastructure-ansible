@@ -1,0 +1,2 @@
+ip46tables -A bat-input -p udp -m udp --dport 1001 -m comment --comment respondd -j ACCEPT
+ip46tables -A mesh-input -p udp -m udp --dport 1001 -m comment --comment respondd -j ACCEPT

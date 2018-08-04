@@ -1,0 +1,4 @@
+# Allow Service named
+ip46tables -A mesh-input -p udp -m udp --dport 53 -j ACCEPT -m comment --comment 'named'
+ip46tables -A mesh-input -p tcp -m tcp --dport 53 -j ACCEPT -m comment --comment 'named'
+    

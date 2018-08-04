@@ -1,0 +1,6 @@
+---
+mesh:
+  mac: 'de:ad:be:ef:ff:00'
+  address: # TODO: multiple adresses?
+    ipv4: '10.100.100.1/24'
+    ipv6: 'fd02:4242:4242::1/48'

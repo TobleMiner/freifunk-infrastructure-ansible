@@ -1,0 +1,5 @@
+---
+- name: Create interface file
+  template:
+    src: batman-interface.j2
+    dest: /etc/network/interfaces.d/bat-{{ name }}

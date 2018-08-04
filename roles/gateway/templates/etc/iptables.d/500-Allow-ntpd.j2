@@ -1,0 +1,4 @@
+# Allow Service ntpd
+rate_limit46 "ntpd" 3600 10 -A mesh-input -p udp -m udp --dport 123
+ip46tables -A mesh-input -p udp -m udp --dport 123 -j ACCEPT -m comment --comment 'ntpd'
+    

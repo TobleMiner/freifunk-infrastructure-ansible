@@ -1,0 +1,24 @@
+---
+# Repos
+- name: Ensure universefactory debian repo is present
+  copy:
+    src: etc/apt/sources.list.d/repo.universe-factory.list
+    dest: /etc/apt/sources.list.d/repo.universe-factory.list
+
+# Pins
+
+- name: Ensure apt pins are in place
+  copy:
+    src: etc/apt/sources.list.d/repo.universe-factory.list
+    dest: /etc/apt/sources.list.d/repo.universe-factory.list
+
+# Packages
+- name: Ensure packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+    - bridge-utils
+    - batman-adv-dkms
+    - batctl

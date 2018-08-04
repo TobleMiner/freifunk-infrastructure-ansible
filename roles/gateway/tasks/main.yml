@@ -1,0 +1,16 @@
+---
+- name: Setup iproute2 related stuff
+  import_tasks: iproute2.yml
+  tags: iproute2
+
+#- name: Install required packages
+#  import_tasks: packages.yml
+#  tags: packages
+
+- name: Setup interfaces
+  import_tasks: interfaces.yml
+  tags: interfaces
+
+- name: Setup firewall
+  import_tasks: firewall.yml
+  tags: firewall
