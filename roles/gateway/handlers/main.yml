@@ -34,3 +34,8 @@
   service:
     name: isc-dhcp-server
     state: restarted
+
+- name: restart unbound
+  service:
+    name: unbound
+    state: restarted
