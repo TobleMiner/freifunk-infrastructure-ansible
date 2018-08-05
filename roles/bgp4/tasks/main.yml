@@ -1,0 +1,63 @@
+---
+- name: Ensure bird is installed
+  apt:
+    name: bird
+    state: present
+  notify:
+    - restart bird
+  tags: bgp4
+
+- name: Ensure bird config directory exists
+  file:
+    path: /etc/bird/bird4.conf.d
+    state: directory
+  notify:
+    - restart bird
+  tags: bgp4
+
+- name: Ensure bird peer directory exists
+  file:
+    path: /etc/bird/bird4.peers.d
+    state: directory
+  notify:
+    - restart bird
+  tags: bgp4
+
+- name: Ensure bird config exists
+  template:
+    src: etc/bird/bird.conf
+    dest: /etc/bird/bird.conf
+  notify:
+    - configure bird
+  tags: bgp4
+
+- name: Ensure bird mesh peering config exists
+  template:
+    src: "{{ 'etc/bird/bird4.peers.d/{{ site.code }}.conf' }}"
+    dest: "/etc/bird/bird4.peers.d/{{ site.code }}.conf"
+  notify:
+    - configure bird
+  tags: bgp4
+
+- name: Ensure bird mesh config exists
+  template:
+    src: "{{ 'etc/bird/bird4.conf.d/{{ site.code }}.conf' }}"
+    dest: "/etc/bird/bird4.conf.d/{{ site.code }}.conf"
+  notify:
+    - configure bird
+  tags: bgp4
+
+- name: Ensure firewall allows bgp traffic
+  copy:
+    src: etc/iptables.d/500-Allow-bird-ipv4
+    dest: /etc/iptables.d/500-Allow-bird-ipv4
+  notify:
+    - restart firewall
+  tags: bgp4
+
+- name: Ensure bird service is enabled
+  service:
+    name: bird
+    enabled: yes
+    state: started
+  tags: bgp4

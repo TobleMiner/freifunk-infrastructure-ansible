@@ -1,0 +1,8 @@
+---
+- name: restart bird
+  service:
+    name: bird
+    state: restarted
+
+- name: configure bird
+  shell: birdc configure || systemctl restart bird
