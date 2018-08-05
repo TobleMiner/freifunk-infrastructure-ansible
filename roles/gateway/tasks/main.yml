@@ -22,3 +22,7 @@
 - name: Setup radvd
   import_tasks: radvd.yml
   tags: radvd, network
+
+- name: Setup mesh-announce
+  import_tasks: mesh-announce.yml
+  tags: mesh-announce, respondd

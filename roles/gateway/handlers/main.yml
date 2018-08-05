@@ -24,3 +24,8 @@
 
 - name: reload sysctl
   shell: sysctl --system
+
+- name: restart respondd
+  service:
+    name: respondd
+    state: restarted

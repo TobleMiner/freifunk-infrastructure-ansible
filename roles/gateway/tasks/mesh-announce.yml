@@ -1,0 +1,24 @@
+---
+- name: Ensure mesh-announce target directory exists
+  file:
+    path: /opt/mesh-announce
+    state: directory
+
+- name: Ensure mesh-announce is installed
+  git:
+    repo: https://github.com/ffnord/mesh-announce.git
+    dest: /opt/mesh-announce
+  notify:
+    - restart respondd
+
+- name: Ensure mesh-announce service file is installed
+  template:
+    src: etc/systemd/system/respondd.service
+    dest: /etc/systemd/system/respondd.service
+  notify:
+    - restart respondd
+
+- name: Ensure mesh-announce service is enabled
+  service:
+    name: respondd
+    enabled: yes

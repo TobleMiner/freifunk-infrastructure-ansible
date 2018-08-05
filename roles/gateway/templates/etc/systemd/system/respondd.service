@@ -1,0 +1,10 @@
+[Unit]
+Description=Respondd
+
+[Service]
+ExecStart=/opt/mesh-announce/respondd.py -d /opt/mesh-announce/providers -i br-{{ site.code }} -i mvpn-{{ site.code }} -b bat-{{ site.code }} -m {{ interface.mesh_bridge.address.ipv4 }}
+Restart=always
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target
