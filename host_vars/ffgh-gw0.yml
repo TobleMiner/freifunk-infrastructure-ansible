@@ -1,0 +1,20 @@
+---
+interface:
+  wan:
+    name: ens3
+
+  batman:
+    mac: 'de:ad:be:ef:ff:00'
+
+  mesh_bridge:
+    address: # TODO: multiple adresses?
+      ipv4: '10.100.10.1/16'
+      ipv6: 'fd2c:2342:1337::ff00/48'
+    dhcp_range:
+      start: 10.100.10.10
+      end:   10.100.10.254
+
+mesh_vpn:
+  key:
+    private: a855738f7c860bb1a9bd23428aacb46faea1691b6f9b01788092e66d91c9e24e
+    public:  df71896d986b59f34a171e546a212af2a92781e052230880a92bbed22614f87b

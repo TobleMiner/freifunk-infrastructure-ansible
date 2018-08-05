@@ -1,6 +1,6 @@
 ---
 - name: setup gateways
-  hosts: debian9-ansible
+  hosts: gateways
   roles:
     - gateway
     - mesh_vpn
