@@ -39,3 +39,8 @@
   service:
     name: unbound
     state: restarted
+
+- name: restart ntp
+  service:
+    name: ntp
+    state: restarted

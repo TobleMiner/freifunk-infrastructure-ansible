@@ -1,0 +1,20 @@
+---
+- name: Ensure ntp is installed
+  apt:
+    name: ntp
+    state: present
+  notify:
+    - restart ntp
+
+- name: Ensure ntp configuration is present
+  template:
+    src: etc/ntp.conf
+    dest: /etc/ntp.conf
+  notify:
+    - restart ntp
+
+- name: Ensure ntp service is enabled and started
+  service:
+    name: ntp
+    enabled: yes
+    state: started
