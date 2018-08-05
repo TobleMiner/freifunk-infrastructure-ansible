@@ -1,0 +1,15 @@
+{% set mesh_ipv4 = interface.mesh_bridge.address.ipv4 | ipaddr('address') %}
+subnet {{ site.mesh.network.ipv4 | ipaddr('network') }} netmask {{ site.mesh.network.ipv4 | ipaddr('netmask') }} {
+  authoritative;
+  range {{ interface.mesh_bridge.dhcp_range.start }} {{ interface.mesh_bridge.dhcp_range.end }};
+  
+  {% if site.tld is defined %}
+  option domain-name "{{ site.tld }}";
+  {% else %}
+  option domain-name "{{ site.code }}";
+  {% endif %}
+  option domain-name-servers {{ mesh_ipv4 }}, {{ mesh_ipv4 }};
+
+  option ntp-servers {{ mesh_ipv4 }};
+  option routers {{ mesh_ipv4 }};
+}

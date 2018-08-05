@@ -1,15 +1,16 @@
 ---
 site:
   code: ffgh
+  tld:  ffgh # optinal, defaults to code
   mesh:
     network:
       ipv4: 10.100.100.0/24 
       ipv6: fd02:4242:4242::/48
-    network_dynamic_clients:
+    network_dynamic_clients: # optional, defaults to network.ipv6
       ipv6: fd02:4242:4242::/64
 
   mesh_vpn:
-    peer_limit: 100
+    peer_limit: 100 # optional, defaults to no limit
     mtu: 1280
     key_git: git://git.freifunk.in-kiel.de/fastd-peer-keys.git
 

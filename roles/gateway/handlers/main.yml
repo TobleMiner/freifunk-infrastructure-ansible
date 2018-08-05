@@ -29,3 +29,8 @@
   service:
     name: respondd
     state: restarted
+
+- name: restart dhcpd
+  service:
+    name: isc-dhcp-server
+    state: restarted

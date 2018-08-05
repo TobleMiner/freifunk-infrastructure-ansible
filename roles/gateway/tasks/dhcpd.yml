@@ -1,0 +1,38 @@
+---
+- name: Ensure dhcpd is installed
+  apt:
+    name: isc-dhcp-server
+    state: present
+  notify:
+    - restart dhcpd
+
+- name: Ensure dhcpd config directory exists
+  file:
+    path: /etc/dhcp/dhcpd.conf.d
+    state: directory
+
+- name: Ensure dhcpd config is in place
+  template:
+    src: etc/dhcp/dhcpd.conf
+    dest: /etc/dhcp/dhcpd.conf
+  notify:
+    - restart dhcpd
+
+- name: Ensure dhcpd mesh bridge config is in place
+  template:
+    src: "{{ 'etc/dhcp/dhcpd.conf.d/interface_br-{{ site.code }}.conf.j2' }}"
+    dest: /etc/dhcp/dhcpd.conf.d/interface_br-{{ site.code }}.conf
+  notify:
+    - restart dhcpd
+
+- name: Ensure dhcpd interface config is in place
+  template:
+    src: etc/default/isc-dhcp-server
+    dest: /etc/default/isc-dhcp-server
+  notify:
+    - restart dhcpd
+
+- name: Ensure dhcpd service is enabled
+  service:
+    name: isc-dhcp-server
+    enabled: yes

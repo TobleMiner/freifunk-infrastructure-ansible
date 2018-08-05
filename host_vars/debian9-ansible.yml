@@ -10,6 +10,9 @@ interface:
     address: # TODO: multiple adresses?
       ipv4: '10.100.100.1/24'
       ipv6: 'fd02:4242:4242::1/48'
+    dhcp_range:
+      start: 10.100.100.100
+      end:   10.100.100.250
 
 mesh_vpn:
   key:
