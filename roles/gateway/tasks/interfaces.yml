@@ -50,9 +50,7 @@
     kversion: "{{ batman.version | regex_replace('-[0-9]+$','') }}"
   shell: |
     batman_version="$(modinfo batman_adv | grep '^version' | tr -d ' ' | cut -d: -f2)"
-    echo "[ "$batman_version" == "{{ kversion }}" ] && echo version ok && exit 0" > /tmp/batman_query
-    [ "$batman_version" == "{{ kversion }}" ] && echo version ok && exit 0
-    echo check failed > /tmp/batman_updated
+    [ "$batman_version" = "{{ kversion }}" ] && echo version ok && exit 0
     dkms uninstall --force batman-adv/{{ kversion }} || true
     modinfo batman-adv | grep -i '^filename' | tr -d ' ' | cut -d: -f2 | xargs rm
     dkms install --force batman-adv/{{ kversion }}
