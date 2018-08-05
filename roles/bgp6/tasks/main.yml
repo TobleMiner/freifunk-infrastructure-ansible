@@ -5,6 +5,7 @@
     state: present
   notify:
     - restart bird6
+  tags: bgp6
 
 - name: Ensure bird6 config directory exists
   file:
@@ -12,6 +13,15 @@
     state: directory
   notify:
     - restart bird6
+  tags: bgp6
+
+- name: Ensure bird6 peer directory exists
+  file:
+    path: /etc/bird/bird6.peers.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bgp6
 
 - name: Ensure bird6 config exists
   template:
@@ -19,6 +29,23 @@
     dest: /etc/bird/bird6.conf
   notify:
     - configure bird6
+  tags: bgp6
+
+- name: Ensure bird6 mesh peering config exists
+  template:
+    src: "{{ 'etc/bird/bird6.peers.d/{{site.code}}.conf' }}"
+    dest: "/etc/bird/bird6.peers.d/{{site.code}}.conf"
+  notify:
+    - configure bird6
+  tags: bgp6
+
+- name: Ensure bird6 mesh config exists
+  template:
+    src: "{{ 'etc/bird/bird6.conf.d/{{site.code}}.conf' }}"
+    dest: "/etc/bird/bird6.conf.d/{{site.code}}.conf"
+  notify:
+    - configure bird6
+  tags: bgp6
 
 - name: Ensure firewall allows bgp traffic
   copy:
@@ -26,8 +53,10 @@
     dest: /etc/iptables.d/500-Allow-bird 
   notify:
     - restart firewall
+  tags: bgp6
 
 - name: Ensure bird6 service is enabled
   service:
     name: bird6
     enabled: yes
+  tags: bgp6

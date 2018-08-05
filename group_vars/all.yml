@@ -14,5 +14,8 @@ site:
     mtu: 1280
     key_git: https://github.com/TobleMiner/ffgh-fastd-peers.git
 
+  bgp:
+    as: 65525
+
 batman:
   version: 2013.4.0-11
