@@ -1,9 +1,16 @@
 ---
+# Prerequisites
+- name: Ensure git is installed
+  apt:
+    name: git
+    state: present
+
 - name: Ensure mesh-announce target directory exists
   file:
     path: /opt/mesh-announce
     state: directory
 
+# Git clone
 - name: Ensure mesh-announce is installed
   git:
     repo: https://github.com/ffnord/mesh-announce.git
@@ -11,6 +18,7 @@
   notify:
     - restart respondd
 
+# Service setup
 - name: Ensure mesh-announce service file is installed
   template:
     src: etc/systemd/system/respondd.service

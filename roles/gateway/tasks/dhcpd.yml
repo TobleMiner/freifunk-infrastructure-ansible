@@ -32,7 +32,8 @@
   notify:
     - restart dhcpd
 
-- name: Ensure dhcpd service is enabled
+- name: Ensure dhcpd service is enabled and started
   service:
     name: isc-dhcp-server
     enabled: yes
+    state: started

@@ -45,7 +45,8 @@
   shell: /usr/local/bin/update-fastd-keys "{{ site.mesh_vpn.key_git }}" "/etc/fastd/mvpn-{{ site.code }}/peers"
 
 # Service
-- name: Ensure fastd service is enabled
+- name: Ensure fastd service is enabled and started
   service:
     name: fastd
     enabled: yes
+    state: started

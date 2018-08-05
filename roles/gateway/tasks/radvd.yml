@@ -17,3 +17,4 @@
   service:
     name: radvd
     enabled: yes
+    state: started

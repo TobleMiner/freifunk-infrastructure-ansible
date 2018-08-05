@@ -12,7 +12,8 @@
   notify:
     - restart unbound
 
-- name: Ensure unbound service is enabled
+- name: Ensure unbound service is enabled and started
   service:
     name: unbound
     enabled: yes
+    state: started

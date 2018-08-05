@@ -1,4 +1,9 @@
 ---
+- name: Ensure netfilter-persistent is installed
+  apt:
+    name: netfilter-persistent
+    state: present
+
 - name: Ensure build-firewall script is installed
   copy:
     src: usr/local/bin/build-firewall
@@ -28,7 +33,8 @@
   notify:
     - restart firewall
 
-- name: Ensure iptables service is enabled
+- name: Ensure iptables service is enabled and started
   service:
     name: iptables
     enabled: yes
+    state: started
