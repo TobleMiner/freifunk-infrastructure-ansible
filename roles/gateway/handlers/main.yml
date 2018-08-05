@@ -16,3 +16,8 @@
     ifdown bat-{{ site.code }} || ip link set down bat-{{ site.code }} || true
     ifup bat-{{ site.code }}
   listen: 'restart network'
+
+- name: restart radvd
+  service:
+    name: radvd
+    state: restarted

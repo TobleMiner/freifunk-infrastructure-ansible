@@ -1,0 +1,12 @@
+---
+- name: Ensure radvd config is in place
+  template:
+    src: etc/radvd.conf
+    dest: /etc/radvd.conf
+  notify:
+    - restart radvd
+
+- name: Ensure radvd service is enabled
+  service:
+    name: radvd
+    enabled: yes

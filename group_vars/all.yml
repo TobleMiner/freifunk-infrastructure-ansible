@@ -5,6 +5,8 @@ site:
     network:
       ipv4: 10.100.100.0/24 
       ipv6: fd02:4242:4242::/48
+    network_dynamic_clients:
+      ipv6: fd02:4242:4242::/64
 
   mesh_vpn:
     peer_limit: 100

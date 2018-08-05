@@ -14,3 +14,7 @@
 - name: Setup interfaces
   import_tasks: interfaces.yml
   tags: interfaces, network
+
+- name: Setup radvd
+  import_tasks: radvd.yml
+  tags: radvd, network
