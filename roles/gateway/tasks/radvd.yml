@@ -1,4 +1,11 @@
 ---
+- name: Ensure radvd is installed
+  apt:
+    name: radvd
+    state: present
+  notify:
+    - restart radvd
+
 - name: Ensure radvd config is in place
   template:
     src: etc/radvd.conf
