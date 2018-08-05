@@ -33,24 +33,24 @@
 
 - name: Ensure bird6 mesh peering config exists
   template:
-    src: "{{ 'etc/bird/bird6.peers.d/{{site.code}}.conf' }}"
-    dest: "/etc/bird/bird6.peers.d/{{site.code}}.conf"
+    src: "{{ 'etc/bird/bird6.peers.d/{{ site.code }}.conf' }}"
+    dest: "/etc/bird/bird6.peers.d/{{ site.code }}.conf"
   notify:
     - configure bird6
   tags: bgp6
 
 - name: Ensure bird6 mesh config exists
   template:
-    src: "{{ 'etc/bird/bird6.conf.d/{{site.code}}.conf' }}"
-    dest: "/etc/bird/bird6.conf.d/{{site.code}}.conf"
+    src: "{{ 'etc/bird/bird6.conf.d/{{ site.code }}.conf' }}"
+    dest: "/etc/bird/bird6.conf.d/{{ site.code }}.conf"
   notify:
     - configure bird6
   tags: bgp6
 
 - name: Ensure firewall allows bgp traffic
   copy:
-    src: etc/iptables.d/500-Allow-bird
-    dest: /etc/iptables.d/500-Allow-bird 
+    src: etc/iptables.d/500-Allow-bird-ipv6
+    dest: /etc/iptables.d/500-Allow-bird-ipv6
   notify:
     - restart firewall
   tags: bgp6
@@ -59,4 +59,5 @@
   service:
     name: bird6
     enabled: yes
+    state: started
   tags: bgp6

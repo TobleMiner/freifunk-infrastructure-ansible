@@ -1,0 +1,2 @@
+# Allow Service bird
+ip6tables -A mesh-input -p tcp -m tcp --dport 179 -j ACCEPT -m comment --comment 'bird'
