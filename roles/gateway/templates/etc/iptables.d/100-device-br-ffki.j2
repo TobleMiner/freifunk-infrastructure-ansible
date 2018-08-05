@@ -1,5 +1,0 @@
-# Process packages from device br-ffki
-ip46tables -A input -i br-ffki -j mesh-input
-ip6tables -A forward -o br-ffki -j ffki-mss-clamp
-ip46tables -A forward -i br-ffki -j mesh-forward
-    

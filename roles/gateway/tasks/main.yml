@@ -1,16 +1,20 @@
 ---
 - name: Setup iproute2 related stuff
   import_tasks: iproute2.yml
-  tags: iproute2
+  tags: iproute2, network
 
-#- name: Install required packages
-#  import_tasks: packages.yml
-#  tags: packages
-
-- name: Setup interfaces
-  import_tasks: interfaces.yml
-  tags: interfaces
+- name: Install required packages
+  import_tasks: packages.yml
+  tags: packages
 
 - name: Setup firewall
   import_tasks: firewall.yml
-  tags: firewall
+  tags: firewall, network
+
+- name: Setup interfaces
+  import_tasks: interfaces.yml
+  tags: interfaces, network
+
+- name: Setup bird6
+  import_tasks: bird6.yml
+  tags: bird6, network, bird

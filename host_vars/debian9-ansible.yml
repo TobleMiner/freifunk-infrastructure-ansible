@@ -1,6 +1,12 @@
 ---
-mesh:
-  mac: 'de:ad:be:ef:ff:00'
-  address: # TODO: multiple adresses?
-    ipv4: '10.100.100.1/24'
-    ipv6: 'fd02:4242:4242::1/48'
+interface:
+  wan:
+    name: ens3
+
+  batman:
+    mac: 'de:ad:be:ef:ff:00'
+
+  mesh_bridge:
+    address: # TODO: multiple adresses?
+      ipv4: '10.100.100.1/24'
+      ipv6: 'fd02:4242:4242::1/48'

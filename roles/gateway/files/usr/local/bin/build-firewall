@@ -28,8 +28,8 @@ function ip46tables() {
 function save_rules(){
   local service='iptables-persistent'
   case  "$(lsb_release -c -s)" in
-        jessie) service='netfilter-persistent' ;;
-             *) service='iptables-persistent'  ;;
+        wheezy) service='iptables-persistent'  ;;
+        *) service='netfilter-persistent' ;;
   esac
   /usr/sbin/service $service save
 }
@@ -54,7 +54,7 @@ function block6(){
   ip6tables -t filter -A "$chain" -s "$iprange" -j DROP
 }
 
-## Rate Limit 
+## Rate Limit
 # IPv{4,6} Version
 function rate_limit46(){
   rate_limit4 $@
@@ -101,7 +101,8 @@ function set_value() {
   echo "echo '${value}' > '${path}'" >> /etc/rclocal.d/firewall-values
 }
 
-rm /etc/rclocal.d/firewall-values 2>&1 > /dev/null
+mkdir -p /etc/rclocal.d/
+rm -f /etc/rclocal.d/firewall-values 2> /dev/null
 touch /etc/rclocal.d/firewall-values
 
 for rules in $(find /etc/iptables.d/ -type f | sort); do

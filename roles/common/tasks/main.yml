@@ -1,4 +1,0 @@
----
-- name: Install required packages
-  import_tasks: packages.yml
-  tags: packages

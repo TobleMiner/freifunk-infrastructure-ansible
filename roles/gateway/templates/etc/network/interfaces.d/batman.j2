@@ -1,0 +1,10 @@
+allow-hotplug bat-{{ site.code }}
+iface bat-{{ site.code }} inet6 manual
+  pre-up    /sbin/ip link add name $IFACE type batadv || true
+  pre-up    /sbin/ip link set dev $IFACE master br-{{ site.code }}
+  pre-up    /usr/sbin/batctl -m $IFACE it 5000
+  pre-up    /sbin/ip link set $IFACE address {{ interface.batman.mac }}
+  up        /sbin/ip link set dev $IFACE up
+  up        echo 60 > /sys/class/net/${IFACE}/mesh/hop_penalty 
+  down      /sbin/ip link set dev $IFACE down
+  post-down /sbin/ip link set dev $IFACE nomaster || true

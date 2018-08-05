@@ -1,0 +1,4 @@
+# Process packages from device eth0
+ip46tables -A input -i {{ interface.wan.name }} -j wan-input
+ip46tables -A forward -i {{ interface.wan.name }} -j wan-forward
+    

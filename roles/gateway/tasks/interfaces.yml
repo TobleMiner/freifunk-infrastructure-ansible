@@ -4,3 +4,13 @@
   template:
     src: etc/network/interfaces.d/bridge.j2
     dest: /etc/network/interfaces.d/br-{{ site.code }}
+  notify:
+    - restart mesh bridge 
+    - restart batman
+
+- name: ensure batman interface is present
+  template:
+    src: etc/network/interfaces.d/batman.j2
+    dest: /etc/network/interfaces.d/bat-{{ site.code }}
+  notify:
+    - restart batman

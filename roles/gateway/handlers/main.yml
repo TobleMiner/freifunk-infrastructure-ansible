@@ -1,0 +1,26 @@
+---
+- name: restart firewall
+  service:
+    name: iptables
+    state: restarted
+  listen: 'restart network'
+
+- name: restart mesh bridge
+  shell: |
+    ifdown br-{{ site.code }} || ( ip link set down br-{{ site.code }} && brctl delbr br-{{ site.code }} ) || true
+    ifup br-{{ site.code }}
+  listen: 'restart network'
+
+- name: restart batman
+  shell: |
+    ifdown bat-{{ site.code }} || ip link set down bat-{{ site.code }} || true
+    ifup bat-{{ site.code }}
+  listen: 'restart network'
+
+- name: restart bird6
+  service:
+    name: bird6
+    state: restarted
+
+- name: configure bird6
+  shell: birdc6 configure # maybe we should add restarting as a fallback here?
