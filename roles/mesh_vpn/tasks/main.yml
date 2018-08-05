@@ -12,6 +12,11 @@
     name: git
     state: present
 
+- name: Ensure patch is installed
+  apt:
+    name: patch
+    state: present
+
 - name: Ensure firewall allows fastd traffic
   copy:
     src: etc/iptables.d/500-Allow-fastd
@@ -42,6 +47,12 @@
     force: yes
 
 # Service
+- name: Ensure fastd init file is patched
+  patch:
+    src: patches/0000-fastd-init-wait-for-process.patch
+    dest: /etc/init.d/fastd
+    basedir: /
+
 - name: Ensure fastd service is enabled and started
   service:
     name: fastd

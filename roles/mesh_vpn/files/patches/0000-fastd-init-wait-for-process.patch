@@ -1,0 +1,23 @@
+diff --git a/etc/init.d/fastd b/etc/init.d/fastd
+index 4ba2009..25195e1 100755
+--- a/etc/init.d/fastd
++++ b/etc/init.d/fastd
+@@ -50,6 +50,17 @@ start_vpn () {
+ 
+ stop_vpn () {
+   kill `cat $PIDFILE` || true
++  for _ in seq 10; do
++    kill -0 `cat $PIDFILE` 2> /dev/null || {
++      rm -f $PIDFILE
++      log_end_msg 0
++      return
++    }
++    sleep 1
++  done
++  log_daemon_msg "WARNING: daemon /failed to stop within 10 seconds, killing"
++  kill -9 `cat $PIDFILE` || true
++  while kill -0 `cat $PIDFILE` 2> /dev/null; do :; done
+   rm -f $PIDFILE
+   log_end_msg 0
+ }
+
