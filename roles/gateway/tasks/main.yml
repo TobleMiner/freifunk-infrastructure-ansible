@@ -3,6 +3,10 @@
   import_tasks: iproute2.yml
   tags: iproute2, network
 
+- name: Setup sysctl
+  import_tasks: sysctl.yml
+  tags: sysctl, network
+
 - name: Install required packages
   import_tasks: packages.yml
   tags: packages

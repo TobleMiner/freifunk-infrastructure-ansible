@@ -36,7 +36,7 @@
   register: apt_batadv
 
 # Batman-adv post-processing
-- name: Fix dkms installation
+- name: Fix dkms install
   vars:
     kversion: "{{ batman.version | regex_replace('-[0-9]+$','') }}"
   shell: |
