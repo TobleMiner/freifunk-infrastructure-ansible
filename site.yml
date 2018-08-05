@@ -3,4 +3,5 @@
   hosts: debian9-ansible
   roles:
     - gateway
+    - mesh_vpn
   tags: gateway

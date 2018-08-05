@@ -1,0 +1,33 @@
+---
+- name: Ensure bird is installed
+  apt:
+    name: bird
+    state: present
+  notify:
+    - restart bird6
+
+- name: Ensure bird6 config directory exists
+  file:
+    path: /etc/bird/bird6.conf.d
+    state: directory
+  notify:
+    - restart bird6
+
+- name: Ensure bird6 config exists
+  template:
+    src: etc/bird/bird6.conf
+    dest: /etc/bird/bird6.conf
+  notify:
+    - configure bird6
+
+- name: Ensure firewall allows bgp traffic
+  copy:
+    src: etc/iptables.d/500-Allow-bird
+    dest: /etc/iptables.d/500-Allow-bird 
+  notify:
+    - restart firewall
+
+- name: Ensure bird6 service is enabled
+  service:
+    name: bird6
+    enabled: yes

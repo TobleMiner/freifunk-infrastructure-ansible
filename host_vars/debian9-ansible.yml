@@ -4,9 +4,14 @@ interface:
     name: ens3
 
   batman:
-    mac: 'de:ad:be:ef:ff:00'
+    mac: 'de:ad:be:ef:ff:42'
 
   mesh_bridge:
     address: # TODO: multiple adresses?
       ipv4: '10.100.100.1/24'
       ipv6: 'fd02:4242:4242::1/48'
+
+mesh_vpn:
+  key:
+    private: a048dc0b779fdb8af3fd447ce97bdf8be569fa858cf67f3f3a2a2468a1a8d569
+    public: ce1753797fe64874008c500b4251dabf7d2d95ceed647dde832152b3be8c40b1

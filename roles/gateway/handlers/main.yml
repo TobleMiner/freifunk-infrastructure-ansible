@@ -16,11 +16,3 @@
     ifdown bat-{{ site.code }} || ip link set down bat-{{ site.code }} || true
     ifup bat-{{ site.code }}
   listen: 'restart network'
-
-- name: restart bird6
-  service:
-    name: bird6
-    state: restarted
-
-- name: configure bird6
-  shell: birdc6 configure # maybe we should add restarting as a fallback here?

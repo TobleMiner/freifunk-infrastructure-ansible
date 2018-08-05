@@ -14,7 +14,3 @@
 - name: Setup interfaces
   import_tasks: interfaces.yml
   tags: interfaces, network
-
-- name: Setup bird6
-  import_tasks: bird6.yml
-  tags: bird6, network, bird

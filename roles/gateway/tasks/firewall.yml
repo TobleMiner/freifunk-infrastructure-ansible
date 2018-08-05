@@ -27,3 +27,8 @@
     dest: /etc/systemd/system/iptables.service 
   notify:
     - restart firewall
+
+- name: Ensure iptables service is enabled
+  service:
+    name: iptables
+    enabled: yes

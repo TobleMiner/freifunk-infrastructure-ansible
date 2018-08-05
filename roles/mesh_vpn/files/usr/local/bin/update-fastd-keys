@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+GIT_REPO="$1"
+TARGET_DIR="$2"
+
+usage() {
+  echo "usage: $0 <git repo> <target directory>"
+  exit 1
+}
+
+[ -n "$GIT_REPO" ] || usage
+[ -n "$TARGET_DIR" ] || usage
+
+force_clone() {
+  rm -rf "$TARGET_DIR"
+  git clone "$GIT_REPO" "$TARGET_DIR"
+}
+
+[ -d "$TARGET_DIR" ] || force_clone
+
+git -C "$TARGET_DIR" pull || force_clone

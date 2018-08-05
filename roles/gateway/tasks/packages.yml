@@ -26,7 +26,6 @@
     - bridge-utils
     - batctl
     - netfilter-persistent
-    - bird
 
 # Phase out batman-adv to make result easily available
 - name: Ensure batman-adv is installed

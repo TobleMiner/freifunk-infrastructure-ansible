@@ -6,5 +6,10 @@ site:
       ipv4: 10.100.100.0/24 
       ipv6: fd02:4242:4242::/48
 
+  mesh_vpn:
+    peer_limit: 100
+    mtu: 1280
+    key_git: git://git.freifunk.in-kiel.de/fastd-peer-keys.git
+
 batman:
   version: 2013.4.0-11

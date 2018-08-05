@@ -1,0 +1,51 @@
+---
+# Prerequisites
+- name: Ensure fastd is installed
+  apt:
+    name: fastd
+    state: present
+  notify:
+    - restart fastd
+
+- name: Ensure git is installed
+  apt:
+    name: git
+    state: present
+
+- name: Ensure firewall allows fastd traffic
+  copy:
+    src: etc/iptables.d/500-Allow-fastd
+    dest: /etc/iptables.d/500-Allow-fastd 
+  notify:
+    - restart firewall
+
+# Config 
+- name: Ensure fastd peer directory exists
+  file:
+    path: "/etc/fastd/mvpn-{{ site.code }}/peers"
+    state: directory
+  notify:
+    - restart fastd
+
+- name: Ensure fastd config exists
+  template:
+    src: etc/fastd/mvpn/fastd.conf
+    dest: "/etc/fastd/mvpn-{{ site.code }}/fastd.conf"
+  notify:
+    - restart fastd
+
+# Peers
+- name: Ensure fastd key update script is installed
+  copy:
+    src: usr/local/bin/update-fastd-keys
+    dest: /usr/local/bin/update-fastd-keys
+    mode: 0755
+
+- name: Ensure fastd key repo is up to date
+  shell: /usr/local/bin/update-fastd-keys "{{ site.mesh_vpn.key_git }}" "/etc/fastd/mvpn-{{ site.code }}/peers"
+
+# Service
+- name: Ensure fastd service is enabled
+  service:
+    name: fastd
+    enabled: yes
