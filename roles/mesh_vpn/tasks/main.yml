@@ -35,14 +35,11 @@
     - restart fastd
 
 # Peers
-- name: Ensure fastd key update script is installed
-  copy:
-    src: usr/local/bin/update-fastd-keys
-    dest: /usr/local/bin/update-fastd-keys
-    mode: 0755
-
 - name: Ensure fastd key repo is up to date
-  shell: /usr/local/bin/update-fastd-keys "{{ site.mesh_vpn.key_git }}" "/etc/fastd/mvpn-{{ site.code }}/peers"
+  git:
+    repo: "{{ site.mesh_vpn.key_git }}"
+    dest: "/etc/fastd/mvpn-{{ site.code }}/peers"
+    force: yes
 
 # Service
 - name: Ensure fastd service is enabled and started
