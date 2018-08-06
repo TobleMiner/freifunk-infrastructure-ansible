@@ -1,0 +1,24 @@
+---
+- name: Ensure ffnw bridge config is in place
+  template:
+    src: "{{ 'etc/network/interfaces.d/br-{{ site.code }}_ffnw.j2' }}"
+    dest: /etc/network/interfaces.d/br-{{ site.code }}_ffnw.j2
+  notify:
+    - restart mesh bridge
+  tags: ffnw6
+
+- name: Ensure ffnw bgp6 peers are set up
+  template:
+    src: etc/bird/bird6.peers.d/ffnw.conf.j2
+    dest: /etc/bird/bird6.peers.d/ffnw.conf
+  notify:
+    - configure bird6
+  tags: ffnw6
+
+- name: Ensure ffnw bgp6 config is in place
+  template:
+    src: etc/bird/bird6.conf.d/ffnw.conf.j2
+    dest: /etc/bird/bird6.conf.d/ffnw.conf
+  notify:
+    - configure bird6
+  tags: ffnw6

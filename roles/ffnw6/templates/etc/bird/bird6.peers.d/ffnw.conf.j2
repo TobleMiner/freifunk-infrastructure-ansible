@@ -1,0 +1,8 @@
+# BGP peerings with ffnw
+{% for sitename, _ in ffnw.site.items() %}
+
+protocol bgp 'ffnw-{{ sitename }}' from 'bgp_ffnw' {
+  neighbor fe80::1%'ffnw-{{ sitename }}' as {{ ffnw.as }};
+};
+
+{% endfor %}

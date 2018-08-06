@@ -1,0 +1,10 @@
+iface br-{{ site.code }} inet6 static
+#  pre-up    echo 0 > /proc/sys/net/ipv6/conf/$IFACE/accept_dad
+  pre-up    /sbin/ip -6 rule del from {{ site.ffnw.network.ipv6 }} lookup ffnw || true
+  pre-up    /sbin/ip -6 rule del to {{ site.ffnw.network.ipv6 }} lookup ffnw || true
+  pre-up    /sbin/ip -6 rule add from {{ site.ffnw.network.ipv6 }} lookup ffnw
+  pre-up    /sbin/ip -6 rule add to {{ site.ffnw.network.ipv6 }} lookup ffnw
+  post-down /sbin/ip -6 rule del from {{ site.ffnw.network.ipv6 }} lookup ffnw || true
+  post-down /sbin/ip -6 rule del to {{ site.ffnw.network.ipv6 }} lookup ffnw || true
+  dad-attempts 0
+  address {{ interface.mesh_bridge.ffnw.ipv6 }}
