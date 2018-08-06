@@ -6,3 +6,8 @@
     regexp: '^42\s+.*'
     line: '42 mesh'
     state: present
+  notify:
+    - restart mesh bridge
+    - restart batman
+    - restart bird
+    - restart bird6
