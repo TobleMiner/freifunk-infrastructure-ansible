@@ -6,7 +6,7 @@ iface ffnw-{{ sitename }} inet tunnel
   netmask {{ peering.ffnw[sitename].transit.local | ipaddr('netmask') }}
   mode gre
   endpoint {{ site.address.ipv4 }}
-  local {{ interface.wan.address.ipv4 }}
+  local {{ interface.wan.address.ipv4 | ipaddr('address') }}
   ttl 64
 
 iface ffnw-{{ sitename }} inet6 static
