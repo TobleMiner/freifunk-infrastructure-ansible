@@ -2,19 +2,35 @@
 interface:
   wan:
     name: ens3
+    address:
+      ipv4: 100.100.11.1
 
   batman:
     mac: 'de:ad:be:ef:ff:01'
 
   mesh_bridge:
-    address: # TODO: multiple adresses?
+    address:
       ipv4: '10.100.11.1/16'
       ipv6: 'fd2c:2342:1337::ff01/48'
     dhcp_range:
       start: 10.100.11.10
       end:   10.100.11.254
 
+    ffnw:
+      ipv6: 2a07:59c6:ec02:0001::1/64
+
 mesh_vpn:
   key:
     private: 7057957c4e037175b097564c8832446acc9344a82c629db0737b352bf3a47268
     public:  be34907877ecc58f5b0e35828aefeab8cfcdbb37d05ba0cfceb81c3ecc807297
+
+peering:
+  ffnw:
+    ber_a:
+      transit:
+        local: 100.100.96.45/31
+        remote: 100.100.96.44
+    fra_a:
+      transit:
+        local: 100.100.32.45/31
+        remote: 100.100.32.44

@@ -2,6 +2,8 @@
 interface:
   wan:
     name: ens3
+    address:
+      ipv4: 100.100.13.1
 
   batman:
     mac: 'de:ad:be:ef:ff:03'
@@ -14,7 +16,21 @@ interface:
       start: 10.100.13.10
       end:   10.100.13.254
 
+    ffnw:
+      ipv6: 2a07:59c6:ec02:0003::1/64
+
 mesh_vpn:
   key:
     private: b03cda495e1d5d8f4fef00477d05a5dd4546489eec1e35cda848d57063b85b47
     public:  28b4875a89797ab83af57ba96ee2bc7c8b0e0a0b3873113100bbab7542f54f6d
+
+peering:
+  ffnw:
+    ber_a:
+      transit:
+        local: 100.100.96.49/31
+        remote: 100.100.96.48
+    fra_a:
+      transit:
+        local: 100.100.32.49/31
+        remote: 100.100.32.48

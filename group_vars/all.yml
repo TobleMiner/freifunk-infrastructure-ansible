@@ -17,5 +17,9 @@ site:
   bgp:
     as: 65525
 
+  ffnw:
+    network:
+      ipv6: 2a07:59c6:ec02::/48
+
 batman:
   version: 2013.4.0-11
