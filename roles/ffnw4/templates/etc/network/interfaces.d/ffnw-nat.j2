@@ -1,0 +1,6 @@
+auto ffnw-nat
+
+iface ffnw-nat inet static
+  pre-up    /sbin/ip link add name $IFACE type dummy
+  post-down /sbin/ip link del $IFACE || true
+  address {{ interface.ffnw.address.ipv4 }}

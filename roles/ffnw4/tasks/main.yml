@@ -1,0 +1,21 @@
+---
+- name: Ensure ffnw nat interface config is in place
+  template:
+    src: etc/network/interfaces.d/ffnw-nat.j2
+    dest: /etc/network/interfaces.d/ffnw-nat
+  notify:
+    - restart ffnw nat interface
+
+- name: Ensure ffnw bgp4 peers are in place
+  template:
+    src: etc/bird/bird4.peers.d/ffnw.conf.j2
+    dest: /etc/bird/bird4.peers.d/ffnw.conf
+  notify:
+    - configure bird
+
+- name: Ensure ffnw bgp4 config is in place
+  template:
+    src: etc/bird/bird4.conf.d/ffnw.conf.j2
+    dest: /etc/bird/bird4.conf.d/ffnw.conf
+  notify:
+    - configure bird

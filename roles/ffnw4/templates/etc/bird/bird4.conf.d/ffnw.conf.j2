@@ -1,0 +1,65 @@
+# FFNW ipv4 peering
+
+# Local src ip address
+define ffnw_gw_ip = {{ interface.ffnw.address.ipv4 | ipaddr('address') }};
+
+# One table for each peering partner
+table ffnw;
+
+# Filter everything that's not supposed to
+# be used as a publicly routable range
+function is_bcp38() {
+  return net ~ [
+    127.0.0.0/8+,
+    0.0.0.0/8+,
+    240.0.0.0/4+,
+    192.0.2.0/24+,
+    198.51.100.0/24+,
+    203.0.113.0/24+,
+    192.168.0.0/16+,
+    10.0.0.0/8+,
+    172.16.0.0/12+,
+    169.254.0.0/16+
+  ];
+}
+
+function is_public_ip() {
+  return !is_bcp38();
+}
+
+protocol kernel {
+  device routes;
+  scan time 20;
+  table ffnw;
+  kernel table 23;
+  import none;
+  # Export all kernel routes
+  export filter {
+    krt_prefsrc = ffnw_gw_ip;
+    accept;
+  };
+}
+
+protocol device {
+  scan time 10;
+};
+
+protocol static {
+  table ffnw;
+  route {{ interface.ffnw.address.ipv4 }} via "ffnw-nat";
+  import all;
+}
+
+template bgp bgp_ffnw {
+  table ffnw;
+  local as 65525;
+  # accept all routes
+  import keep filtered;
+  import where is_public_ip();
+  # export only routes from our subnet
+  export where net ~ [ {{ interface.ffnw.address.ipv4 }}+ ];
+  direct;
+};
+
+# load ffnw peering config
+include "/etc/bird/bird4.peers.d/ffnw.conf";

@@ -19,6 +19,10 @@ interface:
     ffnw:
       ipv6: 2a07:59c6:ec02:0000::1/64
 
+  ffnw:
+    address:
+      ipv4: 185.197.132.132/32
+
 mesh_vpn:
   key:
     private: a855738f7c860bb1a9bd23428aacb46faea1691b6f9b01788092e66d91c9e24e
@@ -29,8 +33,8 @@ peering:
     ber_a:
       transit:
         local: 100.100.96.43/31
-        remote: 100.100.96.42
+        remote: 100.100.96.42/31
     fra_a:
       transit:
         local: 100.100.32.43/31
-        remote: 100.100.32.42
+        remote: 100.100.32.42/31

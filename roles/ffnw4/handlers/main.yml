@@ -1,0 +1,5 @@
+---
+- name: restart ffnw nat interface
+  shell: |
+    ifdown ffnw-nat || true
+    ifup ffnw-nat
