@@ -25,7 +25,7 @@
 
 - name: Ensure bird config exists
   template:
-    src: etc/bird/bird.conf
+    src: etc/bird/bird.conf.j2
     dest: /etc/bird/bird.conf
   notify:
     - configure bird
@@ -33,7 +33,7 @@
 
 - name: Ensure bird mesh peering config exists
   template:
-    src: "{{ 'etc/bird/bird4.peers.d/{{ site.code }}.conf' }}"
+    src: "{{ 'etc/bird/bird4.peers.d/{{ site.code }}.conf.j2' }}"
     dest: "/etc/bird/bird4.peers.d/{{ site.code }}.conf"
   notify:
     - configure bird
@@ -41,7 +41,7 @@
 
 - name: Ensure bird mesh config exists
   template:
-    src: "{{ 'etc/bird/bird4.conf.d/{{ site.code }}.conf' }}"
+    src: "{{ 'etc/bird/bird4.conf.d/{{ site.code }}.conf.j2' }}"
     dest: "/etc/bird/bird4.conf.d/{{ site.code }}.conf"
   notify:
     - configure bird

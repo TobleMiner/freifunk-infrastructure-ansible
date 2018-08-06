@@ -25,7 +25,7 @@
 
 - name: Ensure bird6 config exists
   template:
-    src: etc/bird/bird6.conf
+    src: etc/bird/bird6.conf.j2
     dest: /etc/bird/bird6.conf
   notify:
     - configure bird6
@@ -33,7 +33,7 @@
 
 - name: Ensure bird6 mesh peering config exists
   template:
-    src: "{{ 'etc/bird/bird6.peers.d/{{ site.code }}.conf' }}"
+    src: "{{ 'etc/bird/bird6.peers.d/{{ site.code }}.conf.j2' }}"
     dest: "/etc/bird/bird6.peers.d/{{ site.code }}.conf"
   notify:
     - configure bird6
@@ -41,7 +41,7 @@
 
 - name: Ensure bird6 mesh config exists
   template:
-    src: "{{ 'etc/bird/bird6.conf.d/{{ site.code }}.conf' }}"
+    src: "{{ 'etc/bird/bird6.conf.d/{{ site.code }}.conf.j2' }}"
     dest: "/etc/bird/bird6.conf.d/{{ site.code }}.conf"
   notify:
     - configure bird6

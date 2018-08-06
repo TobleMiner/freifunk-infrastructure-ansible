@@ -34,7 +34,7 @@
 
 - name: Ensure fastd config exists
   template:
-    src: etc/fastd/mvpn/fastd.conf
+    src: etc/fastd/mvpn/fastd.conf.j2
     dest: "/etc/fastd/mvpn-{{ site.code }}/fastd.conf"
   notify:
     - restart fastd

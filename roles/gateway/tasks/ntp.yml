@@ -8,7 +8,7 @@
 
 - name: Ensure ntp configuration is present
   template:
-    src: etc/ntp.conf
+    src: etc/ntp.conf.j2
     dest: /etc/ntp.conf
   notify:
     - restart ntp

@@ -30,7 +30,7 @@
 # Set pins
 - name: Ensure apt pins are in place
   template:
-    src: etc/apt/preferences.d/batman-adv-dkms
+    src: etc/apt/preferences.d/batman-adv-dkms.j2
     dest: /etc/apt/preferences.d/batman-adv-dkms
 
 

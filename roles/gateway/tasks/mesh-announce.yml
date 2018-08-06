@@ -21,7 +21,7 @@
 # Service setup
 - name: Ensure mesh-announce service file is installed
   template:
-    src: etc/systemd/system/respondd.service
+    src: etc/systemd/system/respondd.service.j2
     dest: /etc/systemd/system/respondd.service
   notify:
     - restart respondd

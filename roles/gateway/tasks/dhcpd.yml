@@ -13,7 +13,7 @@
 
 - name: Ensure dhcpd config is in place
   template:
-    src: etc/dhcp/dhcpd.conf
+    src: etc/dhcp/dhcpd.conf.j2
     dest: /etc/dhcp/dhcpd.conf
   notify:
     - restart dhcpd
@@ -27,7 +27,7 @@
 
 - name: Ensure dhcpd interface config is in place
   template:
-    src: etc/default/isc-dhcp-server
+    src: etc/default/isc-dhcp-server.j2
     dest: /etc/default/isc-dhcp-server
   notify:
     - restart dhcpd
