@@ -2,7 +2,7 @@
 - name: Ensure ffnw bridge config is in place
   template:
     src: "{{ 'etc/network/interfaces.d/br-{{ site.code }}_ffnw.j2' }}"
-    dest: /etc/network/interfaces.d/br-{{ site.code }}_ffnw.j2
+    dest: /etc/network/interfaces.d/br-{{ site.code }}_ffnw
   notify:
     - restart mesh bridge
   tags: ffnw6
