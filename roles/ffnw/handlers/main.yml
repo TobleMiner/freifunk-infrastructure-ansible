@@ -1,0 +1,7 @@
+---
+- name: restart ffnw tunnel
+  shell: |
+    {% for site, _ in ffnw.site.items() %}
+    ifdown ffnw-{{ site }} || true
+    ifup ffnw-{{ site }}
+    {% endfor %}

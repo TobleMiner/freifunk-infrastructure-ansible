@@ -1,0 +1,19 @@
+---
+- name: Ensure routing table 23 exists and is called ffnw
+  lineinfile:
+    path: /etc/iproute2/rt_tables
+    regexp: '^23\s+.*'
+    line: '23 ffnw'
+    state: present
+  notify:
+    - restart bird
+    - restart bird6
+  tags: ffnw
+
+- name: Ensure gre tunnel config is in place
+  template:
+    src: etc/network/interfaces.d/ffnw-gre.j2
+    dest: /etc/network/interfaces.d/ffnw-gre
+  notify:
+    - restart ffnw tunnel
+  tags: ffnw

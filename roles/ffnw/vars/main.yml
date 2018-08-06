@@ -1,0 +1,10 @@
+---
+ffnw:
+  site:
+    fra_a:
+      address:
+        ipv4: 185.197.132.3
+    ber_a:
+      address:
+        ipv4: 185.197.132.7
+  as: 206313
