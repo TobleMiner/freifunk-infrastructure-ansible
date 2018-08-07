@@ -41,3 +41,12 @@
   notify:
     - configure bird
   tags: ffnw4
+
+# Firewall
+- name: Ensure SNAT is enabled on peering interfaces
+  template:
+    src: etc/iptables.d/910-SNAT-ffnw
+    dest: /etc/iptables.d/910-SNAT-ffnw
+  notify:
+    - restart firewall
+  tags: ffnw4
