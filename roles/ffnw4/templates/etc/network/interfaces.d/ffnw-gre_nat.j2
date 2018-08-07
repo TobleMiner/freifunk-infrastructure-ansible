@@ -1,0 +1,7 @@
+{% for sitename, site in ffnw.site.items() %}
+
+iface ffnw-{{ sitename }} inet static
+  address {{ interface.ffnw.address.ipv4 | ipaddr('address') }}
+  netmask {{ interface.ffnw.address.ipv4 | ipaddr('netmask') }}
+
+{% endfor %}

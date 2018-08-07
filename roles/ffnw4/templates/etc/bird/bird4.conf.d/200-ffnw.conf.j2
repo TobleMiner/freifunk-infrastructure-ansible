@@ -1,0 +1,33 @@
+# FFNW ipv4 peering
+
+# One table for each peering partner
+table ffnw;
+
+protocol pipe {
+  table ffnw;
+  peer table mesh_kernel;
+  import none;
+  export where is_public_ip();
+};
+
+protocol static {
+  table ffnw;
+  {% for sitename, _ in ffnw.site.items() %}
+  route {{ interface.ffnw.address.ipv4 }} via "ffnw-{{ sitename }}";
+  {% endfor %}
+  import all;
+}
+
+template bgp bgp_ffnw {
+  table ffnw;
+  local as 65525;
+  # accept all routes
+  import keep filtered;
+  import where is_public_ip();
+  # export only routes from our subnet
+  export where net ~ [ {{ interface.ffnw.address.ipv4 }}+ ];
+  direct;
+};
+
+# load ffnw peering config
+include "/etc/bird/bird4.peers.d/ffnw.conf";
