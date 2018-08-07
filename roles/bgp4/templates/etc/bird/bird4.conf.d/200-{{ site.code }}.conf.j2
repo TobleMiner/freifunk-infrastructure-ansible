@@ -1,22 +1,10 @@
 table mesh;
 
-function is_{{ site.code }}() {
-  return (net ~ [ {{ site.mesh.network.ipv4 }}+ ]);
-}
-
-# Pseudo protocol used to gather devices
-protocol device {
-  scan time 10;
-};
-
-# Export all routes not pointing to local mesh
-# to kernel, import no routes from kernel
-protocol kernel {
-  table 'mesh';
-  scan time 20;
-  kernel table 42;
-  import none;
+protocol pipe {
+  table mesh;
+  peer table mesh_kernel;
   export where !is_{{ site.code }}();
+  import none;
 };
 
 # Template for peers inside local mesh

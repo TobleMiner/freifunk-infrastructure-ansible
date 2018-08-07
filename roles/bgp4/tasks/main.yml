@@ -1,4 +1,5 @@
 ---
+# Packages
 - name: Ensure bird is installed
   apt:
     name: bird
@@ -7,6 +8,7 @@
     - restart bird
   tags: bgp4
 
+# Create directories
 - name: Ensure bird config directory exists
   file:
     path: /etc/bird/bird4.conf.d
@@ -23,6 +25,40 @@
     - restart bird
   tags: bgp4
 
+- name: Ensure bird filter directory exists
+  file:
+    path: /etc/bird/bird4.filters.d
+    state: directory
+  notify:
+    - restart bird
+  tags: bgp4
+
+- name: Ensure bird kernel filter directory exists
+  file:
+    path: /etc/bird/bird4.filters.d/mesh_kernel.d
+    state: directory
+  notify:
+    - restart bird
+  tags: bgp4
+
+# Create static configs
+- name: Ensure bird mesh device protocol exists
+  copy:
+    src: etc/bird/bird4.conf.d/050-proto-devices.conf
+    dest: /etc/bird/bird4.conf.d/050-proto-devices.conf
+  notify:
+    - configure bird
+  tags: bgp4
+
+- name: Ensure bird mesh kernel table exists
+  copy:
+    src: etc/bird/bird4.conf.d/100-kernel-table-mesh.conf
+    dest: /etc/bird/bird4.conf.d/100-kernel-table-mesh.conf
+  notify:
+    - configure bird
+  tags: bgp4
+
+# Create dynamic configs
 - name: Ensure bird config exists
   template:
     src: etc/bird/bird.conf.j2
@@ -31,6 +67,7 @@
     - configure bird
   tags: bgp4
 
+# Local site-internal peerings
 - name: Ensure bird mesh peering config exists
   template:
     src: "{{ 'etc/bird/bird4.peers.d/{{ site.code }}.conf.j2' }}"
@@ -39,14 +76,23 @@
     - configure bird
   tags: bgp4
 
-- name: Ensure bird mesh config exists
+- name: Ensure bird mesh defines exists
   template:
-    src: "{{ 'etc/bird/bird4.conf.d/{{ site.code }}.conf.j2' }}"
-    dest: "/etc/bird/bird4.conf.d/{{ site.code }}.conf"
+    src: "{{ 'etc/bird/bird4.conf.d/020-{{ site.code }}-defines.conf.j2' }}"
+    dest: "/etc/bird/bird4.conf.d/020-{{ site.code }}-defines.conf"
   notify:
     - configure bird
   tags: bgp4
 
+- name: Ensure bird mesh config exists
+  template:
+    src: "{{ 'etc/bird/bird4.conf.d/200-{{ site.code }}.conf.j2' }}"
+    dest: "/etc/bird/bird4.conf.d/200-{{ site.code }}.conf"
+  notify:
+    - configure bird
+  tags: bgp4
+
+# Firewall
 - name: Ensure firewall allows bgp traffic
   copy:
     src: etc/iptables.d/500-Allow-bird-ipv4
@@ -55,6 +101,7 @@
     - restart firewall
   tags: bgp4
 
+# Services
 - name: Ensure bird service is enabled
   service:
     name: bird
