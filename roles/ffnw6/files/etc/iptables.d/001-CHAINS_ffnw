@@ -1,0 +1,4 @@
+# IPv6 ffnw peering chains
+
+ip6tables -N ffnw-forward
+

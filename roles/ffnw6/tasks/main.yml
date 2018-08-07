@@ -1,4 +1,5 @@
 ---
+# Interfaces
 - name: Ensure ffnw bridge config is in place
   template:
     src: "{{ 'etc/network/interfaces.d/br-{{ site.code }}_ffnw.j2' }}"
@@ -7,6 +8,7 @@
     - restart mesh bridge
   tags: ffnw6
 
+# BGP
 - name: Ensure ffnw bgp6 peers are set up
   template:
     src: etc/bird/bird6.peers.d/ffnw.conf.j2
@@ -21,4 +23,21 @@
     dest: /etc/bird/bird6.conf.d/ffnw.conf
   notify:
     - configure bird6
+  tags: ffnw6
+
+# Firewall
+- name: Ensure ipv6 forwarding from local mesh to ffnw is allowed
+  template:
+    src: etc/iptables.d/800-mesh-forward-ACCEPT-ffnw.j2
+    dest: /etc/iptables.d/800-mesh-forward-ACCEPT-ffnw
+  notify:
+    - restart firewall
+  tags: ffnw6
+
+- name: Ensure ipv6 forwarding from ffnw to local mesh is allowed
+  template:
+    src: "{{ 'etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}.j2' }}"
+    dest: "/etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}.j2"
+  notify:
+    - restart firewall
   tags: ffnw6
