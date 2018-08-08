@@ -1,7 +1,14 @@
-{% for sitename, site in ffnw.site.items() %}
+{% for sitename, _ in ffnw.site.items() %}
+{% set ffnw_addr=interface.ffnw.address.ipv4 | ipaddr('address') %}
 
 iface ffnw-{{ sitename }} inet static
-  address {{ interface.ffnw.address.ipv4 | ipaddr('address') }}
-  netmask {{ interface.ffnw.address.ipv4 | ipaddr('netmask') }}
+  pre-up    /sbin/ip rule del pref 31010 from {{ ffnw_addr }} lookup mesh || true
+  pre-up    /sbin/ip rule del pref 31011 to {{ ffnw_addr }} lookup mesh || true
+  pre-up   /sbin/ip rule add pref 31010 from {{ ffnw_addr }} lookup mesh
+  pre-up   /sbin/ip rule add pref 31011 to {{ ffnw_addr }} lookup mesh
+  post-down /sbin/ip rule del pref 31010 from {{ ffnw_addr }} lookup mesh || true
+  post-down /sbin/ip rule del pref 31011 to {{ ffnw_addr }} lookup mesh || true
+  address   {{ ffnw_addr }}
+  netmask   {{ interface.ffnw.address.ipv4 | ipaddr('netmask') }}
 
 {% endfor %}
