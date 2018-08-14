@@ -1,0 +1,1 @@
+ip6tables -A forward -o br-{{ site.code }} -j {{ site.code}}-mss-clamp
