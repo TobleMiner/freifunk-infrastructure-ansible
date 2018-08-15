@@ -2,7 +2,7 @@
 - name: restart ffnw tunnel
   shell: |
     {% for site, _ in ffnw.site.items() %}
-    ifdown ffnw-{{ site }}
+    ifdown ffnw-{{ site }} || true
     ip link set down ffnw-{{ site }} && ip link del ffnw-{{ site }} || true
     ifup ffnw-{{ site }}
     {% endfor %}
