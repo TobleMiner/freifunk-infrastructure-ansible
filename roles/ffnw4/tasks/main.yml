@@ -8,6 +8,14 @@
     - restart ffnw tunnel
   tags: ffnw4
 
+- name: Ensure ffnw ipv4 transit networks are configured
+  template:
+    src: etc/network/interfaces.d/ffnw-gre_transit.j2
+    dest: /etc/network/interfaces.d/ffnw-gre_transit
+  notify:
+    - restart ffnw tunnel
+  tags: ffnw4
+
 # bgp Peerings
 - name: Ensure ffnw bgp4 peers are in place
   template:

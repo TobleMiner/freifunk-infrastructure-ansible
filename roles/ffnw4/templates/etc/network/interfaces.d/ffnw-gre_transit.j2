@@ -1,0 +1,8 @@
+{% for sitename, site in ffnw.site.items() %}
+
+auto ffnw-{{ sitename }}
+iface ffnw-{{ sitename }} inet static
+  address {{ peering.ffnw[sitename].transit.local | ipaddr('address') }}
+  netmask {{ peering.ffnw[sitename].transit.local | ipaddr('netmask') }}
+
+{% endfor %}

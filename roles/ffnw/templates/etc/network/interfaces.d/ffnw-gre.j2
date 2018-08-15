@@ -2,14 +2,11 @@
 
 auto ffnw-{{ sitename }}
 iface ffnw-{{ sitename }} inet tunnel
-  address {{ peering.ffnw[sitename].transit.local | ipaddr('address') }}
-  netmask {{ peering.ffnw[sitename].transit.local | ipaddr('netmask') }}
+  address fe80::2
+  netmask 64
   mode gre
   endpoint {{ site.address.ipv4 }}
   local {{ interface.wan.address.ipv4 | ipaddr('address') }}
   ttl 64
-
-iface ffnw-{{ sitename }} inet6 static
-  address fe80::2/64
 
 {% endfor %}
