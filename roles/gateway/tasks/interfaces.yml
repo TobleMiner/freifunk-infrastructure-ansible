@@ -34,6 +34,13 @@
     dest: /etc/apt/preferences.d/batman-adv-dkms
 
 
+# Install dkms and related recommended packages
+- name: Ensure dkms and kernel headers are installed
+  apt:
+    name: dkms
+    state: present
+    install_recommends: yes
+
 # Install required packages
 - name: Ensure required networking packages are installed
   apt:
@@ -52,7 +59,7 @@
     batman_version="$(modinfo batman_adv | grep '^version' | tr -d ' ' | cut -d: -f2)"
     [ "$batman_version" = "{{ kversion }}" ] && echo version ok && exit 0
     dkms uninstall --force batman-adv/{{ kversion }} || true
-    modinfo batman-adv | grep -i '^filename' | tr -d ' ' | cut -d: -f2 | xargs rm
+    modinfo batman-adv | grep -i '^filename' | tr -d ' ' | cut -d: -f2 | xargs rm -f
     dkms install --force batman-adv/{{ kversion }}
   register: batman_dkms
   changed_when: '"version ok" not in batman_dkms.stdout'
