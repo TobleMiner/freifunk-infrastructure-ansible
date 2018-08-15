@@ -1,1 +1,4 @@
 *.retry
+# Ignore production inventory and host vars
+ffki
+host_vars/ffki*
