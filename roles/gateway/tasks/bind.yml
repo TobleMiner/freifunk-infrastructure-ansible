@@ -1,0 +1,70 @@
+---
+# Authoritative DNS, isc software, use only behind unbound!
+# Packages
+- name: Ensure BIND is installed
+  apt:
+    name: bind9
+    state: present
+  notify:
+    - restart bind
+
+# Config
+- name: Ensure bind config directory exists
+  file:
+    path: /etc/bind
+    state: directory
+  notify:
+    - restart bind
+
+- name: Ensure bind config is in place
+  copy:
+    src: etc/bind/named.conf
+    dest: /etc/bind/named.conf
+  notify:
+    - restart bind
+
+- name: Ensure bind options are in place
+  copy:
+    src: etc/bind/named.conf.options
+    dest: /etc/bind/named.conf.options
+  notify:
+    - restart bind
+
+- name: Ensure zone directory exists
+  file:
+    path: /etc/bind/zones/
+    state: directory
+  notify:
+    - restart bind
+
+- name: Ensure all zone directories exist
+  file:
+    path: "/etc/bind/zones/{{ item.key }}"
+    state: directory
+  with_dict: "{{ site.dns }}"
+  notify:
+    - restart bind
+
+- name: Ensure all zone files are included
+  lineinfile:
+    path: /etc/bind/named.conf
+    line: "include \"/etc/bind/zones/{{ item.key }}/{{ item.key }}.conf\";"
+    state: present
+  with_dict: "{{ site.dns }}"
+  notify:
+    - restart bind
+
+- name: Ensure bind zone configs are in place
+  git:
+    repo: "{{ site.dns[item.key].git }}"
+    dest: "/etc/bind/zones/{{ item.key }}"
+    force: yes
+  with_dict: "{{ site.dns }}"
+  notify:
+    - restart bind
+
+- name: Ensure bind service is enabled and started
+  service:
+    name: bind9
+    enabled: yes
+    state: started

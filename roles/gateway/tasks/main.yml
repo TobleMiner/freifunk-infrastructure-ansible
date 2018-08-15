@@ -27,6 +27,10 @@
   import_tasks: dhcpd.yml
   tags: dhcpd, network
 
+- name: Setup bind
+  import_tasks: bind.yml
+  tags: bind, dns, network
+
 - name: Setup unbound
   import_tasks: unbound.yml
   tags: unbound, dns, network

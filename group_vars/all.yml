@@ -19,6 +19,13 @@ site:
   bgp:
     as: 65525
 
+  dns:
+    ffki:
+      git: git://git.freifunk.in-kiel.de/ffki-zone.git
+      servers:
+        - 127.0.0.1@5300
+        - ::1@5300
+
   ffnw:
     network:
       ipv6: 2a07:59c6:ec02::/48

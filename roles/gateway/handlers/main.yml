@@ -44,3 +44,8 @@
   service:
     name: ntp
     state: restarted
+
+- name: restart bind
+  service:
+    name: bind9
+    state: restarted
