@@ -7,6 +7,14 @@
     state: present
   notify:
     - restart bind
+  register: apt_bind
+
+# Stopping bind here is required to make sure config changes are applied before starting
+- name: Ensure bind service is stopped after installation
+  service:
+    name: bind9
+    state: stopped
+  when: apt_bind.changed
 
 # Config
 - name: Ensure bind config directory exists
