@@ -3,7 +3,7 @@ interface "mvpn-{{ site.code }}";
 method "salsa2012+umac";    # since fastd v15
 method "salsa2012+gmac";
 method "xsalsa20-poly1305"; # deprecated
-bind any:11235;
+bind any:{{ site.mesh_vpn.port }};
 hide ip addresses yes;
 hide mac addresses yes;
 secret "{{ mesh_vpn.key.private }}";

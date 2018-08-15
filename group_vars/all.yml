@@ -13,6 +13,7 @@ site:
     peer_limit: 100 # optional, defaults to no limit
     mtu: 1280
     key_git: https://github.com/TobleMiner/ffgh-fastd-peers.git
+    port: 11235
 
   bgp:
     as: 65525
