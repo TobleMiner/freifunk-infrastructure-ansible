@@ -6,16 +6,19 @@
     state: present
   notify:
     - restart fastd
+  tags: mesh_vpn
 
 - name: Ensure git is installed
   apt:
     name: git
     state: present
+  tags: mesh_vpn
 
 - name: Ensure patch is installed
   apt:
     name: patch
     state: present
+  tags: mesh_vpn
 
 - name: Ensure firewall allows fastd traffic
   copy:
@@ -23,6 +26,7 @@
     dest: /etc/iptables.d/500-Allow-fastd 
   notify:
     - restart firewall
+  tags: mesh_vpn
 
 # Config 
 - name: Ensure fastd peer directory exists
@@ -31,6 +35,7 @@
     state: directory
   notify:
     - restart fastd
+  tags: mesh_vpn
 
 - name: Ensure fastd config exists
   template:
@@ -38,6 +43,7 @@
     dest: "/etc/fastd/mvpn-{{ site.code }}/fastd.conf"
   notify:
     - restart fastd
+  tags: mesh_vpn
 
 # Peers
 - name: Ensure fastd key repo is up to date
@@ -45,6 +51,7 @@
     repo: "{{ site.mesh_vpn.key_git }}"
     dest: "/etc/fastd/mvpn-{{ site.code }}/peers"
     force: yes
+  tags: mesh_vpn, fastd_keys
 
 # Service
 - name: Ensure fastd init file is patched
@@ -54,9 +61,11 @@
     basedir: /
   notify:
     - restart fastd
+  tags: mesh_vpn
 
 - name: Ensure fastd service is enabled and started
   service:
     name: fastd
     enabled: yes
     state: started
+  tags: mesh_vpn
