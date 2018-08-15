@@ -6,6 +6,9 @@ method "xsalsa20-poly1305"; # deprecated
 bind any:{{ site.mesh_vpn.port }};
 hide ip addresses yes;
 hide mac addresses yes;
+{% if site.mesh_vpn.verify is defined and not site.mesh_vpn.verify %}
+on verify true;
+{% endif %}
 secret "{{ mesh_vpn.key.private }}";
 {% if mesh_vpn.key.public is defined %}
 #public: {{ mesh_vpn.key.public }}

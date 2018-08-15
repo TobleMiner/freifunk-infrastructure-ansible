@@ -14,6 +14,7 @@ site:
     mtu: 1280
     key_git: https://github.com/TobleMiner/ffgh-fastd-peers.git
     port: 11235
+    verify: yes # optional, defaults to yes
 
   bgp:
     as: 65525
