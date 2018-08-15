@@ -49,3 +49,8 @@
   service:
     name: bind9
     state: restarted
+
+- name: restart prometheus-node-exporter
+  service:
+    name: prometheus-node-exporter
+    state: restarted

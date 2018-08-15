@@ -38,3 +38,7 @@
 - name: Setup ntp
   import_tasks: ntp.yml
   tags: ntp
+
+- name: Setup prometheus-node-exporter
+  import_tasks: prometheus-node-exporter.yml
+  tags: prometheus-node-exporter, monitoring

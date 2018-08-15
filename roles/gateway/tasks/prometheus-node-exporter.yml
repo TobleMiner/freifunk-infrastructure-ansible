@@ -1,0 +1,13 @@
+---
+- name: Ensure prometheus-node-exporter is installed
+  apt:
+    name: prometheus-node-exporter
+    state: present
+  notify:
+    - restart prometheus-node-exporter
+
+- name: Ensure prometheus-node-exporter service is enabled and started
+  service:
+    name: prometheus-node-exporter
+    enabled: yes
+    state: started
