@@ -1,7 +1,7 @@
 ---
 site:
   code: ffgh
-  tld:  ffgh # optinal, defaults to code
+  tld:  ffgh # optional, defaults to code
   mesh:
     network:
       ipv4: 10.100.0.0/16

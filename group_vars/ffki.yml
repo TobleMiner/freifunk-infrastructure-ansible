@@ -1,7 +1,7 @@
 ---
 site:
   code: ffki
-  tld:  ffki # optinal, defaults to code
+  tld:  ffki # optional, defaults to code
   mesh:
     network:
       ipv4: 10.116.0.0/16
