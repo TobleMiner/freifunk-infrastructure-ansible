@@ -1,5 +1,5 @@
 # host_vars
-Freifunk GitHub is an example community.
+Freifunk GitHub (ffgh) is an example community.
 
 One $hostname.yml for each gateway:
 ```yaml
