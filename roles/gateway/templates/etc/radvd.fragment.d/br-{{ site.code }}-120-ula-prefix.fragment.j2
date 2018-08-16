@@ -1,10 +1,10 @@
 
- {# network_dynamic_clients can be used to limit the size of the network routed via the gateways #}
- {% if site.mesh.network_dynamic_clients is defined %}
+{# network_dynamic_clients can be used to limit the size of the network routed via the gateways #}
+{% if site.mesh.network_dynamic_clients is defined %}
  prefix {{ site.mesh.network_dynamic_clients.ipv6 }}
- {% else %}
+{% else %}
  prefix {{ site.mesh.network.ipv6 }}
- {% endif %}
+{% endif %}
  {
    AdvPreferredLifetime 14400;
    AdvValidLifetime 86400;
