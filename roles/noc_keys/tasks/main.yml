@@ -1,0 +1,30 @@
+---
+- name: Ensure package prerequisites are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - git
+    - openssl
+  tags: noc_keys
+
+- name: Ensure noc key git is cloned and up to date
+  git:
+    repo: "{{ site.noc_keys.git }}"
+    dest: /opt/noc_keys
+    force: yes
+  tags: noc_keys
+
+- name: Enumerate noc keys
+  find:
+    path: /opt/noc_keys/keys
+  register: noc_keys
+  tags: noc_keys
+
+- name: Ensure noc users are present
+  vars:
+    username: "{{ (item.path | basename | splitext)[0] }}"
+    home: /home/{{ username }}
+  include_tasks: user.yml
+  with_items: "{{ noc_keys.files }}"
+  tags: noc_keys

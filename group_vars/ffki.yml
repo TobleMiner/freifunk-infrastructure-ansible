@@ -30,5 +30,8 @@ site:
     network:
       ipv6: 2a07:59c6:ec02::/48
 
+  noc_keys:
+    git: https://github.com/TobleMiner/ffki-noc-sshkeys.git
+
 batman:
   version: 2013.4.0-11

@@ -1,0 +1,44 @@
+---
+- name: Ensure NOC user {{ username  }} exists
+  user:
+    name: "{{ username }}"
+  register: user
+  tags: noc_keys
+
+- name: Set up NOC user {{ username }}
+  block:
+    - name: Create password for NOC user {{ username }}
+      shell: dd if=/dev/urandom bs=20 count=1 2> /dev/null | base64
+      register: password
+    - name: Hash password of NOC user {{ username }}
+      shell: openssl passwd -1 {{ password.stdout | regex_replace('[\n\r]', '') }}
+      register: password_md5
+    - name: Reconfigure NOC user {{ username }}
+      user:
+        name: "{{ username }}"
+        home: "{{ home }}"
+        shell: /bin/bash
+        append: yes
+        groups: sudo
+        password: "{{ password_md5.stdout | regex_replace('[\n\r]', '') }}"
+    - name: Copy user password for NOC member {{ username }} to {{ home }}/password
+      copy:
+        dest: "{{ home }}/password"
+        content: "{{ password.stdout }}\n"
+        owner: "{{ username }}"
+        mode: 0400
+  when: 'user.changed'
+  tags: noc_keys
+
+- name: Ensure .ssh directory is present for NOC member {{ username }}
+  file:
+    path: "{{ home }}/.ssh"
+    state: directory
+  tags: noc_keys
+
+- name: Ensure public key of NOC member {{ username }} is deployed
+  copy:
+    dest: "{{ home }}/.ssh/authorized_keys"
+    src: "{{ item.path }}"
+    remote_src: yes
+  tags: noc_keys
