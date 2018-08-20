@@ -72,3 +72,8 @@
 
 - name: Ensure batman_adv kernel module is loaded
   shell: modprobe batman_adv
+
+- name: Ensure batman_adv kernel module is loaded at bootup
+  copy:
+    content: batman_adv
+    dest: /etc/modules-load.d/batman.conf
