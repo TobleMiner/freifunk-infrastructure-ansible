@@ -1,0 +1,2 @@
+# Allow GRE traffic
+ip4tables -A wan-input -p gre -j ACCEPT

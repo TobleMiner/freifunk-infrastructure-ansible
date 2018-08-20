@@ -7,6 +7,14 @@
     state: present
   tags: ffnw
 
+- name: Ensure GRE traffic is not blocked by firewall
+  copy:
+    src: etc/iptables.d/500-Allow-GRE
+    dest: /etc/iptables.d/500-Allow-GRE
+  notify:
+    - restart firewall
+  tags: ffnw
+
 - name: Ensure gre tunnel config is in place
   template:
     src: etc/network/interfaces.d/ffnw-gre.j2
