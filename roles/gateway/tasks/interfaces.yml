@@ -1,83 +1,14 @@
 ---
 # This playbook configures the basic, always required interfaces
 
-# Package prerequisistes for external repos
-- name: Ensure repo prerequisites are installed
-  apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - apt-transport-https
-    - dirmngr
-
-# batman_adv dkms repo
-- name: Ensure universefactory debian repo is present
-  copy:
-    src: etc/apt/sources.list.d/repo.universe-factory.list
-    dest: /etc/apt/sources.list.d/repo.universe-factory.list
-
-# Install apt repo keys
-- name: Ensure universefactory key is installed
-  apt_key:
-      id: 16EF3F64CB201D9C
-      keyserver: keys.gnupg.net 
-
-# Pull in newly configured repos
-- name: Ensure apt repo cache is up to date
-  apt:
-    update_cache: yes
-
-# Set pins
-- name: Ensure apt pins are in place
-  template:
-    src: etc/apt/preferences.d/batman-adv-dkms.j2
-    dest: /etc/apt/preferences.d/batman-adv-dkms
-
-
-# Install dkms and related recommended packages
-- name: Ensure dkms and kernel headers are installed
-  apt:
-    name: dkms
-    state: present
-    install_recommends: yes
-
 # Install required packages
 - name: Ensure required networking packages are installed
   apt:
     name: "{{ item }}"
     state: present
   loop:
-    - batman-adv-dkms
     - batctl
     - bridge-utils 
-
-# Batman-adv post-processing
-- name: Ensure correct batman_adv version is installed
-  vars:
-    kversion: "{{ batman.version | regex_replace('-[0-9]+$','') }}"
-  shell: |
-    batman_version="$(modinfo batman_adv | grep '^version' | tr -d ' ' | cut -d: -f2)"
-    [ "$batman_version" = "{{ kversion }}" ] && echo version ok && exit 0
-    dkms uninstall --force batman-adv/{{ kversion }} || true
-    modinfo batman-adv | grep -i '^filename' | tr -d ' ' | cut -d: -f2 | xargs rm -f
-    dkms install --force batman-adv/{{ kversion }}
-  register: batman_dkms
-  changed_when: '"version ok" not in batman_dkms.stdout'
-
-# Unload batman kernel module if updated
-- name: Ensure batman_adv kernel module is unloaded
-  shell: |
-    lsmod | grep '^batman_adv' || echo 'module not loaded' && exit 0 # module not loaded, no action required
-    ifdown bat-{{ site.code }} || ip link set down bat-{{ site.code }} && ip link del bat-{{ site.code }} || true
-    rmmod batman_adv
-  when: batman_dkms.changed
-  register: batman_unload
-  changed_when: '"module not loaded" not in batman_unload.stdout'
-  notify:
-    - restart batman
-
-- name: Ensure batman_adv kernel module is loaded
-  shell: modprobe batman_adv
 
 # Interface setup
 - name: ensure bridge interface is present
