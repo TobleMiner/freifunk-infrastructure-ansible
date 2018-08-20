@@ -59,7 +59,6 @@
   changed_when: '"version ok" not in batman_dkms.stdout'
 
 # Unload batman kernel module if updated
-
 - name: Ensure batman_adv kernel module is unloaded
   shell: |
     lsmod | grep '^batman_adv' || echo 'module not loaded' && exit 0 # module not loaded, no action required
