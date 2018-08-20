@@ -1,4 +1,10 @@
 ---
+- name: Ensure gateways are up to date
+  hosts: gateways
+  roles:
+    - apt_upgrade
+  tags: apt_upgrade
+
 - name: Ensure gateways are set up
   hosts: gateways
   roles:
