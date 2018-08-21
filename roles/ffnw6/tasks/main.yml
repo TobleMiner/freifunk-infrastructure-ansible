@@ -25,39 +25,6 @@
     - configure bird6
   tags: ffnw6
 
-# Firewall
-- name: Ensure ffnw-forward chain exists
-  copy:
-    src: etc/iptables.d/001-CHAINS_ffnw
-    dest: /etc/iptables.d/001-CHAINS_ffnw
-  notify:
-    - restart firewall
-  tags: ffnw6
-
-- name: Ensure ipv6 forwarding from local mesh to ffnw is allowed
-  template:
-    src: etc/iptables.d/800-mesh-forward-ACCEPT-ffnw.j2
-    dest: /etc/iptables.d/800-mesh-forward-ACCEPT-ffnw
-  notify:
-    - restart firewall
-  tags: ffnw6
-
-- name: Ensure ipv6 forwarding from ffnw to local mesh is allowed
-  template:
-    src: "{{ 'etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}.j2' }}"
-    dest: "/etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}"
-  notify:
-    - restart firewall
-  tags: ffnw6
-
-- name: Ensure non-matching traffic on ffnw interface is dropped
-  copy:
-    src: etc/iptables.d/900-FORWARD-drop_ffnw
-    dest: /etc/iptables.d/900-FORWARD-drop_ffnw
-  notify:
-    - restart firewall
-  tags: ffnw6
-
 # radvd
 - name: Ensure public ipv6 prefix is announced via radvd
   template:

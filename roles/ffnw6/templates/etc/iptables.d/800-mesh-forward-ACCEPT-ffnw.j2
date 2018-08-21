@@ -1,5 +1,0 @@
-{% for sitename, _ in ffnw.site.items() %}
-
-ip6tables -A mesh-forward -o ffnw-{{ sitename }} -j ACCEPT
-
-{% endfor %}
