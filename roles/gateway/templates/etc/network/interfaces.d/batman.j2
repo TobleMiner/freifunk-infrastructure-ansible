@@ -1,4 +1,5 @@
 allow-hotplug bat-{{ site.code }}
+auto bat-{{ site.code }}
 iface bat-{{ site.code }} inet6 manual
   pre-up    /sbin/ip link add name $IFACE type batadv || true
   pre-up    /usr/sbin/batctl -m $IFACE it 5000
