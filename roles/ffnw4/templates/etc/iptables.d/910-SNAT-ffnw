@@ -1,2 +1,2 @@
 # SNAT all traffic sent out via ffnw to our public ffnw IP address
-ip4tables -t nat -A POSTROUTING -o ffnw-+ -j SNAT --to-source {{ interface.ffnw.address.ipv4 | ipaddr('address') }}
+ip4tables -t nat -A POSTROUTING -s {{ site.mesh.network.ipv4 }} -o ffnw-+ -j SNAT --to-source {{ interface.ffnw.address.ipv4 | ipaddr('address') }}
