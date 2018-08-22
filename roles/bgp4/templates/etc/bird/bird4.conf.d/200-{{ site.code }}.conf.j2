@@ -3,7 +3,7 @@ table mesh;
 protocol pipe {
   table mesh;
   peer table mesh_kernel;
-  export where !is_{{ site.code }}();
+  export where !is_{{ site.code }}() && gw != router_id;
   import none;
 };
 

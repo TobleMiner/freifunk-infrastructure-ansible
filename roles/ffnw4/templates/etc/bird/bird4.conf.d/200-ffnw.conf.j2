@@ -10,7 +10,7 @@ protocol pipe {
   export where is_public_ip();
 };
 
-protocol static {
+protocol static 'ffnw4' {
   table ffnw;
   {% for sitename, _ in ffnw.site.items() %}
   route {{ interface.ffnw.address.ipv4 }} via "ffnw-{{ sitename }}";
@@ -31,3 +31,10 @@ template bgp bgp_ffnw {
 
 # load ffnw peering config
 include "/etc/bird/bird4.peers.d/ffnw.conf";
+
+# export ipv4 default route into mesh table
+protocol static 'default_nat' {
+  table mesh;
+  route 0.0.0.0/0 via {{ interface.mesh_bridge.address.ipv4 | ipaddr('address') }};
+  import all;
+};
