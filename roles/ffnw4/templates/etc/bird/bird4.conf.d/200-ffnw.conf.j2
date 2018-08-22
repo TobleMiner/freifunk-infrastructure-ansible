@@ -7,7 +7,13 @@ protocol pipe {
   table ffnw;
   peer table mesh_kernel;
   import none;
-  export where is_public_ip();
+  export filter {
+    if !is_public_ip() then {
+      reject;
+    }
+    preference = 1000;
+    accept;
+  };
 };
 
 protocol static 'ffnw4' {
@@ -36,5 +42,8 @@ include "/etc/bird/bird4.peers.d/ffnw.conf";
 protocol static 'default_nat' {
   table mesh;
   route 0.0.0.0/0 via {{ interface.mesh_bridge.address.ipv4 | ipaddr('address') }};
-  import all;
+  import filter {
+    preference = 100;
+    accept;
+  };
 };
