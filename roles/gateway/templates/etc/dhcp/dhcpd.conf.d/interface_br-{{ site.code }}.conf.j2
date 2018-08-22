@@ -11,5 +11,9 @@ subnet {{ site.mesh.network.ipv4 | ipaddr('network') }} netmask {{ site.mesh.net
   option domain-name-servers {{ mesh_ipv4 }}, {{ mesh_ipv4 }};
 
   option ntp-servers {{ mesh_ipv4 }};
+  {% if interface.mesh_bridge.dhcp_gateway is defined %}
+  option routers {{ interface.mesh_bridge.dhcp_gateway | ipaddr('address') }};
+  {% else %}
   option routers {{ mesh_ipv4 }};
+  {% endif %}
 }

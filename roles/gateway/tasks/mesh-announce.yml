@@ -25,6 +25,13 @@
     dest: /etc/systemd/system/respondd.service
   notify:
     - restart respondd
+  register:
+    respondd_unit
+
+- name: Ensure systemd services are reloaded if unit file changed
+  systemd:
+    daemon_reload: yes
+  when: respondd_unit.changed
 
 - name: Ensure mesh-announce service is enabled
   service:

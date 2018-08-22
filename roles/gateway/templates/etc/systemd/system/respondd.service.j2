@@ -2,7 +2,11 @@
 Description=Respondd
 
 [Service]
+{% if interface.mesh_bridge.dhcp_gateway is defined %}
+ExecStart=/opt/mesh-announce/respondd.py -d /opt/mesh-announce/providers -i br-{{ site.code }} -i mvpn-{{ site.code }} -b bat-{{ site.code }} -m {{ interface.mesh_bridge.dhcp_gateway }}
+{% else %}
 ExecStart=/opt/mesh-announce/respondd.py -d /opt/mesh-announce/providers -i br-{{ site.code }} -i mvpn-{{ site.code }} -b bat-{{ site.code }} -m {{ interface.mesh_bridge.address.ipv4 }}
+{% endif %}
 Restart=always
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
