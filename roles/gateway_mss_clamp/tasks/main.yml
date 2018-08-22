@@ -19,8 +19,8 @@
 
 - name: Ensure mss on site bridge interface is clamped
   template:
-    src: "{{ 'etc/iptables.d/100-device-br-{{ site.code }}_mss-clamp.j2' }}"
-    dest: "/etc/iptables.d/100-device-br-{{ site.code }}_mss-clamp"
+    src: "{{ 'etc/iptables.d/090-device-br-{{ site.code }}_mss-clamp.j2' }}"
+    dest: "/etc/iptables.d/090-device-br-{{ site.code }}_mss-clamp"
   notify:
     - restart firewall
   tags: mss_clamp
