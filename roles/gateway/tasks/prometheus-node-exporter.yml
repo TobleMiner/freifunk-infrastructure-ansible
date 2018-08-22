@@ -8,6 +8,6 @@
 
 - name: Ensure prometheus-node-exporter service is enabled and started
   service:
-    name: prometheus-node-exporter
+    name: prometheus-node-exporter.service
     enabled: yes
     state: started

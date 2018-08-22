@@ -104,7 +104,7 @@
 # Services
 - name: Ensure bird service is enabled
   service:
-    name: bird
+    name: bird.service
     enabled: yes
     state: started
   tags: bgp4

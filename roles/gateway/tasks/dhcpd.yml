@@ -34,6 +34,6 @@
 
 - name: Ensure dhcpd service is enabled and started
   service:
-    name: isc-dhcp-server
+    name: isc-dhcp-server.service
     enabled: yes
     state: started

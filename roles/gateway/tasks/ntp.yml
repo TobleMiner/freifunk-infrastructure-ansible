@@ -15,6 +15,6 @@
 
 - name: Ensure ntp service is enabled and started
   service:
-    name: ntp
+    name: ntp.service
     enabled: yes
     state: started

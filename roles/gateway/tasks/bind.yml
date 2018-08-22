@@ -73,6 +73,6 @@
 
 - name: Ensure bind service is enabled and started
   service:
-    name: bind9
+    name: bind9.service
     enabled: yes
     state: started

@@ -65,7 +65,7 @@
 
 - name: Ensure fastd service is enabled and started
   service:
-    name: fastd
+    name: fastd.service
     enabled: yes
     state: started
   tags: mesh_vpn

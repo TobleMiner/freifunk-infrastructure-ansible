@@ -57,7 +57,7 @@
 
 - name: Ensure bird6 service is enabled
   service:
-    name: bird6
+    name: bird6.service
     enabled: yes
     state: started
   tags: bgp6
