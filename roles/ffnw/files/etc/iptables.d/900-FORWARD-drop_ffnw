@@ -1,1 +1,0 @@
-ip46tables -A ffnw-forward -j DROP

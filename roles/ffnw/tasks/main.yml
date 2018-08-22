@@ -7,27 +7,11 @@
     state: present
   tags: ffnw
 
+# Firewall
 - name: Ensure GRE traffic is not blocked by firewall
   copy:
     src: etc/iptables.d/500-Allow-GRE
     dest: /etc/iptables.d/500-Allow-GRE
-  notify:
-    - restart firewall
-  tags: ffnw
-
-- name: Ensure gre tunnel config is in place
-  template:
-    src: etc/network/interfaces.d/ffnw-gre.j2
-    dest: /etc/network/interfaces.d/ffnw-gre
-  notify:
-    - restart ffnw tunnel
-  tags: ffnw
-
-# Firewall
-- name: Ensure ffnw-forward chain exists
-  copy:
-    src: etc/iptables.d/001-CHAINS_ffnw
-    dest: /etc/iptables.d/001-CHAINS_ffnw
   notify:
     - restart firewall
   tags: ffnw
@@ -40,18 +24,12 @@
     - restart firewall
   tags: ffnw
 
-- name: Ensure ip forwarding from ffnw to local mesh is allowed
+# GRE tunnel
+- name: Ensure gre tunnel config is in place
   template:
-    src: "{{ 'etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}.j2' }}"
-    dest: "/etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}"
+    src: etc/network/interfaces.d/ffnw-gre.j2
+    dest: /etc/network/interfaces.d/ffnw-gre
   notify:
-    - restart firewall
-  tags: ffnw6
-
-- name: Ensure non-matching traffic on ffnw interface is dropped
-  copy:
-    src: etc/iptables.d/900-FORWARD-drop_ffnw
-    dest: /etc/iptables.d/900-FORWARD-drop_ffnw
-  notify:
-    - restart firewall
+    - restart ffnw tunnel
   tags: ffnw
+
