@@ -1,3 +1,6 @@
 [submodule "ffki_host_vars"]
 	path = ffki_host_vars
 	url = git@gitlab.toppoint.de:ffki/ansible-host-vars.git
+[submodule "ffki_scripts"]
+	path = ffki_scripts
+	url = https://github.com/TobleMiner/ffki-scripts
