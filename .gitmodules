@@ -1,0 +1,3 @@
+[submodule "ffki_host_vars"]
+	path = ffki_host_vars
+	url = git@gitlab.toppoint.de:ffki/ansible-host-vars.git
