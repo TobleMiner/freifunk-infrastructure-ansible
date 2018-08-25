@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+error() {
+  ( >&2 echo $@ )
+  exit 1
+}
+
+KEY_GIT_URL='{{ site.mesh_vpn.key_git }}'
+{% if site.mesh_vpn.key_git_branch is defined %}
+KEY_GIT_BRANCH='{{ site.mesh_vpn.key_git_branch }}'
+{% else %}
+KEY_GIT_BRANCH=master
+{% endif %}
+KEY_GIT_DIRECTORY='/opt/fastd-peer-keys-{{ site.code }}'
+KEY_DIRECTORY='/etc/fastd/mvpn-{{ site.code }}/peers'
+
+[ -e "$KEY_DIRECTORY" ] || error "FATAL: Key directory '$KEY_DIRECTORY' does not exist"
+
+set +e
+GIT_OUTPUT="$(update_git_repo "$KEY_GIT_URL" "$KEY_GIT_BRANCH" "$KEY_GIT_DIRECTORY" 2>&1)"
+GIT_EXIT=$?
+set -e
+
+if [[ $GIT_EXIT -ne 0 ]]; then
+  error 'FATAL: Git repo update failed' "$GIT_OUTPUT"
+fi
+
+validate_fastd_keys "$KEY_GIT_DIRECTORY"
+
+for file in "$KEY_GIT_DIRECTORY"/*; do
+  base="$(basename "$file")"
+  if ! diff "$file" "${KEY_DIRECTORY}/${base}" 2> /dev/null; then
+    echo "Installing changed key '$base'"
+    cp "$file" "$KEY_DIRECTORY"
+  fi
+done

@@ -8,16 +8,15 @@
     - restart fastd
   tags: mesh_vpn
 
-- name: Ensure git is installed
+- name: Ensure packages are installed
   apt:
-    name: git
+    name: "{{ item }}"
     state: present
-  tags: mesh_vpn
-
-- name: Ensure patch is installed
-  apt:
-    name: patch
-    state: present
+  with_items:
+    - git
+    - patch
+    - diff
+    - cron
   tags: mesh_vpn
 
 - name: Ensure firewall allows fastd traffic
@@ -27,18 +26,6 @@
   notify:
     - restart firewall
   tags: mesh_vpn
-
-- name: Ensure key validation script is installed
-  copy:
-    src: usr/local/bin/validate_fastd_keys
-    dest: /usr/local/bin/validate_fastd_keys
-  tags: mesh_vpn, fastd_keys
-
-- name: Ensure key validation script is executable
-  file:
-    path: /usr/local/bin/validate_fastd_keys
-    mode: 0755
-  tags: mesh_vpn, fastd_keys
 
 # Config 
 - name: Ensure fastd peer directory exists
@@ -58,19 +45,41 @@
   tags: mesh_vpn
 
 # Peers
-- name: Ensure fastd key repo is up to date
-  git:
-    repo: "{{ site.mesh_vpn.key_git }}"
-    dest: "/opt/fastd-peer-keys-{{ site.code }}"
-    force: yes
+- name: Ensure scripts are installed
+  copy:
+    src: "usr/local/bin/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+  with_items:
+    - validate_fastd_keys
+    - update_git_repo
   tags: mesh_vpn, fastd_keys
 
-- name: Ensure fastd peer keys are valid
-  shell: validate_fastd_keys "/opt/fastd-peer-keys-{{ site.code }}"
+- name: Ensure fastd key update script is installed
+  template:
+    src: "{{ 'usr/local/bin/fastd_update_keys_{{ site.code }}.j2' }}"
+    dest: "/usr/local/bin/fastd_update_keys_{{ site.code }}"
+  tags: mesh_vpn, fastd_keys
+
+- name: Ensure scripts are executable
+  file:
+    path: "/usr/local/bin/{{ item }}"
+    mode: 0755
+  with_items:
+    - validate_fastd_keys
+    - update_git_repo
+    - fastd_update_keys_{{ site.code }}
   tags: mesh_vpn, fastd_keys
 
 - name: Ensure fastd key directory is up to date
-  shell: cp -r /opt/fastd-peer-keys-{{ site.code }}/* /etc/fastd/mvpn-{{ site.code }}/peers
+  shell: "/usr/local/bin/fastd_update_keys_{{ site.code }}"
+  register: key_update
+  changed_when: '"Installing changed key" in key_update.stdout'
+  tags: mesh_vpn, fastd_keys, update_fastd_keys
+
+- name: Ensure fastd key repo update cronjob is installed
+  cron:
+    job: "/usr/local/bin/fastd_update_keys_{{ site.code }}"
+    minute: '*/5'
   tags: mesh_vpn, fastd_keys
 
 # Service
