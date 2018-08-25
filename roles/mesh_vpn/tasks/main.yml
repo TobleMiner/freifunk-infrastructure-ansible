@@ -15,7 +15,6 @@
   with_items:
     - git
     - patch
-    - diff
     - cron
   tags: mesh_vpn
 
