@@ -1,0 +1,12 @@
+---
+- name: Ensure sudo is installed
+  apt:
+    name: sudo
+    state: present
+
+- name: Ensure mesh vpn keys can be updated by ci
+  vars:
+    username: mesh_vpn_ci_{{ site.code }}
+    home: /home/{{ username }}
+  include_tasks: ci_user.yml
+  tags: mesh_vpn_ci_access

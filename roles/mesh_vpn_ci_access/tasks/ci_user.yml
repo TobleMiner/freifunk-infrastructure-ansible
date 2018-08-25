@@ -1,0 +1,47 @@
+- name: Ensure mesh vpn update wrapper is installed
+  copy:
+    content: "#!/usr/bin/env bash\nsudo /usr/local/bin/fastd_update_keys_{{ site.code }}\n"
+    dest: /usr/local/bin/fastd_update_keys_{{ site.code }}_sudo_wrapper
+  tags: mesh_vpn_ci_access
+
+- name: Ensure mesh vpn update wrapper is executable
+  file:
+    path: /usr/local/bin/fastd_update_keys_{{ site.code }}_sudo_wrapper
+    state: file
+    mode: 0755
+    owner: root
+  tags: mesh_vpn_ci_access
+
+- name: Ensure mesh vpn key ci deploy user exists
+  user:
+    name: "{{ username }}"
+    state: present
+    home: "{{ home }}"
+    shell: /usr/local/bin/fastd_update_keys_{{ site.code }}_sudo_wrapper
+  tags: mesh_vpn_ci_access
+
+- name: Ensure .ssh directory of ci deploy user exists
+  file:
+    path: "{{ home }}/.ssh"
+    state: directory
+    owner: "{{ username }}"
+    mode: 0700
+  when: 'site.mesh_vpn.ci_deploy_key is defined'
+  tags: mesh_vpn_ci_access
+
+- name: Ensure ci job can log in via ssh
+  copy:
+    content: "{{ site.mesh_vpn.ci_deploy_key }}\n"
+    dest: "{{ home }}/.ssh/authorized_keys"
+  when: 'site.mesh_vpn.ci_deploy_key is defined'
+  tags: mesh_vpn_ci_access
+
+- name: Ensure ci user can trigger key update
+  lineinfile:
+    regexp: "^{{ username }}.*"
+    insertbefore: '^\s*#includedir'
+    firstmatch: yes
+    line: "{{ username }} ALL=(root) NOPASSWD: /usr/local/bin/fastd_update_keys_{{ site.code }}"
+    path: /etc/sudoers
+    state: present
+  tags: mesh_vpn_ci_access

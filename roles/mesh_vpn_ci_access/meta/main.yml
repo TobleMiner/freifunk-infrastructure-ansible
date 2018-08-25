@@ -1,0 +1,2 @@
+dependencies:
+  - { role: mesh_vpn }
