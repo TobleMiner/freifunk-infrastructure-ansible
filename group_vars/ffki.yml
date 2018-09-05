@@ -12,7 +12,7 @@ site:
   mesh_vpn:
     peer_limit: 100 # optional, defaults to no limit
     mtu: 1280
-    key_git: git://git.freifunk.in-kiel.de/fastd-peer-keys.git
+    key_git: https://gitlab.toppoint.de/ffki/fastd-peer-keys.git
     port: 11235
     verify: yes # optional, defaults to yes
     ci_deploy_key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDchXSfmPJsqIa1Qp0V2qtBI635BAkYedV++Gc7oKhq6EHK6c4p+B5XfwQ2nA1J/VW0b/PRVoQjGJg/vc/Y6vRB1wgce4XLHmMfTBQLGOmE6gqj/VkexHQsiU3hf1lC8QiQxaTZ6ZlmJeLP3B6vhAL1w5Is+Z+QlDYnSCinIGTeIKOHmECWdKPJrpW1SI4t1wisVy3TUZhiHwqjHIed/VgM07BdPgBmSTLfIp3FKYHGx+goi/1KtdAd4S6W/2l1wM7rtt/daaYN7QHL3Uu8xJCLJOdRkhRp1jpVN754oIO/tbT85Ax8TIR3XLDoW67Gfwt/do0rt+iUEyKe9CSJnoguGKnzSW5fUzEYOydh0u63u87Zj7Y8bjfgEEnvWFY4Vdw2Q/poDg+g5QrMH3A6uzfMiVVLM0Twm3UGKEb33RDezxZKjTv4im7SEBc3TskeRux1VVPhOukpYB0CclJoBuXigFLSzSk0MuWvu716Sm13sZv5REV/QzPaCMWURe+ITFxbeUJFH7e86we88kdwdBqrYAXZXVGMOkzfHh6l+bQQ+R/YXKfSAhepoLZywZa0uW4hmuNLt0B1xN8S+YoV/wnT6W48vNUnv5fwkY6G0MEo3F2GlAQSl0kLUFznErNbz0MylDRQ0+BwxXVHIOnxo3+bqweuFUdWrFLOQ01rGXxq4w=='
