@@ -6,6 +6,8 @@ Debian 8 (jessie) does not work and will not be supported, Debian 10 (buster) mi
 
 In the following documentation all occurences ```<hostname>``` are to be replaced by the name used for the gateway in the inventory file.
 
+# Configuration
+
 Gateways are defied through files placed in ```host_vars```. There must be a file ```host_vars/<hostname>.yml``` for each gateway.
 
 An annotated example of a gateway config can be found below:
@@ -78,3 +80,9 @@ peering:
         local: 100.100.32.43/31
         remote: 100.100.32.42/31
 ```
+
+# Deployment
+
+Deployment of all gateways is realized by running `ansible-playbook -b -K -i ffki -t gateway site.yml`
+
+If you wish to deploy only one gateway in particular use `ansible-playbook -b -K -i ffki -t gateway site.yml --limit <hostname>`
