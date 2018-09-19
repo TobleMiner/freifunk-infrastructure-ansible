@@ -3,17 +3,17 @@
     name: "{{ item }}"
     state: present
   loop:
-  - etckeeper
-  - sshguard
-  - nano
-  - vim
-  - tcpdump
-  - dnsutils
-  - realpath
-  - screen
-  - tmux
-  - htop
-  - mlocate
-  - git
-  - tig
-  - unattended-upgrades
+    - etckeeper
+    - sshguard
+    - nano
+    - vim
+    - tcpdump
+    - dnsutils
+    - realpath
+    - screen
+    - tmux
+    - htop
+    - mlocate
+    - git
+    - tig
+    - unattended-upgrades
