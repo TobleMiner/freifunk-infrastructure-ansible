@@ -1,4 +1,8 @@
 ---
+- name: install miscellaneous packages
+  import_task: misc_packages.yaml
+  tags: miscellaneous
+
 - name: Setup iproute2 related stuff
   import_tasks: iproute2.yml
   tags: iproute2, network
