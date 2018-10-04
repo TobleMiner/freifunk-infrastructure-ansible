@@ -27,3 +27,9 @@
   roles:
     - ffnw4
   tags: gateway
+
+- name: Ensure wirerrd is set up
+  hosts: gateways
+  roles:
+     - wirerrd
+  tags: gateway

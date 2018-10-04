@@ -1,0 +1,13 @@
+[Unit]
+Description=wirerrd exporter
+
+[Service]
+Type=oneshot
+User=wirerrd
+Group=wirerrd
+WorkingDirectory=/home/wirerrd/wirerrd
+ExecStart=/home/wirerrd/wirerrd/wirerrd export -i /home/wirerrd/rrd -o /home/wirerrd/output
+
+[Install]
+WantedBy=multi-user.target
+

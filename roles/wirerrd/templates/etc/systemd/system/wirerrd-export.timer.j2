@@ -1,0 +1,10 @@
+[Unit]
+Description=wirerrd export timer
+
+[Timer]
+Unit=wirerrd-export
+OnBootSec=5m
+OnUnitActiveSec=5m
+
+[Install]
+WantedBy=timers.target

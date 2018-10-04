@@ -1,0 +1,11 @@
+[Unit]
+Description=wirerrd collector
+
+[Service]
+Type=simple
+User=wirerrd
+WorkingDirectory=/home/wirerrd/wirerrd
+ExecStart=/home/wirerrd/wirerrd/wirerrd collect -i mvpn-{{ site.code }} -o /home/wirerrd/rrd -f contrib/filters/bcast-stats.rules
+
+[Install]
+WantedBy=multi-user.target
