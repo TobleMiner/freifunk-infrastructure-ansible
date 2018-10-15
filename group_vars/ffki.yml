@@ -4,7 +4,7 @@ site:
   tld:  ffki # optional, defaults to code
   mesh:
     network:
-      ipv4: 10.116.0.0/17
+      ipv4: 10.116.128.0/17
       ipv6: fda1:384a:74de::/48
     network_dynamic_clients: # optional, defaults to network.ipv6
       ipv6: fda1:384a:74de:4242::/64
