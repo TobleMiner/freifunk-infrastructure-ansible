@@ -5,6 +5,11 @@
     name: git
     state: present
 
+- name: Ensure ethtool is installed
+  apt:
+    name: ethtool
+    state: present
+
 - name: Ensure mesh-announce target directory exists
   file:
     path: /opt/mesh-announce
