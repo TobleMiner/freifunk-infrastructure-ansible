@@ -57,7 +57,7 @@
 - name: Ensure ffnw-forward chain is referenced in forward chain
   template:
     src: etc/iptables.d/100-device-ffnw.j2
-    dest: /etc/iptables.d/100-device-ffnw.j2
+    dest: /etc/iptables.d/100-device-ffnw
   notify:
     - restart firewall
   tags: ffnw6
