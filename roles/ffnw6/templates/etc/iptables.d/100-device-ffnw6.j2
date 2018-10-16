@@ -1,5 +1,6 @@
 {% for sitename, _ in ffnw.site.items() %}
 
+ip6tables -A input -i ffnw-{{ sitename }} -j ffnw-input
 ip6tables -A forward -i ffnw-{{ sitename }} -j ffnw-forward
 
 {% endfor %}

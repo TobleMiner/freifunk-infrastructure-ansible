@@ -46,6 +46,30 @@
   tags: ffnw6
 
 # Firewall
+- name: Ensure ffnw-input firewall chain exists
+  copy:
+    src: etc/iptables.d/001-CHAINS_ffnw6
+    dest: /etc/iptables.d/001-CHAINS_ffnw6
+  notify:
+    - restart firewall
+  tags: ffnw6
+
+- name: Ensure ffnw-input delegation is set up in input chain
+  template:
+    src: etc/iptables.d/100-device-ffnw6.j2
+    dest: /etc/iptables.d/100-device-ffnw6
+  notify:
+    - restart firewall
+  tags: ffnw6
+
+- name: Ensure incoming BGP traffic is accepted
+  copy:
+    src: etc/iptables.d/500-Allow-bgp-ffnw6
+    dest: /etc/iptables.d/500-Allow-bgp-ffnw6
+  notify:
+    - restart firewall
+  tags: ffnw6
+
 - name: Ensure ffnw-forward chain exists
   copy:
     src: etc/iptables.d/001-CHAINS_ffnw
@@ -56,8 +80,8 @@
 
 - name: Ensure ffnw-forward chain is referenced in forward chain
   template:
-    src: etc/iptables.d/100-device-ffnw.j2
-    dest: /etc/iptables.d/100-device-ffnw
+    src: etc/iptables.d/100-device-ffnw6.j2
+    dest: /etc/iptables.d/100-device-ffnw6
   notify:
     - restart firewall
   tags: ffnw6
