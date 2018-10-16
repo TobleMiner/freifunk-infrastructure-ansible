@@ -1,0 +1,5 @@
+{% for sitename, _ in ffnw.site.items() %}
+
+ip4tables -A input -i ffnw-{{ sitename }} -j ffnw-input
+
+{% endfor %}

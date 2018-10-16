@@ -1,0 +1,1 @@
+ip4tables -N ffnw-input

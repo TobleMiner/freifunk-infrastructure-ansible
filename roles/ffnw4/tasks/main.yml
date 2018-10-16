@@ -43,9 +43,33 @@
   tags: ffnw4
 
 # Firewall
+- name: Ensure ffnw-input firewall chain exists
+  copy:
+    src: etc/iptables.d/001-CHAINS_ffnw4
+    dest: /etc/iptables.d/001-CHAINS_ffnw4
+  notify:
+    - restart firewall
+  tags: ffnw4
+
+- name: Ensure ffnw-input delegation is set up in input chain
+  template:
+    src: etc/iptables.d/100-device-ffnw4.j2
+    dest: /etc/iptables.d/100-device-ffnw4
+  notify:
+    - restart firewall
+  tags: ffnw4
+
+- name: Ensure incoming BGP traffic is accepted
+  copy:
+    src: etc/iptables.d/500-Allow-bgp-ffnw4
+    dest: /etc/iptables.d/500-Allow-bgp-ffnw4
+  notify:
+    - restart firewall
+  tags: ffnw4
+
 - name: Ensure SNAT is enabled on peering interfaces
   template:
-    src: etc/iptables.d/910-SNAT-ffnw
+    src: etc/iptables.d/910-SNAT-ffnw.j2
     dest: /etc/iptables.d/910-SNAT-ffnw
   notify:
     - restart firewall
