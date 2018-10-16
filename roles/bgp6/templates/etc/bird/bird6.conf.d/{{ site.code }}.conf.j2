@@ -100,7 +100,7 @@ protocol static 'local_{{ site.code }}' {
   {% endif %}
 };
 
-function 'is_self_{{ site.code }}' () {
+function is_self_{{ site.code }}() {
   return (proto = "static_{{ site.code }}");
 };
 
@@ -109,7 +109,7 @@ function 'is_self_{{ site.code }}' () {
 protocol pipe 'pipe_mesh_{{ site.code }}' {
   table mesh;
   peer table 'mesh_{{ site.code }}';
-  import where ! 'is_self_{{ site.code }}'();
+  import where ! is_self_{{ site.code }}();
   export where (source = RTS_BGP || source = RTS_STATIC_DEVICE);
 };
 
