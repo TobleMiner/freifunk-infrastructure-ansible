@@ -58,6 +58,8 @@ interface:
 
 # optional, required if mesh vpn is enabled
 mesh_vpn:
+  # optional, enables/disables peer key validation
+  validate: yes
   # mesh vpn private/public key config. PLEASE DO NOT USE THE EXAMPLE KEYS PROVIDED HERE! They are compromised.
   key:
     private: 28b0870219d3696bcfe43856bbb3ada49051c9c2201e1ffb22378503e2a8735b
