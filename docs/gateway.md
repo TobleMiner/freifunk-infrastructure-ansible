@@ -58,7 +58,7 @@ interface:
 
 # optional, required if mesh vpn is enabled
 mesh_vpn:
-  # mesh vpn private/prublic key config. PLEASE DO NOT USE THE EXAMPLE KEYS PROVIDED HERE! They are compromised.
+  # mesh vpn private/public key config. PLEASE DO NOT USE THE EXAMPLE KEYS PROVIDED HERE! They are compromised.
   key:
     private: 28b0870219d3696bcfe43856bbb3ada49051c9c2201e1ffb22378503e2a8735b
     public:  0b0dd91ae88df431de13db04221ae63d4352a9b100b2c2f206b917901d83ffef
