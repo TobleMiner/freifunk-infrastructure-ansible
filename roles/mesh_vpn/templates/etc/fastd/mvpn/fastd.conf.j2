@@ -6,8 +6,18 @@ method "xsalsa20-poly1305"; # deprecated
 bind any:{{ site.mesh_vpn.port }};
 hide ip addresses yes;
 hide mac addresses yes;
-{% if site.mesh_vpn.verify is defined and not site.mesh_vpn.verify %}
-on verify true;
+{# Default to verify #}
+{% set verify=True %}
+{# Overwrite verification state with definition from group vars #}
+{% if site.mesh_vpn.verify is defined %}
+{% set verify=site.mesh_vpn.verify %}
+{% endif %}
+{# Overwrite verification state with definition from host vars #}
+{% if mesh_vpn.verify is defined %}
+{% set verify=mesh_vpn.verify %}
+{% endif %}
+{% if not verify %}
+on verify "true";
 {% endif %}
 secret "{{ mesh_vpn.key.private }}";
 {% if mesh_vpn.key.public is defined %}
