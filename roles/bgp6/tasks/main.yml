@@ -1,4 +1,5 @@
 ---
+# Packages
 - name: Ensure bird is installed
   apt:
     name: bird
@@ -7,6 +8,7 @@
     - restart bird6
   tags: bgp6
 
+# Create directories
 - name: Ensure bird6 config directory exists
   file:
     path: /etc/bird/bird6.conf.d
@@ -23,6 +25,57 @@
     - restart bird6
   tags: bgp6
 
+- name: Ensure bird6 filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bgp6
+
+- name: Ensure bird6 mesh kernel filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d/mesh_kernel.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bgp6
+
+- name: Ensure bird6 kernel filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d/main_kernel.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bgp6
+
+# Drop static config files
+- name: Ensure bird6 mesh device protocol exists
+  copy:
+    src: etc/bird/bird6.conf.d/050-proto-devices.conf
+    dest: /etc/bird/bird6.conf.d/050-proto-devices.conf
+  notify:
+    - configure bird6
+  tags: bgp6
+
+- name: Ensure bird6 mesh kernel table exists
+  copy:
+    src: etc/bird/bird6.conf.d/100-kernel-table-mesh.conf
+    dest: /etc/bird/bird6.conf.d/100-kernel-table-mesh.conf
+  notify:
+    - configure bird6
+  tags: bgp6
+
+- name: Ensure bird6 main kernel table exists
+  copy:
+    src: etc/bird/bird6.conf.d/100-kernel-table-main.conf
+    dest: /etc/bird/bird6.conf.d/100-kernel-table-main.conf
+  notify:
+    - configure bird6
+  tags: bgp6
+
+
+# Drop config files
 - name: Ensure bird6 config exists
   template:
     src: etc/bird/bird6.conf.j2
@@ -41,8 +94,8 @@
 
 - name: Ensure bird6 mesh config exists
   template:
-    src: "{{ 'etc/bird/bird6.conf.d/{{ site.code }}.conf.j2' }}"
-    dest: "/etc/bird/bird6.conf.d/{{ site.code }}.conf"
+    src: "{{ 'etc/bird/bird6.conf.d/200-{{ site.code }}.conf.j2' }}"
+    dest: "/etc/bird/bird6.conf.d/200-{{ site.code }}.conf"
   notify:
     - configure bird6
   tags: bgp6

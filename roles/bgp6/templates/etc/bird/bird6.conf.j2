@@ -1,11 +1,3 @@
 router id {{ interface.mesh_bridge.address.ipv4 | ipaddr('address') }};
 
-table _dummy;
-
-# Dummy 
-protocol kernel _do_not_use {
-  scan time 20;
-  table _dummy;
-}
-
 include "/etc/bird/bird6.conf.d/*.conf";
