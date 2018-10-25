@@ -16,6 +16,8 @@
     - git
     - patch
     - cron
+    - jq
+    - socat
   tags: mesh_vpn
 
 - name: Ensure firewall allows fastd traffic
@@ -51,6 +53,7 @@
   with_items:
     - validate_fastd_keys
     - update_git_repo
+    - fastd_query
   tags: mesh_vpn, fastd_keys
 
 - name: Ensure fastd key update script is installed
@@ -67,6 +70,7 @@
     - validate_fastd_keys
     - update_git_repo
     - fastd_update_keys_{{ site.code }}
+    - fastd_query
   tags: mesh_vpn, fastd_keys
 
 - name: Ensure fastd key directory is up to date
