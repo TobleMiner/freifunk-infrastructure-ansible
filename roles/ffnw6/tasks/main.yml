@@ -17,10 +17,42 @@
     - configure bird6
   tags: ffnw6
 
+- name: Ensure bird6 ffnw kernel filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d/ffnw_kernel.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: ffnw6
+
+- name: Ensure ffnw bgp6 parameters are in place
+  copy:
+    src: etc/bird/bird6.filters.d/ffnw_kernel.d/050-ffnw-set-krt_prefsrc.export
+    dest: /etc/bird/bird6.filters.d/ffnw_kernel.d/050-ffnw-set-krt_prefsrc.export
+  notify:
+    - configure bird6
+  tags: ffnw6
+
+- name: Ensure ffnw bgp6 parameters are in place
+  copy:
+    src: etc/bird/bird6.conf.d/100-kernel-table-ffnw.conf
+    dest: /etc/bird/bird6.conf.d/100-kernel-table-ffnw.conf
+  notify:
+    - configure bird6
+  tags: ffnw6
+
+- name: Ensure ffnw bgp6 parameters are in place
+  template:
+    src: etc/bird/bird6.conf.d/020-ffnw-defines.conf.j2
+    dest: /etc/bird/bird6.conf.d/020-ffnw-defines.conf
+  notify:
+    - configure bird6
+  tags: ffnw6
+
 - name: Ensure ffnw bgp6 config is in place
   template:
-    src: etc/bird/bird6.conf.d/ffnw.conf.j2
-    dest: /etc/bird/bird6.conf.d/ffnw.conf
+    src: etc/bird/bird6.conf.d/200-ffnw.conf.j2
+    dest: /etc/bird/bird6.conf.d/200-ffnw.conf
   notify:
     - configure bird6
   tags: ffnw6
@@ -101,4 +133,3 @@
   notify:
     - restart firewall
   tags: ffnw6
-

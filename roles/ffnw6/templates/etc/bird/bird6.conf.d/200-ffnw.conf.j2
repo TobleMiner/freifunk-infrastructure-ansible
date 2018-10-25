@@ -1,8 +1,3 @@
-# Local src ip address
-define ffnw_gw_ip = {{ interface.mesh_bridge.ffnw.ipv6 | ipaddr('address') }};
-
-table ffnw;
-
 function is_private_ip() {
   return net ~ [
     fc00::/7+,
@@ -14,28 +9,15 @@ function is_public_ip() {
   return !is_private_ip();
 }
 
-protocol kernel {
-  device routes;
-  scan time 20;
-  table ffnw;
-  kernel table 23;
-  import none;
-  # Export all kernel routes
-  export filter {
-    krt_prefsrc = ffnw_gw_ip;
-    accept;
-  };
-}
-
 # Import all routes on interface br-{{ site.code }}
 protocol direct {
-  table ffnw;
+  table ffnw_kernel;
   interface "br-{{ site.code }}";
   import all;
 }
 
 template bgp bgp_ffnw {
-  table ffnw;
+  table ffnw_kernel;
   local as {{ site.bgp.as }};
   # accept all routes
   import where net ~ [ ::/0+ ];
