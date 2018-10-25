@@ -13,16 +13,25 @@ function ffnw_is_ours() {
   return net ~ [ {{ site.ffnw.network.ipv6 }}+ ];
 }
 
+table 'ffnw_{{ site.code }}';
+
 # Import all routes on interface br-{{ site.code }}
 protocol direct {
-  table 'mesh_{{ site.code }}';
+  table 'ffnw_{{ site.code }}';
   interface "br-{{ site.code }}";
   import where ffnw_is_ours();
 };
 
 protocol pipe {
-  table 'mesh_{{ site.code }}';
+  table 'ffnw_{{ site.code }}';
   peer table ffnw_kernel;
+  export where ffnw_is_ours();
+  import none;
+};
+
+protocol pipe {
+  table 'ffnw_{{ site.code }}';
+  peer table 'mesh_{{ site.code }}';
   export where ffnw_is_ours();
   import none;
 };
@@ -33,7 +42,7 @@ template bgp bgp_ffnw {
   # accept all routes
   import where net ~ [ ::/0+ ];
   # export only routes from our subnet
-  export where ffnw_is_ours();
+  export where ffnw_is_ours() && source != RTS_BGP;
   direct;
 };
 
