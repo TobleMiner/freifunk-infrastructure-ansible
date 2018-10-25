@@ -27,13 +27,6 @@ protocol pipe {
   import none;
 };
 
-#protocol pipe {
-#  table 'mesh_{{ site.code }}';
-#  peer table main_kernel;
-#  export where ffnw_is_ours();
-#  import none;
-#};
-
 template bgp bgp_ffnw {
   table ffnw_kernel;
   local as {{ site.bgp.as }};
