@@ -1,0 +1,9 @@
+---
+- name: restart mesh_gre tunnel
+  shell: |
+    {% for hostname in mesh_gre.peers %}
+    ifdown mg-{{ hostname }} || true
+    ip link set down mg-{{ hostname }} && ip link del mg-{{ hostname }} || true
+    ifdown mg-{{ hostname }}
+    {% endfor %}
+

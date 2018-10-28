@@ -1,0 +1,13 @@
+{% for gateway_name in mesh_gre.peers %}
+{% if inventory_hostname in hostvars[gateway_name].mesh_gre.peers %}
+
+auto mg-{{ gateway_name }}
+iface mg-{{ gateway_name }} inet manual
+  pre-up ip link add $IFACE type gretap local {{ interface.wan.address.ipv4 | ipaddr('address') }} remote {{ hostvars[gateway_name].interface.wan.address.ipv4 | ipaddr('address') }} dev {{ interface.wan.name }}
+  pre-up ip link set $IFACE up
+  post-up /usr/sbin/batctl -m bat-{{ site.code }} if add $IFACE ||:
+  pre-down /usr/sbin/batctl -m bat-{{ site.code }} if del $IFACE ||:
+  post-down ip link del $IFACE
+
+{% endif %}
+{% endfor %}

@@ -1,0 +1,10 @@
+---
+
+- name: Ensure gre tunnel is in place
+  template:
+    src: "etc/network/interfaces.d/mesh_gre.j2"
+    dest: "/etc/network/interfaces.d/mesh-gre"
+  notify:
+    - restart mesh_gre tunnel
+  tags: mesh
+
