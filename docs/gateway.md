@@ -67,6 +67,13 @@ mesh_vpn:
     private: 28b0870219d3696bcfe43856bbb3ada49051c9c2201e1ffb22378503e2a8735b
     public:  0b0dd91ae88df431de13db04221ae63d4352a9b100b2c2f206b917901d83ffef
 
+# optional, required if inter-gateway mesh via GRE is enabled
+mesh_gre:
+  # List of hostnames to peer with, must match ansible hostnames
+  peers:
+    - ffki-gw1
+    - ffki-gw6
+
 # optional, GRE + BGP peering configuration
 peering:
   # peering partner specifiation, use name of institution/community you are peering with here
