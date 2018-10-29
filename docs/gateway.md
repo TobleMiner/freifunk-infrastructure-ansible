@@ -25,6 +25,8 @@ interface:
     address:
       # primary IPv4 address of the uplink interface
       ipv4: 138.201.144.216/32
+      # if the primary IPv4 address of the uplink interface is NATed, add external address of NAT here
+      nat: 176.9.100.89
 
   # B.A.T.M.A.N interface config
   batman:
