@@ -21,7 +21,7 @@
 
 - name: Setup mesh-announce
   import_tasks: mesh-announce.yml
-  tags: mesh-announce, respondd
+  tags: mesh-announce, respondd, dhcpd
 
 - name: Setup dhcpd
   import_tasks: dhcpd.yml
