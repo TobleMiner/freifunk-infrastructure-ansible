@@ -42,3 +42,7 @@
 - name: Setup prometheus-node-exporter
   import_tasks: prometheus-node-exporter.yml
   tags: prometheus-node-exporter, monitoring
+
+- name: Setup conntrack
+  import_tasks: conntrack
+  tags: conntrack
