@@ -1,16 +1,19 @@
 [ffki]
 ffki-gw0
 ffki-gw1
+ffki-gw2
 ffki-gw6
 
 [gateways]
 ffki-gw0
 ffki-gw1
+ffki-gw2
 ffki-gw6
 
 [peering_ffnw6]
 ffki-gw0
 ffki-gw1
+ffki-gw2
 ffki-gw6
 
 [peering_ffnw4]
