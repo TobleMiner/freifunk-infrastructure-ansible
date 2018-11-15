@@ -1,0 +1,8 @@
+---
+ - name: Deploy gre tunnels for mesh connection
+   hosts: 
+     - ffki-gw0 
+     - ffki-gw1
+     - ffki-gw6
+   roles:
+     - mesh_gre

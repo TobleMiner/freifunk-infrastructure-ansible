@@ -14,6 +14,7 @@
     - mesh_vpn_ci_access
     - bgp4 # Required for default route distribution
     - gateway_mss_clamp
+    - mesh_gre
   tags: gateway
 
 - name: Ensure gateways are peered with ffnw via ipv6
