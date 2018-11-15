@@ -6,6 +6,7 @@
   with_items:
     - git
     - openssl
+    - ca-certificates
   tags: noc_keys
 
 - name: Ensure noc key git is cloned and up to date
