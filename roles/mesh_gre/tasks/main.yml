@@ -6,5 +6,5 @@
     dest: "/etc/network/interfaces.d/mesh-gre"
   notify:
     - restart mesh_gre tunnel
-  tags: mesh
+  tags: mesh, mesh_gre
 
