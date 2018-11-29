@@ -30,7 +30,6 @@ include peers from "peers";
 peer limit {{ site.mesh_vpn.peer_limit }};
 {% endif %}
 on up "
- ip link set address {{ interface.batman.mac  }} dev $INTERFACE
  /usr/sbin/batctl -m bat-{{ site.code }} if add $INTERFACE
  ip link set up dev $INTERFACE
 ";
