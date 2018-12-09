@@ -39,6 +39,7 @@
   service:
     name: isc-dhcp-server
     state: restarted
+  listen: 'restart mesh bridge'
 
 - name: restart unbound
   service:
