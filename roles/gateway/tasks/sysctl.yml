@@ -1,4 +1,15 @@
 ---
+- name: Ensure conntrack module is loaded on boot
+  copy:
+    src: "etc/modules-load.d/conntrack.conf"
+    dest: "/etc/modules-load.d/conntrack.conf"
+
+- name: Ensure conntrack module is loaded
+  modprobe:
+    name: nf_conntrack
+    state: present
+  
+
 - name: Ensure required sysctl config files are present
   copy:
     src: "{{ item }}"
