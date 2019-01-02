@@ -7,6 +7,7 @@ iface bat-{{ site.code }} inet6 manual
   pre-up    /sbin/ip link add name $IFACE type batadv || true
   pre-up    /usr/sbin/batctl -m $IFACE if add dummy-{{ site.code }} || true
   pre-up    /usr/sbin/batctl -m $IFACE it 5000
+  pre-up    /usr/sbin/batctl -m $IFACE bl 1
   pre-up    /usr/sbin/batctl -m $IFACE gw_mode server
   pre-up    /sbin/ip link set $IFACE address {{ interface.batman.mac }}
   up        /sbin/ip link set dev $IFACE up
