@@ -81,6 +81,7 @@
 
 - name: Ensure fastd key repo update cronjob is installed
   cron:
+    name: "fastd_update_keys_{{ site.code }}"
     job: "/usr/local/bin/fastd_update_keys_{{ site.code }}"
     minute: '*/5'
   tags: mesh_vpn, fastd_keys
