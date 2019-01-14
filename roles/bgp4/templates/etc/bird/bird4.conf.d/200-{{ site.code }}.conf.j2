@@ -11,7 +11,7 @@ protocol pipe {
 template bgp local_mesh_{{ site.code }} {
   table 'mesh';
   source address {{ interface.mesh_bridge.address.ipv4 | ipaddr('address') }};
-  local as {{ site.bgp.as }};
+  local as asn;
   direct;
   next hop self;
   import all;

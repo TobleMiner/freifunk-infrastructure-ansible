@@ -26,7 +26,7 @@ protocol static 'ffnw4' {
 
 template bgp bgp_ffnw {
   table ffnw;
-  local as 65525;
+  local as asn;
   # accept all routes
   import keep filtered;
   import where is_public_ip();
