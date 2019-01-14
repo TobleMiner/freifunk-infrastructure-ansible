@@ -1,0 +1,8 @@
+---
+- name: restart ffrl tunnel
+  shell: |
+    {% for site, _ in ffrl.site.items() %}
+    ifdown ffrl-{{ site }} || true
+    ip link set down ffrl-{{ site }} && ip link del ffrl-{{ site }} || true
+    ifup ffrl-{{ site }}
+    {% endfor %}

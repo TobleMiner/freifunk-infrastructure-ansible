@@ -1,0 +1,17 @@
+{% for sitename, site in ffrl.site.items() %}
+
+auto ffrl-{{ sitename }}
+iface ffrl-{{ sitename }} inet tunnel
+  address {{ peering.ffrl[sitename].transit.ipv4.local | ipaddr('address') }}
+  netmask {{ peering.ffrl[sitename].transit.ipv4.local | ipaddr('netmask') }}
+  mode gre
+  endpoint {{ site.address.ipv4 | ipaddr('address') }}
+  local {{ interface.wan.address.ipv4 | ipaddr('address') }}
+  ttl 64
+  mtu 1400
+
+iface ffrl-{{ sitename }} inet6 static
+  address {{ peering.ffrl[sitename].transit.ipv6.local | ipaddr('address') }}
+  netmask {{ peering.ffrl[sitename].transit.ipv6.local | ipaddr('prefix') }}
+
+{% endfor %}

@@ -1,0 +1,5 @@
+{% for sitename, _ in ffrl.site.items() %}
+
+ip46tables -A mesh-forward -o ffrl-{{ sitename }} -j ACCEPT
+
+{% endfor %}

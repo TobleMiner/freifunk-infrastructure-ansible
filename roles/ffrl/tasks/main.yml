@@ -1,0 +1,35 @@
+---
+- name: Ensure routing table 24 exists and is called ffrl
+  lineinfile:
+    path: /etc/iproute2/rt_tables
+    regexp: '^24\s+.*'
+    line: '24 ffrl'
+    state: present
+  tags: ffrl
+
+# Firewall
+- name: Ensure GRE traffic is not blocked by firewall
+  copy:
+    src: etc/iptables.d/500-Allow-GRE
+    dest: /etc/iptables.d/500-Allow-GRE
+  notify:
+    - restart firewall
+  tags: ffrl
+
+- name: Ensure ip forwarding from local mesh to ffrl is allowed
+  template:
+    src: etc/iptables.d/800-mesh-forward-ACCEPT-ffrl.j2
+    dest: /etc/iptables.d/800-mesh-forward-ACCEPT-ffrl
+  notify:
+    - restart firewall
+  tags: ffrl
+
+# GRE tunnel
+- name: Ensure gre tunnel config is in place
+  template:
+    src: etc/network/interfaces.d/ffrl-gre.j2
+    dest: /etc/network/interfaces.d/ffrl-gre
+  notify:
+    - restart ffrl tunnel
+  tags: ffrl
+
