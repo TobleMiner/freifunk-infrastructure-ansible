@@ -31,6 +31,10 @@ site:
     network:
       ipv6: 2a07:59c6:ec02::/48
 
+  ffrl:
+    network:
+      ipv6: 2a03:2260:1017::/48
+
   noc_keys:
     git: https://github.com/TobleMiner/ffki-noc-sshkeys.git
 
