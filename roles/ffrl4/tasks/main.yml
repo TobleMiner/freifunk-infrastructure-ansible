@@ -1,0 +1,76 @@
+---
+# Interface config
+- name: Ensure ffrl ipv4 peering interface config is in place
+  template:
+    src: etc/network/interfaces.d/ffrl-gre_nat.j2
+    dest: /etc/network/interfaces.d/ffrl-gre_nat
+  notify:
+    - restart ffrl tunnel
+  tags: ffrl4
+
+# bgp Peerings
+- name: Ensure ffrl bgp4 peers are in place
+  template:
+    src: etc/bird/bird4.peers.d/ffrl.conf.j2
+    dest: /etc/bird/bird4.peers.d/ffrl.conf
+  notify:
+    - configure bird
+  tags: ffrl4
+
+# bird config
+- name: Ensure ffrl bgp4 kernel route filter is in place
+  template:
+    src: etc/bird/bird4.filters.d/mesh_kernel.d/050-ffrl-set-krt_prefsrc.export.j2
+    dest: /etc/bird/bird4.filters.d/mesh_kernel.d/050-ffrl-set-krt_prefsrc.export
+  notify:
+    - configure bird
+  tags: ffrl4
+
+- name: Ensure ffrl bgp4 config defines are in place
+  template:
+    src: etc/bird/bird4.conf.d/020-ffrl-defines.conf.j2
+    dest: /etc/bird/bird4.conf.d/020-ffrl-defines.conf
+  notify:
+    - configure bird
+  tags: ffrl4
+
+- name: Ensure ffrl bgp4 config is in place
+  template:
+    src: etc/bird/bird4.conf.d/200-ffrl.conf.j2
+    dest: /etc/bird/bird4.conf.d/200-ffrl.conf
+  notify:
+    - configure bird
+  tags: ffrl4
+
+# Firewall
+- name: Ensure ffrl-input firewall chain exists
+  copy:
+    src: etc/iptables.d/001-CHAINS_ffrl4
+    dest: /etc/iptables.d/001-CHAINS_ffrl4
+  notify:
+    - restart firewall
+  tags: ffrl4
+
+- name: Ensure ffrl-input delegation is set up in input chain
+  template:
+    src: etc/iptables.d/100-device-ffrl4.j2
+    dest: /etc/iptables.d/100-device-ffrl4
+  notify:
+    - restart firewall
+  tags: ffrl4
+
+- name: Ensure incoming BGP traffic is accepted
+  copy:
+    src: etc/iptables.d/500-Allow-bgp-ffrl4
+    dest: /etc/iptables.d/500-Allow-bgp-ffrl4
+  notify:
+    - restart firewall
+  tags: ffrl4
+
+- name: Ensure SNAT is enabled on peering interfaces
+  template:
+    src: etc/iptables.d/910-SNAT-ffrl.j2
+    dest: /etc/iptables.d/910-SNAT-ffrl
+  notify:
+    - restart firewall
+  tags: ffrl4

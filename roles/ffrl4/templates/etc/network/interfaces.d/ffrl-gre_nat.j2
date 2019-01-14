@@ -1,0 +1,14 @@
+{% for sitename, _ in ffrl.site.items() %}
+{% set ffrl_addr=interface.ffrl.address.ipv4 | ipaddr('address') %}
+
+iface ffrl-{{ sitename }} inet static
+  pre-up    /sbin/ip rule del pref 31010 from {{ ffrl_addr }} lookup mesh || true
+  pre-up    /sbin/ip rule del pref 31011 to {{ ffrl_addr }} lookup mesh || true
+  pre-up   /sbin/ip rule add pref 31010 from {{ ffrl_addr }} lookup mesh
+  pre-up   /sbin/ip rule add pref 31011 to {{ ffrl_addr }} lookup mesh
+  post-down /sbin/ip rule del pref 31010 from {{ ffrl_addr }} lookup mesh || true
+  post-down /sbin/ip rule del pref 31011 to {{ ffrl_addr }} lookup mesh || true
+  address   {{ ffrl_addr }}
+  netmask   {{ interface.ffrl.address.ipv4 | ipaddr('netmask') }}
+
+{% endfor %}

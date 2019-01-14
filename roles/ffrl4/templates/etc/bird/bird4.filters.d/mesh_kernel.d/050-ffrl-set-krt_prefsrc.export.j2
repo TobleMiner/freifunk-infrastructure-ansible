@@ -1,0 +1,3 @@
+{% for sitename, _ in ffrl.site.items() %}
+if "ffrl-{{ sitename }}" = ifname then krt_prefsrc = ffrl_gw_ip;
+{% endfor %}

@@ -1,0 +1,5 @@
+{% for sitename, _ in ffrl.site.items() %}
+
+ip4tables -A input -i ffrl-{{ sitename }} -j ffrl-input
+
+{% endfor %}
