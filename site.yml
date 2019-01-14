@@ -28,3 +28,15 @@
   roles:
     - ffnw4
   tags: gateway
+
+- name: Ensure gateways are peered with ffrl via ipv6
+  hosts: peering_ffrl6
+  roles:
+    - ffrl6
+  tags: gateway
+
+- name: Ensure gateways are peered with ffrl via ipv4
+  hosts: peering_ffrl4
+  roles:
+    - ffrl4
+  tags: gateway
