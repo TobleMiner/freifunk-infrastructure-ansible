@@ -38,7 +38,7 @@ protocol pipe {
 
 template bgp bgp_ffnw {
   table ffnw_kernel;
-  local as {{ site.bgp.as }};
+  local as asn;
   # accept all routes
   import where net ~ [ ::/0+ ];
   # export only routes from our subnet
