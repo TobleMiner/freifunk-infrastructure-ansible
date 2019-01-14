@@ -1,0 +1,8 @@
+# BGP peerings with ffrl
+{% for sitename, _ in ffrl.site.items() %}
+
+protocol bgp 'ffrl-{{ sitename }}' from 'bgp_ffrl' {
+  neighbor {{ peering.ffrl[sitename].transit.ipv6.remote | ipaddr('address') }} as {{ ffrl.as }};
+};
+
+{% endfor %}

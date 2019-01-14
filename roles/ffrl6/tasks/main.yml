@@ -1,0 +1,135 @@
+---
+# Interfaces
+- name: Ensure ffrl bridge config is in place
+  template:
+    src: "{{ 'etc/network/interfaces.d/br-{{ site.code }}_ffrl.j2' }}"
+    dest: /etc/network/interfaces.d/br-{{ site.code }}_ffrl
+  notify:
+    - restart mesh bridge
+  tags: ffrl6
+
+# BGP
+- name: Ensure ffrl bgp6 peers are set up
+  template:
+    src: etc/bird/bird6.peers.d/ffrl.conf.j2
+    dest: /etc/bird/bird6.peers.d/ffrl.conf
+  notify:
+    - configure bird6
+  tags: ffrl6
+
+- name: Ensure bird6 ffrl kernel filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d/ffrl_kernel.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: ffrl6
+
+- name: Ensure ffrl bgp6 parameters are in place
+  copy:
+    src: etc/bird/bird6.filters.d/ffrl_kernel.d/050-ffrl-set-krt_prefsrc.export
+    dest: /etc/bird/bird6.filters.d/ffrl_kernel.d/050-ffrl-set-krt_prefsrc.export
+  notify:
+    - configure bird6
+  tags: ffrl6
+
+- name: Ensure ffrl bgp6 parameters are in place
+  copy:
+    src: etc/bird/bird6.conf.d/100-kernel-table-ffrl.conf
+    dest: /etc/bird/bird6.conf.d/100-kernel-table-ffrl.conf
+  notify:
+    - configure bird6
+  tags: ffrl6
+
+- name: Ensure ffrl bgp6 parameters are in place
+  template:
+    src: etc/bird/bird6.conf.d/020-ffrl-defines.conf.j2
+    dest: /etc/bird/bird6.conf.d/020-ffrl-defines.conf
+  notify:
+    - configure bird6
+  tags: ffrl6
+
+- name: Ensure ffrl bgp6 config is in place
+  template:
+    src: etc/bird/bird6.conf.d/200-ffrl.conf.j2
+    dest: /etc/bird/bird6.conf.d/200-ffrl.conf
+  notify:
+    - configure bird6
+  tags: ffrl6
+
+# radvd
+- name: Ensure public ipv6 prefix is announced via radvd
+  template:
+    src: "{{ 'etc/radvd.fragment.d/br-{{ site.code }}-200-ffrl-public-prefix.fragment.j2' }}"
+    dest: /etc/radvd.fragment.d/br-{{ site.code }}-200-ffrl-public-prefix.fragment
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: ffrl6
+
+- name: Ensure default advertisement lifetime is set
+  lineinfile:
+    path: /etc/radvd.fragment.d/br-{{ site.code }}-110-default-lifetime.fragment
+    regexp: '^.*AdvDefaultLifetime.*$'
+    line: ' AdvDefaultLifetime 1200;'
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: ffrl6
+
+# Firewall
+- name: Ensure ffrl-input firewall chain exists
+  copy:
+    src: etc/iptables.d/001-CHAINS_ffrl6
+    dest: /etc/iptables.d/001-CHAINS_ffrl6
+  notify:
+    - restart firewall
+  tags: ffrl6
+
+- name: Ensure ffrl-input delegation is set up in input chain
+  template:
+    src: etc/iptables.d/100-device-ffrl6.j2
+    dest: /etc/iptables.d/100-device-ffrl6
+  notify:
+    - restart firewall
+  tags: ffrl6
+
+- name: Ensure incoming BGP traffic is accepted
+  copy:
+    src: etc/iptables.d/500-Allow-bgp-ffrl6
+    dest: /etc/iptables.d/500-Allow-bgp-ffrl6
+  notify:
+    - restart firewall
+  tags: ffrl6
+
+- name: Ensure ffrl-forward chain exists
+  copy:
+    src: etc/iptables.d/001-CHAINS_ffrl
+    dest: /etc/iptables.d/001-CHAINS_ffrl
+  notify:
+    - restart firewall
+  tags: ffrl6
+
+- name: Ensure ffrl-forward chain is referenced in forward chain
+  template:
+    src: etc/iptables.d/100-device-ffrl6.j2
+    dest: /etc/iptables.d/100-device-ffrl6
+  notify:
+    - restart firewall
+  tags: ffrl6
+
+- name: Ensure ip forwarding from ffrl to local mesh is allowed
+  template:
+    src: "{{ 'etc/iptables.d/800-ffrl-forward-ACCEPT-br-{{ site.code }}.j2' }}"
+    dest: "/etc/iptables.d/800-ffrl-forward-ACCEPT-br-{{ site.code }}"
+  notify:
+    - restart firewall
+  tags: ffrl6
+
+- name: Ensure non-matching traffic on ffrl interface is dropped
+  copy:
+    src: etc/iptables.d/900-FORWARD-drop_ffrl
+    dest: /etc/iptables.d/900-FORWARD-drop_ffrl
+  notify:
+    - restart firewall
+  tags: ffrl6
