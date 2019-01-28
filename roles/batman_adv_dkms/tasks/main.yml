@@ -51,6 +51,20 @@
     state: present
   tags: batman_adv_dkms
 
+# Extract required header version
+- name: Ensure current kernel version is known
+  shell: uname -r
+  register: kernel_version
+  changed_when: no
+  tags: batman_adv_dkms
+
+# Install kernel headers
+- name: Ensure kernel headers for currently booted kernel are installed
+  apt:
+    name: linux-headers-{{ kernel_version.stdout }}
+    state: present
+  tags: batman_adv_dkms
+
 # Batman-adv post-processing
 - name: Ensure correct batman_adv version is installed
   vars:
