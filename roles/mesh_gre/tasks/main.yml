@@ -4,6 +4,7 @@
   template:
     src: "etc/network/interfaces.d/mesh_gre.j2"
     dest: "/etc/network/interfaces.d/mesh-gre"
+  when: '"mesh_gre" in hostvars[inventory_hostname]'
   notify:
     - restart mesh_gre tunnel
   tags: mesh, mesh_gre
