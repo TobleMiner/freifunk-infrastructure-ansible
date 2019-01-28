@@ -40,3 +40,9 @@
   roles:
     - ffrl4
   tags: gateway
+
+- name: Ensure gateways channel out IPv4 traffic locally
+  hosts: local_exit4
+  roles:
+    - local_exit4
+  tags: gateway
