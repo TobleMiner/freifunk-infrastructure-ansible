@@ -1,0 +1,18 @@
+---
+# bird config
+- name: Ensure local_exit bird4 config is in place
+  template:
+    src: etc/bird/bird4.conf.d/200-local_exit.conf.j2
+    dest: /etc/bird/bird4.conf.d/200-local_exit.conf.conf
+  notify:
+    - configure bird
+  tags: local_exit4
+
+# Firewall
+- name: Ensure SNAT is enabled on wan interface
+  template:
+    src: etc/iptables.d/910-SNAT-mesh-to-wan.j2
+    dest: /etc/iptables.d/910-SNAT-mesh-to-wan
+  notify:
+    - restart firewall
+  tags: local_exit4

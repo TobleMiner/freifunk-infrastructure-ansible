@@ -1,0 +1,2 @@
+# SNAT all traffic sent out via wan to our public IP address
+ip4tables -t nat -A POSTROUTING -s {{ site.mesh.network.ipv4 }} -o {{ interface.wan.name }} -j SNAT --to-source {{ interface.wan.address.ipv4 | ipaddr('address') }}

@@ -1,0 +1,9 @@
+# local exit via static routes
+
+# No additional routing table this time; this routes should not be propagated
+
+protocol static local_exit {
+  table mesh_kernel;
+  route 0.0.0.0/0 via "{{ interface.wan.name }}";
+  export all;
+};
