@@ -1,0 +1,19 @@
+---
+# Install batctl
+- name: Ensure batctl is installed
+  apt:
+    name: batctl
+    state: present
+  tags: batman_adv_distro
+
+- name: Ensure batman_adv kernel module is loaded
+  modprobe:
+    name: batman_adv
+    state: present
+  tags: batman_adv_distro
+
+- name: Ensure batman_adv kernel module is loaded at bootup
+  copy:
+    content: "batman_adv\n"
+    dest: /etc/modules-load.d/batman.conf
+  tags: batman_adv_distro
