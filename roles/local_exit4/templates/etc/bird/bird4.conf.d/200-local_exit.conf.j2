@@ -4,6 +4,7 @@
 
 protocol static local_exit {
   table mesh_kernel;
-  route 0.0.0.0/0 via "{{ interface.wan.name }}";
+  route {{ interface.wan.gateway.ipv4 | ipaddr("address") }}/32 via "{{ interface.wan.name }}";
+  route 0.0.0.0/0 via {{ interface.wan.gateway.ipv4 | ipaddr("address") }};
   export all;
 };
