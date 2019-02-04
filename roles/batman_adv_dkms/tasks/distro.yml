@@ -4,11 +4,14 @@
   apt:
     name: batctl
     state: present
+  tags: batman_adv_dkms
 
 - name: Ensure batman_adv kernel module is loaded
   shell: modprobe batman_adv
+  tags: batman_adv_dkms
 
 - name: Ensure batman_adv kernel module is loaded at bootup
   copy:
     content: "batman_adv\n"
     dest: /etc/modules-load.d/batman.conf
+  tags: batman_adv_dkms
