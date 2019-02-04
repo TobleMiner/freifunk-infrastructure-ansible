@@ -1,0 +1,44 @@
+---
+- name: Setup iproute2 related stuff
+  import_tasks: iproute2.yml
+  tags: iproute2, network
+
+- name: Setup sysctl
+  import_tasks: sysctl.yml
+  tags: sysctl, network
+
+- name: Setup firewall
+  import_tasks: firewall.yml
+  tags: firewall, network
+
+- name: Setup interfaces
+  import_tasks: interfaces.yml
+  tags: interfaces, network
+
+- name: Setup radvd
+  import_tasks: radvd.yml
+  tags: radvd, network
+
+- name: Setup mesh-announce
+  import_tasks: mesh-announce.yml
+  tags: mesh-announce, respondd, dhcpd
+
+- name: Setup dhcpd
+  import_tasks: dhcpd.yml
+  tags: dhcpd, network
+
+- name: Setup unbound
+  import_tasks: unbound.yml
+  tags: unbound, dns, network
+
+- name: Setup bind
+  import_tasks: bind.yml
+  tags: bind, dns, network
+
+- name: Setup ntp
+  import_tasks: ntp.yml
+  tags: ntp
+
+- name: Setup prometheus-node-exporter
+  import_tasks: prometheus-node-exporter.yml
+  tags: prometheus-node-exporter, monitoring

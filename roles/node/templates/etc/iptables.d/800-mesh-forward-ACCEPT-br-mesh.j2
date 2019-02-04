@@ -1,0 +1,2 @@
+# Process packages from device br-{{ site.code }}
+ip46tables -A mesh-forward -o br-{{ site.code }} -j ACCEPT
