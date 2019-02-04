@@ -1,4 +1,0 @@
-# Process packages from device br-ffki
-ip46tables -A input -i br-{{ site.code }} -j mesh-input
-ip46tables -A forward -i br-{{ site.code }} -j mesh-forward
-    

@@ -4,14 +4,6 @@
     name: netfilter-persistent
     state: present
 
-- name: Ensure build-firewall script is installed
-  copy:
-    src: usr/local/bin/build-firewall
-    dest: /usr/local/bin/build-firewall
-    mode: 0755
-  notify:
-    - restart firewall
-
 - name: Ensure firewall directory exists
   file:
     path: /etc/iptables.d
@@ -23,13 +15,6 @@
     dest: /etc/iptables.d/{{ item | basename | regex_replace('\.j2','') }}
   with_fileglob:
     - ../templates/etc/iptables.d/*.j2
-  notify:
-    - restart firewall
-
-- name: Ensure iptables service is installed
-  copy:
-    src: etc/systemd/system/iptables.service 
-    dest: /etc/systemd/system/iptables.service 
   notify:
     - restart firewall
 

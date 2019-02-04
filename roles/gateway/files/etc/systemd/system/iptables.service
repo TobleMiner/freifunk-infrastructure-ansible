@@ -1,9 +1,0 @@
-[Unit]
-Description="Build ffki firewall rules"
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/build-firewall
-
-[Install]
-WantedBy=network-pre.target

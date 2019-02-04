@@ -8,7 +8,6 @@
   modprobe:
     name: nf_conntrack
     state: present
-  
 
 - name: Ensure required sysctl config files are present
   copy:

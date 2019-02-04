@@ -1,3 +1,0 @@
-ip46tables -A DROP-log ! -p tcp  -j LOG --log-ip-options --log-uid
-ip46tables -A DROP-log -p tcp -j LOG --log-tcp-sequence --log-tcp-options --log-ip-options --log-uid
-ip46tables -A DROP-log -j DROP

@@ -1,8 +1,0 @@
----
-# This role sets up iproute2 stuff
-- name: ensure routing table 42 exists and is called mesh
-  lineinfile:
-    path: /etc/iproute2/rt_tables
-    regexp: '^42\s+.*'
-    line: '42 mesh'
-    state: present
