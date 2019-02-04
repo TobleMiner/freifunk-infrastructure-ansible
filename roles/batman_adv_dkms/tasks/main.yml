@@ -1,103 +1,67 @@
 ---
-# Package prerequisistes for external repos
-- name: Ensure repo prerequisites are installed
-  apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - apt-transport-https
-    - dirmngr
-  tags: batman_adv_dkms
+- name: Determine wether installed version of batman_adv is suitable
+  shell: |
+    min_version="{{ batman.version_min if "version_min" in hostvars[inventory_hostname].batman else "" }}"
+    max_version="{{ batman.version_max if "version_max" in hostvars[inventory_hostname].batman else "" }}"
+    version="{{ batman.version }}"
 
-# batman_adv dkms repo
-- name: Ensure universefactory debian repo is present
-  copy:
-    src: etc/apt/sources.list.d/repo.universe-factory.list
-    dest: /etc/apt/sources.list.d/repo.universe-factory.list
-  tags: batman_adv_dkms
+    version_leq() {
+      IFS=.
+      v1=($1)
+      v2=($2)
+      unset IFS
+      len_v1=${{'{'}}#v1[@]}
+      len_v2=${{'{'}}#v2[@]}
+      len_min=$len_v1
+      if [ $len_v2 -lt $len_min ]; then
+        len_min=$len_v2
+      fi
 
-# Install apt repo keys
-- name: Ensure universefactory key is installed
-  apt_key:
-      id: 16EF3F64CB201D9C
-      keyserver: keys.gnupg.net
-  tags: batman_adv_dkms
+      for i in `seq 0 $((len_min - 1))`; do
+        if {{ '[ ${v1[$i]} -lt ${v2[$i]} ]' }}; then
+          return 0
+        fi
+        if {{ '[ ${v1[$i]} -gt ${v2[$i]} ]' }}; then
+          return 1
+        fi
+      done
 
-# Pull in newly configured repos
-- name: Ensure apt repo cache is up to date
-  apt:
-    update_cache: yes
-  tags: batman_adv_dkms
+      return 0
+    }
 
-# Set pins
-- name: Ensure apt pins are in place
-  template:
-    src: etc/apt/preferences.d/batman-adv-dkms.j2
-    dest: /etc/apt/preferences.d/batman-adv-dkms
-  tags: batman_adv_dkms
+    modversion="$(modinfo batman_adv | grep "^version:" | sed "s/[[:space:]]\+/ /g" | cut -f2 -d" ")"
+    if [ -n "$min_version" ] && version_leq "$modversion" "$min_version"; then
+      echo dkms
+      exit 0
+    fi
 
-# Install dkms and related recommended packages
-- name: Ensure dkms and kernel headers are installed
-  apt:
-    name: dkms
-    state: present
-    install_recommends: yes
-  tags: batman_adv_dkms
+    if [ -n "$max_version" ] && version_leq "$max_version" "$modversion"; then
+      echo dkms
+      exit 0
+    fi
 
-# Install required packages
-- name: Ensure required networking packages are installed
-  apt:
-    name: batman-adv-dkms
-    state: present
-  tags: batman_adv_dkms
+    if [ -z "$min_version" ] && [ -z "$max_version" ]; then
+      if version_leq "$version" "$modversion" && version_leq "$modversion" "$version"; then
+        echo distro
+        exit 0
+      fi
+      echo dkms
+      exit 0
+    fi
 
-# Extract required header version
-- name: Ensure current kernel version is known
-  shell: uname -r
-  register: kernel_version
+    echo distro
+  args:
+    executable: /bin/bash
+  register: batman_adv_src
   changed_when: no
   tags: batman_adv_dkms
 
-# Install kernel headers
-- name: Ensure kernel headers for currently booted kernel are installed
-  apt:
-    name: linux-headers-{{ kernel_version.stdout }}
-    state: present
+- name: Install batman_adv (dkms)
+  include_tasks: dkms.yml
+  when: '"dkms" in batman_adv_src.stdout'
   tags: batman_adv_dkms
 
-# Batman-adv post-processing
-- name: Ensure correct batman_adv version is installed
-  vars:
-    kversion: "{{ batman.version | regex_replace('-[0-9]+$','') }}"
-  shell: |
-    batman_version="$(modinfo batman_adv | grep '^version' | tr -d ' ' | cut -d: -f2)"
-    [ "$batman_version" = "{{ kversion }}" ] && echo version ok && exit 0
-    dkms uninstall --force batman-adv/{{ kversion }} || true
-    modinfo batman-adv | grep -i '^filename' | tr -d ' ' | cut -d: -f2 | xargs rm -f
-    dkms install --force batman-adv/{{ kversion }}
-  register: batman_dkms
-  changed_when: '"version ok" not in batman_dkms.stdout'
-  tags: batman_adv_dkms
-
-# Unload batman kernel module if updated
-- name: Ensure batman_adv kernel module is unloaded
-  shell: |
-    lsmod | grep '^batman_adv' || echo 'module not loaded' && exit 0 # module not loaded, no action required
-    ifdown bat-{{ site.code }} || ip link set down bat-{{ site.code }} && ip link del bat-{{ site.code }} || true
-    rmmod batman_adv
-  when: batman_dkms.changed
-  register: batman_unload
-  changed_when: '"module not loaded" not in batman_unload.stdout'
-  notify:
-    - restart batman if available
-  tags: batman_adv_dkms
-
-- name: Ensure batman_adv kernel module is loaded
-  shell: modprobe batman_adv
-  tags: batman_adv_dkms
-
-- name: Ensure batman_adv kernel module is loaded at bootup
-  copy:
-    content: "batman_adv\n"
-    dest: /etc/modules-load.d/batman.conf
+- name: Install batman_adv (distro)
+  include_tasks: distro.yml
+  when: '"distro" in batman_adv_src.stdout'
   tags: batman_adv_dkms
