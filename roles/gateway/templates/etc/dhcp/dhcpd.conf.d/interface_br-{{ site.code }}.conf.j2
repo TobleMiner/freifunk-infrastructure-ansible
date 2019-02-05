@@ -2,7 +2,7 @@
 subnet {{ site.mesh.network.ipv4 | ipaddr('network') }} netmask {{ site.mesh.network.ipv4 | ipaddr('netmask') }} {
   authoritative;
   range {{ interface.mesh_bridge.dhcp_range.start }} {{ interface.mesh_bridge.dhcp_range.end }};
-  
+
   {% if site.tld is defined %}
   option domain-name "{{ site.tld }}";
   {% else %}

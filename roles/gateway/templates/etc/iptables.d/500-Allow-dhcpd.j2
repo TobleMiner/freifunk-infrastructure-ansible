@@ -1,4 +1,3 @@
 # Allow Service dhcpd
 ip46tables -A mesh-input -p udp -m udp --dport 67 -j ACCEPT -m comment --comment 'dhcpd'
 ip46tables -A mesh-input -p udp -m udp --dport 68 -j ACCEPT -m comment --comment 'dhcpd'
-    

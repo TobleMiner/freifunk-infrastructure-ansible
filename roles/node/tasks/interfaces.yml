@@ -8,7 +8,7 @@
     state: present
   loop:
     - batctl
-    - bridge-utils 
+    - bridge-utils
 
 # Interface setup
 - name: ensure bridge interface is present
@@ -16,7 +16,7 @@
     src: etc/network/interfaces.d/bridge.j2
     dest: /etc/network/interfaces.d/br-{{ site.code }}
   notify:
-    - restart mesh bridge 
+    - restart mesh bridge
     - restart batman
 
 - name: Ensure batman interface is present

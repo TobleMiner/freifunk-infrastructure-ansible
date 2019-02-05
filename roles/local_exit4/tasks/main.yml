@@ -16,7 +16,7 @@
   notify:
     - restart firewall
   tags: local_exit4
-  
+
 - name: Ensure SNAT is enabled on wan interface
   template:
     src: etc/iptables.d/910-SNAT-mesh-to-wan.j2

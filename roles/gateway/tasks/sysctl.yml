@@ -9,6 +9,6 @@
     src: "{{ item }}"
     dest: /etc/sysctl.d/{{ item | basename }}
   with_fileglob:
-    - etc/sysctl.d/*.conf  
+    - etc/sysctl.d/*.conf
   notify:
     - reload sysctl

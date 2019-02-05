@@ -3,13 +3,13 @@
 # table exports it routes to the mesh table and import
 # routes which are not in the mesh specific prefix.
 # The mesh_${site} tables exchange routes with the local
-# peers from here routes to local subnets are communicated 
+# peers from here routes to local subnets are communicated
 # and routes to other communities from icvpn peers in the local
-# network are exchanged. 
-# 
+# network are exchanged.
+#
 # If this router is a icvpn peer then routes from the
 # icvpn will be exchanged directly with the mesh table.
-#              
+#
 # icvpn <-> [mesh] <#> [mesh_ffgc,..] <#> local-peers
 #             ^--------> [kernel(rtable=42)]
 

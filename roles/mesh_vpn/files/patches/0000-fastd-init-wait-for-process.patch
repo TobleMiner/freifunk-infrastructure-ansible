@@ -3,7 +3,7 @@ index 4ba2009..25195e1 100755
 --- a/etc/init.d/fastd
 +++ b/etc/init.d/fastd
 @@ -50,6 +50,17 @@ start_vpn () {
- 
+
  stop_vpn () {
    kill `cat $PIDFILE` || true
 +  for _ in seq 10; do

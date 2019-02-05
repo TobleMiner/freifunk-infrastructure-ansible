@@ -23,12 +23,12 @@
 - name: Ensure firewall allows fastd traffic
   copy:
     src: etc/iptables.d/500-Allow-fastd
-    dest: /etc/iptables.d/500-Allow-fastd 
+    dest: /etc/iptables.d/500-Allow-fastd
   notify:
     - restart firewall
   tags: mesh_vpn
 
-# Config 
+# Config
 - name: Ensure fastd peer directory exists
   file:
     path: "/etc/fastd/mvpn-{{ site.code }}/peers"

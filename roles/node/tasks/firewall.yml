@@ -28,8 +28,8 @@
 
 - name: Ensure iptables service is installed
   copy:
-    src: etc/systemd/system/iptables.service 
-    dest: /etc/systemd/system/iptables.service 
+    src: etc/systemd/system/iptables.service
+    dest: /etc/systemd/system/iptables.service
   notify:
     - restart firewall
 

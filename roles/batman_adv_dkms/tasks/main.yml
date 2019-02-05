@@ -53,7 +53,7 @@
   args:
     executable: /bin/bash
   register: batman_adv_src
-  changed_when: no  
+  changed_when: no
   check_mode: no
   tags: batman_adv_dkms
 
