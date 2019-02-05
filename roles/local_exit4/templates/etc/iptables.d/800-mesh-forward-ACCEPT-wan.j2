@@ -1,0 +1,3 @@
+# Forward packages from device br-{{ site.code }}
+ip4tables -A mesh-forward -o {{ interface.wan.name }} -j ACCEPT
+

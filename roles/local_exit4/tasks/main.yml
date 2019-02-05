@@ -9,6 +9,14 @@
   tags: local_exit4
 
 # Firewall
+- name: Ensure forwarding from mesh to wan is allowed
+  template:
+    src: etc/iptables.d/800-mesh-forward-ACCEPT-wan.j2
+    dest: /etc/iptables.d/800-mesh-forward-ACCEPT-wan
+  notify:
+    - restart firewall
+  tags: local_exit4
+  
 - name: Ensure SNAT is enabled on wan interface
   template:
     src: etc/iptables.d/910-SNAT-mesh-to-wan.j2
