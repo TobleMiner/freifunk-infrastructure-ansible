@@ -3,6 +3,7 @@
   apt:
     name: sudo
     state: present
+  tags: mesh_vpn_ci_access
 
 - name: Ensure mesh vpn keys can be updated by ci
   vars:
