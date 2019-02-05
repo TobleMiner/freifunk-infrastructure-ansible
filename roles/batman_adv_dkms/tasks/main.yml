@@ -1,9 +1,15 @@
 ---
 - name: Determine wether installed version of batman_adv is suitable
   shell: |
-    min_version="{{ batman.version_min if "version_min" in hostvars[inventory_hostname].batman else "" }}"
-    max_version="{{ batman.version_max if "version_max" in hostvars[inventory_hostname].batman else "" }}"
+    {% if batman.version_min is defined %}
+    min_version="{{ batman.version_min }}"
+    {% endif %}
+    {% if batman.version_max is defined %}
+    max_version="{{ batman.version_max }}"
+    {% endif %}
+    {% if batman.version is defined %}
     version="{{ batman.version }}"
+    {% endif %}
 
     version_leq() {
       IFS=.
@@ -55,14 +61,15 @@
   register: batman_adv_src
   changed_when: no
   check_mode: no
+  when: 'batman is defined'
   tags: batman_adv_dkms
 
 - name: Install batman_adv (dkms)
   include_tasks: dkms.yml
-  when: '"dkms" in batman_adv_src.stdout'
+  when: 'batman is defined and "dkms" in batman_adv_src.stdout'
   tags: batman_adv_dkms
 
 - name: Install batman_adv (distro)
   include_tasks: distro.yml
-  when: '"distro" in batman_adv_src.stdout'
+  when: 'batman is not defined or "distro" in batman_adv_src.stdout'
   tags: batman_adv_dkms
