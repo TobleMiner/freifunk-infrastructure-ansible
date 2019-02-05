@@ -4,11 +4,12 @@
 # Install required packages
 - name: Ensure required networking packages are installed
   apt:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: present
-  loop:
-    - batctl
-    - bridge-utils
+  vars:
+    packages:
+      - batctl
+      - bridge-utils
 
 # Interface setup
 - name: ensure bridge interface is present

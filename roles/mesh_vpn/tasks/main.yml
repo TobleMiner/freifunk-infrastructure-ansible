@@ -10,14 +10,15 @@
 
 - name: Ensure packages are installed
   apt:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: present
-  with_items:
-    - git
-    - patch
-    - cron
-    - jq
-    - socat
+  vars:
+    packages:
+      - git
+      - patch
+      - cron
+      - jq
+      - socat
   tags: mesh_vpn
 
 - name: Ensure firewall allows fastd traffic
