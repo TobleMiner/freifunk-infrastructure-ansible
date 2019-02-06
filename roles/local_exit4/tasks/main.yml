@@ -3,7 +3,7 @@
 - name: Ensure local_exit bird4 config is in place
   template:
     src: etc/bird/bird4.conf.d/200-local_exit.conf.j2
-    dest: /etc/bird/bird4.conf.d/200-local_exit.conf.conf
+    dest: /etc/bird/bird4.conf.d/200-local_exit.conf
   notify:
     - configure bird
   tags: local_exit4
