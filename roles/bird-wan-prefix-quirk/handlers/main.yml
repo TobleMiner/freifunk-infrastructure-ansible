@@ -1,0 +1,6 @@
+---
+- name: restart dummy wan interface
+  shell: |
+    ifdown dummy-wan || true
+    ip link set down dummy-wan && ip link del dummy-wan || true
+    ifup dummy-wan

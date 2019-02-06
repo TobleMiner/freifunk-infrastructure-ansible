@@ -1,0 +1,14 @@
+{% set subnetsize = 30 %}
+{% set subnet = interface.wan.gateway.ipv4 | ipsubnet(subnetsize) %}
+{% set address = subnet | ipaddr('1') | regex_replace('/[0-9]+$', '') %}
+{% if address == interface.wan.gateway.ipv4 | regex_replace('/[0-9]+$', '')  %}
+{% set address = address | ipmath(1) %}
+{% endif %}
+
+auto dummy-wan
+iface dummy-wan inet manual
+  pre-up    /sbin/ip link add $IFACE type dummy || true
+  pre-up    /sbin/ip addr add {{ address }}/{{ subnetsize }} dev $IFACE
+  up        /sbin/ip link set up $IFACE
+  down      /sbin/ip link set down $IFACE
+  post-down /sbin/ip link set down $IFACE

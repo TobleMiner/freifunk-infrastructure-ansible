@@ -1,0 +1,9 @@
+---
+# Bird Quirk workaroumd
+- name: Ensure workaround for bird nexthop-outside-interface-subnet is installed
+  template:
+    src: etc/network/interfaces.d/dummy-wan-prefix.conf.j2
+    dest: /etc/network/interfaces.d/dummy-wan-prefix
+  notify:
+    - restart dummy wan interface
+  tags: bird-wan-prefix-quirk
