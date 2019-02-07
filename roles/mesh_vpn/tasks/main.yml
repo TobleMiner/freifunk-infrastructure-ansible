@@ -22,7 +22,7 @@
   tags: mesh_vpn
 
 - name: Ensure firewall allows fastd traffic
-  copy:
+  template:
     src: etc/iptables.d/500-Allow-fastd
     dest: /etc/iptables.d/500-Allow-fastd
   notify:
