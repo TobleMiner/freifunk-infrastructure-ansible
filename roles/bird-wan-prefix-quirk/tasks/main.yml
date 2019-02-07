@@ -1,9 +1,34 @@
 ---
-# Bird Quirk workaroumd
-- name: Ensure workaround for bird nexthop-outside-interface-subnet is installed
-  template:
-    src: etc/network/interfaces.d/dummy-wan-prefix.conf.j2
-    dest: /etc/network/interfaces.d/dummy-wan-prefix
-  notify:
-    - restart dummy wan interface
+- name: Ensure build-dep of bird is installed
+  apt:
+    name: bird
+    state: build-dep
+    update_cache: yes
+  tags: bird-wan-prefix-quirk
+
+- name: Ensure other building prerequisistes are installed
+  apt:
+    name:  "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - build-essential
+      - quilt
+      - devscripts
+      - fakeroot
+  tags: bird-wan-prefix-quirk
+
+- name: Determine current version of bird
+  shell: apt-cache show bird | grep 'Version:' | cut -d' ' -f2
+  register: bird_version
+  changed_when: no
+  check_mode: no
+  tags: bird-wan-prefix-quirk
+
+- name: Patch and install bird
+  vars:
+    workdir: '/usr/src/bird'
+    bird_pkg_version: "{{ bird_version.stdout }}"
+    bird_src_version: "{{ bird_version.stdout | regex_replace('-.*$', '') }}"
+  include_tasks: bird.yml
   tags: bird-wan-prefix-quirk

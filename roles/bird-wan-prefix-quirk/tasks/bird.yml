@@ -1,0 +1,67 @@
+---
+- name: Ensure workdir is clean
+  file:
+    path: "{{ workdir }}"
+    state: absent
+  tags: bird-wan-prefix-quirk
+
+- name: Ensure workdir exists
+  file:
+    path: "{{ workdir }}"
+    state: directory
+  tags: bird-wan-prefix-quirk
+
+- name: Download bird source
+  command: apt-get source bird
+  args:
+    chdir: "{{ workdir }}"
+    warn: no
+  tags: bird-wan-prefix-quirk
+
+- name: Ensure bird patches are rolled back
+  command: quilt pop -a
+  args:
+    chdir: "{{ workdir }}/bird-{{ bird_src_version }}"
+  tags: bird-wan-prefix-quirk
+
+- name: Copy patch to tmp
+  copy:
+    src: usr/src/bird/bird-1.6.3/debian/patches/0006-consider-single-host-prefix-routes-for-nexthop.patch
+    dest: /tmp/0006-consider-single-host-prefix-routes-for-nexthop.patch
+  tags: bird-wan-prefix-quirk
+
+- name: Ensure bird patches are applied
+  command: quilt push -a
+  args:
+    chdir: "{{ workdir }}/bird-{{ bird_src_version }}"
+  tags: bird-wan-prefix-quirk
+
+- name: Ensure bird patch is imported
+  command: quilt import -f /tmp/0006-consider-single-host-prefix-routes-for-nexthop.patch
+  args:
+    chdir: "{{ workdir }}/bird-{{ bird_src_version }}"
+  tags: bird-wan-prefix-quirk
+
+- name: Ensure bird patch is applied
+  command: quilt push 0006-consider-single-host-prefix-routes-for-nexthop.patch
+  args:
+    chdir: "{{ workdir }}/bird-{{ bird_src_version }}"
+  tags: bird-wan-prefix-quirk
+
+- name: Build bird
+  command: debuild -b -uc -us
+  args:
+    chdir: "{{ workdir }}/bird-{{ bird_src_version }}"
+  tags: bird-wan-prefix-quirk
+
+- name: Determine dpkg architecture
+  command: dpkg --print-architecture
+  register: dpkg_architecture
+  changed_when: no
+  tags: bird-wan-prefix-quirk
+
+- name: Install bird
+  shell: dpkg -i 'bird_{{ bird_pkg_version }}_{{ dpkg_architecture.stdout }}.deb'
+  args:
+    chdir: "{{ workdir }}"
+  tags: bird-wan-prefix-quirk

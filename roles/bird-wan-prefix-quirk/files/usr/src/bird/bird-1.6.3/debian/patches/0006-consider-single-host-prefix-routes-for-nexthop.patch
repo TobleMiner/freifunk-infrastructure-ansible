@@ -1,0 +1,90 @@
+Index: bird-1.6.3/nest/neighbor.c
+===================================================================
+--- bird-1.6.3.orig/nest/neighbor.c
++++ bird-1.6.3/nest/neighbor.c
+@@ -42,6 +42,7 @@
+ #include "nest/bird.h"
+ #include "nest/iface.h"
+ #include "nest/protocol.h"
++#include "nest/route.h"
+ #include "lib/resource.h"
+ 
+ #define NEIGH_HASH_SIZE 256
+@@ -120,6 +121,8 @@ neigh_find(struct proto *p, ip_addr *a,
+   return neigh_find2(p, a, NULL, flags);
+ }
+ 
++#define WALK_LLIST(cursor, head) \
++  for(cursor = head; cursor; cursor = cursor->next)
+ 
+ neighbor *
+ neigh_find2(struct proto *p, ip_addr *a, struct iface *ifa, unsigned flags)
+@@ -161,6 +164,25 @@ neigh_find2(struct proto *p, ip_addr *a,
+   /* scope < 0 means i don't know neighbor */
+   /* scope >= 0 implies ifa != NULL */
+ 
++  // Look for direct peers via /MAX_PREFIX_LENGTH route
++  if(scope < 0) {
++    struct rte* entry;
++    struct rta* attr;
++    struct network* net = net_find(p->table, *a, MAX_PREFIX_LENGTH);
++    if(net) {
++      WALK_LLIST(entry, net->routes) {
++	WALK_LLIST(attr, entry->attrs) {
++          if(!attr->iface || !(attr->iface->flags & (IF_UP | IF_ADMIN_UP))) {
++            continue;
++          }
++          ifa = attr->iface;
++          scope = SCOPE_HOST;
++          break;
++        }
++      }
++    }
++  }
++
+   if ((scope < 0) && !(flags & NEF_STICKY))
+     return NULL;
+ 
+Index: bird-1.6.3/proto/static/static.c
+===================================================================
+--- bird-1.6.3.orig/proto/static/static.c
++++ bird-1.6.3/proto/static/static.c
+@@ -162,12 +162,17 @@ static_update_bfd(struct proto *p, struc
+ }
+ 
+ static int
++static_invalid_neigh_scope(struct static_route *r) {
++  return r->neigh->scope < 0;
++}
++
++static int
+ static_decide(struct static_config *cf, struct static_route *r)
+ {
+   /* r->dest != RTD_MULTIPATH, but may be RTD_NONE (part of multipath route)
+      the route also have to be valid (r->neigh != NULL) */
+ 
+-  if (r->neigh->scope < 0)
++  if (static_invalid_neigh_scope(r))
+     return 0;
+ 
+   if (cf->check_link && !(r->neigh->iface->flags & IF_LINK_UP))
+@@ -425,12 +430,19 @@ static_if_notify(struct proto *p, unsign
+       WALK_LIST(r, c->iface_routes)
+ 	if (!strcmp(r->if_name, i->name))
+ 	  static_install(p, r, i);
++      WALK_LIST(r, c->other_routes)
++        if (static_invalid_neigh_scope(r))
++          static_add(p, c, r);
++
+     }
+   else if (flags & IF_CHANGE_DOWN)
+     {
+       WALK_LIST(r, c->iface_routes)
+ 	if (!strcmp(r->if_name, i->name))
+ 	  static_remove(p, r);
++      WALK_LIST(r, c->other_routes)
++        if (static_invalid_neigh_scope(r))
++          static_add(p, c, r);
+     }
+ }
+ 
