@@ -1,0 +1,19 @@
+---
+- name: Install useful administrative packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - vim
+      - tcpdump
+      - dnsutils
+      - realpath
+      - screen
+      - htop
+      - mlocate
+      - tig
+      - tmux
+      - etckeeper
+      - nano
+  tags: convenience

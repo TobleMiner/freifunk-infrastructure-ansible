@@ -9,6 +9,7 @@
   hosts: gateways
   roles:
     - noc_keys
+    - convenience
     - gateway
     - mesh_vpn
     - mesh_vpn_ci_access
