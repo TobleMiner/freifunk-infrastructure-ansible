@@ -42,3 +42,21 @@
     src: "{{ item.path }}"
     remote_src: yes
   tags: noc_users
+
+- name: Check wether dotfile directory for NOC member {{ username }} exists
+  stat:
+    path: "{{ dotfiles }}"
+  register: stat_dotfiles
+  changed_when: no
+  tags: noc_users
+
+- name: Copy dotfiles of NOC member {{ username }} to home directory
+  synchronize:
+    src: "{{ dotfiles }}"
+    dest: "{{ home }}"
+    checksum: yes
+    rsync_opts:
+      - "--chown={{ username }}"
+  delegate_to: "{{ inventory_hostname }}"
+  when: 'stat_dotfiles.stat.exists and stat_dotfiles.stat.isdir'
+  tags: noc_users

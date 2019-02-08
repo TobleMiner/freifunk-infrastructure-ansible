@@ -8,6 +8,7 @@
       - git
       - openssl
       - ca-certificates
+      - rsync
   tags: noc_users
 
 - name: Ensure noc key git is cloned and up to date
@@ -27,6 +28,7 @@
   vars:
     username: "{{ (item.path | basename | splitext)[0] }}"
     home: /home/{{ username }}
+    dotfiles: /opt/noc_keys/dotfiles/{{ username }}
   include_tasks: user.yml
   with_items: "{{ noc_keys.files }}"
   tags: noc_users
