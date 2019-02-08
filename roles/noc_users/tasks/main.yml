@@ -8,20 +8,20 @@
       - git
       - openssl
       - ca-certificates
-  tags: noc_keys
+  tags: noc_users
 
 - name: Ensure noc key git is cloned and up to date
   git:
     repo: "{{ site.noc_keys.git }}"
     dest: /opt/noc_keys
     force: yes
-  tags: noc_keys
+  tags: noc_users
 
 - name: Enumerate noc keys
   find:
     path: /opt/noc_keys/keys
   register: noc_keys
-  tags: noc_keys
+  tags: noc_users
 
 - name: Ensure noc users are present
   vars:
@@ -29,4 +29,4 @@
     home: /home/{{ username }}
   include_tasks: user.yml
   with_items: "{{ noc_keys.files }}"
-  tags: noc_keys
+  tags: noc_users

@@ -8,7 +8,7 @@
 - name: Ensure gateways are set up
   hosts: gateways
   roles:
-    - noc_keys
+    - noc_users
     - convenience
     - gateway
     - mesh_vpn

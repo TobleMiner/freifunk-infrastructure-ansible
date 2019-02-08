@@ -3,7 +3,7 @@
   user:
     name: "{{ username }}"
   register: user
-  tags: noc_keys
+  tags: noc_users
 
 - name: Set up NOC user {{ username }}
   block:
@@ -28,17 +28,17 @@
         owner: "{{ username }}"
         mode: 0400
   when: 'user.changed'
-  tags: noc_keys
+  tags: noc_users
 
 - name: Ensure .ssh directory is present for NOC member {{ username }}
   file:
     path: "{{ home }}/.ssh"
     state: directory
-  tags: noc_keys
+  tags: noc_users
 
 - name: Ensure public key of NOC member {{ username }} is deployed
   copy:
     dest: "{{ home }}/.ssh/authorized_keys"
     src: "{{ item.path }}"
     remote_src: yes
-  tags: noc_keys
+  tags: noc_users
