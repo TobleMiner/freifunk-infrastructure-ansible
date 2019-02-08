@@ -1,0 +1,13 @@
+---
+- name: Ensure unattended-upgrades is installed
+  apt:
+    name: unattended-upgrades
+    state: present
+  tags: unattended_upgrades
+
+- name: Ensure unattended-upgrades config is installed
+  copy:
+    src: etc/apt/apt.conf.d/50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+  tags: unattended_upgrades
+

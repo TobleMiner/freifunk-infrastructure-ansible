@@ -9,6 +9,7 @@
   hosts: gateways
   roles:
     - noc_users
+    - unattended_upgrades
     - convenience
     - gateway
     - mesh_vpn
