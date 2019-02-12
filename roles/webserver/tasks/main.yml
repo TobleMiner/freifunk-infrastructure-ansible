@@ -1,0 +1,21 @@
+---
+- name: Ensure apache2 is installed
+  apt:
+    name: apache2
+    state: present
+  tags: webserver
+
+- name: Ensure firewall allows HTTP traffic
+  copy:
+    src: etc/iptables.d/500-Allow-http
+    dest: /etc/iptables.d/500-Allow-http
+  notify:
+    - restart firewall
+  tags: webserver, firewall
+
+- name: Ensure apache2 service is enabled and started
+  service:
+    name: apache2.service
+    enabled: yes
+    state: started
+  tags: webserver
