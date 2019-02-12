@@ -14,7 +14,7 @@
     dest: /etc/iptables.d/500-Allow-GRE
   notify:
     - restart firewall
-  tags: ffnw
+  tags: ffnw, firewall
 
 - name: Ensure ip forwarding from local mesh to ffnw is allowed
   template:
@@ -22,7 +22,7 @@
     dest: /etc/iptables.d/800-mesh-forward-ACCEPT-ffnw
   notify:
     - restart firewall
-  tags: ffnw
+  tags: ffnw, firewall
 
 # GRE tunnel
 - name: Ensure gre tunnel config is in place

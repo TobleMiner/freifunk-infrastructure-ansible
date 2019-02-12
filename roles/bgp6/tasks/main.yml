@@ -106,7 +106,7 @@
     dest: /etc/iptables.d/500-Allow-bird-ipv6
   notify:
     - restart firewall
-  tags: bgp6
+  tags: bgp6, firewall
 
 - name: Ensure bird6 service is enabled
   service:

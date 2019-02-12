@@ -27,7 +27,7 @@
     dest: /etc/iptables.d/500-Allow-fastd
   notify:
     - restart firewall
-  tags: mesh_vpn
+  tags: mesh_vpn, firewall
 
 # Config
 - name: Ensure fastd peer directory exists

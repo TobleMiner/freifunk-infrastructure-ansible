@@ -49,7 +49,7 @@
     dest: /etc/iptables.d/001-CHAINS_ffrl4
   notify:
     - restart firewall
-  tags: ffrl4
+  tags: ffrl4, firewall
 
 - name: Ensure ffrl-input delegation is set up in input chain
   template:
@@ -57,7 +57,7 @@
     dest: /etc/iptables.d/100-device-ffrl4
   notify:
     - restart firewall
-  tags: ffrl4
+  tags: ffrl4, firewall
 
 - name: Ensure incoming BGP traffic is accepted
   copy:
@@ -65,7 +65,7 @@
     dest: /etc/iptables.d/500-Allow-bgp-ffrl4
   notify:
     - restart firewall
-  tags: ffrl4
+  tags: ffrl4, firewall
 
 - name: Ensure SNAT is enabled on peering interfaces
   template:
@@ -73,4 +73,4 @@
     dest: /etc/iptables.d/910-SNAT-ffrl
   notify:
     - restart firewall
-  tags: ffrl4
+  tags: ffrl4, firewall

@@ -99,7 +99,7 @@
     dest: /etc/iptables.d/500-Allow-bird-ipv4
   notify:
     - restart firewall
-  tags: bgp4
+  tags: bgp4, firewall
 
 # Services
 - name: Ensure bird service is enabled

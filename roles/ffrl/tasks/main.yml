@@ -14,7 +14,7 @@
     dest: /etc/iptables.d/500-Allow-GRE
   notify:
     - restart firewall
-  tags: ffrl
+  tags: ffrl, firewall
 
 - name: Ensure ip forwarding from local mesh to ffrl is allowed
   template:
@@ -22,7 +22,7 @@
     dest: /etc/iptables.d/800-mesh-forward-ACCEPT-ffrl
   notify:
     - restart firewall
-  tags: ffrl
+  tags: ffrl, firewall
 
 # GRE tunnel
 - name: Ensure gre tunnel config is in place

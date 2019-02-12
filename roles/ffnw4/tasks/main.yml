@@ -49,7 +49,7 @@
     dest: /etc/iptables.d/001-CHAINS_ffnw4
   notify:
     - restart firewall
-  tags: ffnw4
+  tags: ffnw4, firewall
 
 - name: Ensure ffnw-input delegation is set up in input chain
   template:
@@ -57,7 +57,7 @@
     dest: /etc/iptables.d/100-device-ffnw4
   notify:
     - restart firewall
-  tags: ffnw4
+  tags: ffnw4, firewall
 
 - name: Ensure incoming BGP traffic is accepted
   copy:
@@ -65,7 +65,7 @@
     dest: /etc/iptables.d/500-Allow-bgp-ffnw4
   notify:
     - restart firewall
-  tags: ffnw4
+  tags: ffnw4, firewall
 
 - name: Ensure SNAT is enabled on peering interfaces
   template:
@@ -73,4 +73,4 @@
     dest: /etc/iptables.d/910-SNAT-ffnw
   notify:
     - restart firewall
-  tags: ffnw4
+  tags: ffnw4, firewall

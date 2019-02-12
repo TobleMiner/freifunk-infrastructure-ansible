@@ -84,7 +84,7 @@
     dest: /etc/iptables.d/001-CHAINS_ffnw6
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall
 
 - name: Ensure ffnw-input delegation is set up in input chain
   template:
@@ -92,7 +92,7 @@
     dest: /etc/iptables.d/100-device-ffnw6
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall
 
 - name: Ensure incoming BGP traffic is accepted
   copy:
@@ -100,7 +100,7 @@
     dest: /etc/iptables.d/500-Allow-bgp-ffnw6
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall
 
 - name: Ensure ffnw-forward chain exists
   copy:
@@ -108,7 +108,7 @@
     dest: /etc/iptables.d/001-CHAINS_ffnw
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall
 
 - name: Ensure ffnw-forward chain is referenced in forward chain
   template:
@@ -116,7 +116,7 @@
     dest: /etc/iptables.d/100-device-ffnw6
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall
 
 - name: Ensure ip forwarding from ffnw to local mesh is allowed
   template:
@@ -124,7 +124,7 @@
     dest: "/etc/iptables.d/800-ffnw-forward-ACCEPT-br-{{ site.code }}"
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall
 
 - name: Ensure non-matching traffic on ffnw interface is dropped
   copy:
@@ -132,4 +132,4 @@
     dest: /etc/iptables.d/900-FORWARD-drop_ffnw
   notify:
     - restart firewall
-  tags: ffnw6
+  tags: ffnw6, firewall

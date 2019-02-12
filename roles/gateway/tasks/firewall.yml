@@ -1,14 +1,4 @@
 ---
-- name: Ensure netfilter-persistent is installed
-  apt:
-    name: netfilter-persistent
-    state: present
-
-- name: Ensure firewall directory exists
-  file:
-    path: /etc/iptables.d
-    state: directory
-
 - name: Ensure firewall rules are deployed
   template:
     src: "{{ item }}"
@@ -17,9 +7,3 @@
     - ../templates/etc/iptables.d/*.j2
   notify:
     - restart firewall
-
-- name: Ensure iptables service is enabled and started
-  service:
-    name: iptables
-    enabled: yes
-    state: started
