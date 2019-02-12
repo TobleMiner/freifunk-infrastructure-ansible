@@ -5,22 +5,22 @@ IP6TABLES=$(which ip6tables)
 
 ## Wrapper function for iptables - IPv4 version
 function ip4tables() {
-  echo -e "\t iptables $*"
-  $IP4TABLES $*
+  echo -e "\t iptables $@"
+  $IP4TABLES "$@"
 }
 
 ## Wrapper function for iptables - IPv6 version
 function ip6tables() {
-  echo -e "\t ip6tables $*"
-  $IP6TABLES $*
+  echo -e "\t ip6tables $@"
+  $IP6TABLES "$@"
 }
 
 ## Wrapper function for iptables - IPv{4,6} version
 # should only be used for statements which apply
 # for both iptables versions.
 function ip46tables() {
-  ip4tables $*
-  ip6tables $*
+  ip4tables "$@"
+  ip6tables "$@"
 }
 
 ## Wrapper function for iptables-save or netfilter-save
@@ -72,8 +72,8 @@ function rate_limit4() {
   local hitcount="$3"
   shift 3
   echo -e "\t Rate Limit ${service} with ${seconds} seconds and a hitcount of ${hitcount}"
-  ip4tables -m recent --name "$service" --update --seconds "$seconds" --hitcount "$hitcount" -j DROP $*
-  ip4tables -m recent --name "$service" --set $*
+  ip4tables -m recent --name "$service" --update --seconds "$seconds" --hitcount "$hitcount" -j DROP "$@"
+  ip4tables -m recent --name "$service" --set "$@"
 }
 
 ## Rate Limit - Introduce rate limiting for services.
@@ -87,8 +87,8 @@ function rate_limit6() {
   local hitcount="$3"
   shift 3
   echo -e "\t Rate Limit ${service} with ${seconds} seconds and a hitcount of ${hitcount}"
-  ip6tables -m recent --name "$service" --update --seconds "$seconds" --hitcount "$hitcount" -j DROP $*
-  ip6tables -m recent --name "$service" --set $*
+  ip6tables -m recent --name "$service" --update --seconds "$seconds" --hitcount "$hitcount" -j DROP "$@"
+  ip6tables -m recent --name "$service" --set "$@"
 }
 
 ## Utility function to execute
