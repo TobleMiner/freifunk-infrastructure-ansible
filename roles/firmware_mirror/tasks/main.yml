@@ -1,0 +1,16 @@
+---
+- name: Ensure firmware directory exists
+  file:
+    path: /opt/{{ site.code }}/firmware
+    state: directory
+  tags: firmware_mirror
+
+- name: Ensure apache firmware redirect config exists
+  vars:
+    firmwaredir: /opt/{{ site.code }}/firmware
+  template:
+    src: '{{ "etc/apache2/freifunk.d/{{ site.code }}/200-firmware.conf" }}'
+    dest: /etc/apache2/freifunk.d/{{ site.code }}/200-firmware.conf
+  notify:
+    - reload apache2
+  tags: firmware_mirror
