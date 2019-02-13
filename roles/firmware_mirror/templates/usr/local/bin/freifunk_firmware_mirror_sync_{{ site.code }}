@@ -2,4 +2,4 @@
 
 set -e -o pipefail
 
-rsync --archive "{{ site.mirror.firmware.source }}" "{{ firmwaredir }}"
+rsync --archive --chmod=D755,F644 "{{ site.mirror.firmware.source }}" "{{ firmwaredir }}"
