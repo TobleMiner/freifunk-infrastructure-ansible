@@ -39,8 +39,8 @@
     name: Update {{ site.code }} firmware mirror
     job: /usr/local/bin/freifunk_firmware_mirror_sync_{{ site.code }}
     user: firmware_mirror_{{ site.code }}
-    hour: '*/2'
-    minute: 42
+    hour: '{{ inventory_hostname | hashnum(0, 23) }}'
+    minute: '{{ inventory_hostname | hashnum(0, 59) }}'
     month: '*'
     day: '*'
   tags: firmware_mirror
