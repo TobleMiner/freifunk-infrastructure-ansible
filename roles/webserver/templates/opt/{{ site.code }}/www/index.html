@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> {{ inventory_hostname }} </title>
+    <style>
+      span { font-weight: bold; background-color: #f1f1f1; padding: 0.5em }
+    </style>
+  </head>
+  <body>
+    This is gateway <span> {{ inventory_hostname }} </span> of community <span> {{ site.code }} </span>
+  </body>
+</html>

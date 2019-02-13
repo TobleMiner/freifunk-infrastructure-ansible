@@ -5,6 +5,12 @@
     state: present
   tags: webserver
 
+- name: Ensure default apache vhost is purged
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+  tags: webserver
+
 - name: Ensure firewall allows HTTP traffic
   copy:
     src: etc/iptables.d/500-Allow-http
@@ -12,6 +18,41 @@
   notify:
     - restart firewall
   tags: webserver, firewall
+
+- name: Ensure web root exists
+  file:
+    path: '/opt/{{ site.code }}/www'
+    state: directory
+  tags: webserver
+
+- name: Ensure index.html exists
+  template:
+    src: '{{ "opt/{{ site.code }}/www/index.html" }}'
+    dest: '/opt/{{ site.code }}/www/index.html'
+  tags: webserver
+
+- name: Ensure web config directory exists
+  file:
+    path: /etc/apache2/freifunk.d/{{ site.code }}
+    state: directory
+  tags: webserver
+
+- name: Ensure web config directory contians a file
+  copy:
+    content: ""
+    dest: /etc/apache2/freifunk.d/{{ site.code }}/000-empty.conf
+  tags: webserver
+
+- name: Ensure vhost config exists
+  vars:
+    webroot: /opt/{{ site.code }}/www
+    confdir: /etc/apache2/freifunk.d/{{ site.code }}
+  template:
+    src: '{{ "etc/apache2/sites-enabled/001-freifunk-{{ site.code }}.conf" }}'
+    dest: '/etc/apache2/sites-enabled/001-freifunk-{{ site.code }}.conf'
+  notify:
+    - reload apache2
+  tags: webserver
 
 - name: Ensure apache2 service is enabled and started
   service:
