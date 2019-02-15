@@ -1,0 +1,35 @@
+---
+- name: Ensure rsync is installed
+  apt:
+    name: rsync
+    state: present
+  tags: rsyncd
+
+- name: Ensure rsyncd config fragment directory exists
+  file:
+    path: /etc/rsyncd.fragment.d
+    state: directory
+  tags: rsyncd
+
+- name: Ensure rsyncd is enabled
+  lineinfile:
+    path: /etc/default/rsync
+    regexp: '^RSYNC_ENABLE=.*'
+    line: 'RSYNC_ENABLE=true'
+    state: present
+  tags: rsyncd
+
+- name: Copy rsyncd config head
+  copy:
+    src: etc/rsyncd.fragment.d/010-rsyncd-head.conf
+    dest: /etc/rsyncd.fragment.d/010-rsyncd-head.conf
+  notify:
+    - rebuild rsyncd config
+  tags: rsyncd
+
+- name: Ensure rsync server is started
+  service:
+    name: rsync.service
+    state: started
+    enabled: yes
+  tags: rsyncd

@@ -1,0 +1,12 @@
+---
+- name: rebuild rsyncd config
+  assemble:
+    src: /etc/rsyncd.fragment.d/
+    dest: /etc/rsyncd.conf
+  notify:
+    - restart rsyncd
+
+- name: restart rsyncd
+  service:
+    name: rsync.service
+    state: restarted
