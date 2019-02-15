@@ -1,48 +1,9 @@
 ---
-- name: Ensure rsync is installed
-  apt:
-    name: rsync
-    state: present
-  tags: firmware_mirror
-
-- name: Create user for periodic firmware mirroring
-  user:
-    name: firmware_mirror_{{ site.code }}
-    state: present
-  tags: firmware_mirror
-
 - name: Ensure firmware directory exists
   file:
     path: /opt/{{ site.code }}/firmware
     state: directory
-    owner: firmware_mirror_{{ site.code }}
     mode: 0755
-  tags: firmware_mirror
-
-- name: Ensure mirror update script exists
-  vars:
-    firmwaredir: /opt/{{ site.code }}/firmware
-  template:
-    src: '{{ "usr/local/bin/freifunk_firmware_mirror_sync_{{ site.code }}" }}'
-    dest: /usr/local/bin/freifunk_firmware_mirror_sync_{{ site.code }}
-  tags: firmware_mirror
-
-- name: Ensure mirror update script is executable
-  file:
-    path: /usr/local/bin/freifunk_firmware_mirror_sync_{{ site.code }}
-    state: file
-    mode: 0755
-  tags: firmware_mirror
-
-- name: Ensure firmware mirroring cron exists
-  cron:
-    name: Update {{ site.code }} firmware mirror
-    job: /usr/local/bin/freifunk_firmware_mirror_sync_{{ site.code }}
-    user: firmware_mirror_{{ site.code }}
-    hour: '{{ inventory_hostname | hashnum(0, 23) }}'
-    minute: '{{ inventory_hostname | hashnum(0, 59) }}'
-    month: '*'
-    day: '*'
   tags: firmware_mirror
 
 - name: Ensure apache firmware redirect config exists

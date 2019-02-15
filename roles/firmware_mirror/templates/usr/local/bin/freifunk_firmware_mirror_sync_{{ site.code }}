@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -e -o pipefail
-
-rsync --archive --exclude='.*' --chmod=D755,F644 "{{ site.mirror.firmware.source }}" "{{ firmwaredir }}"
