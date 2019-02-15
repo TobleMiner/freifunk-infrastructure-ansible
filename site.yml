@@ -54,3 +54,9 @@
   roles:
     - local_exit4
   tags: gateway
+
+- name: Ensure a tier2 firmware mirror is set up
+  hosts: firmware_mirror_tier2
+  roles:
+    - firmware_mirror_tier2
+  tags: gateway
