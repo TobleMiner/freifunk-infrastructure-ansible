@@ -38,5 +38,11 @@ site:
   noc_keys:
     git: https://github.com/TobleMiner/ffki-noc-sshkeys.git
 
+  mirror:
+    firmware:
+      source: rsync://10.116.250.1/freifunk_firmware_ffki
+      dir: firmware
+
+
 batman:
   version: 2013.4.0-11
