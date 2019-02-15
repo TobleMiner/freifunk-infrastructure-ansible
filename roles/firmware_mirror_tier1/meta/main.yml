@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: firmware_mirror }
+  - { role: rsyncd }

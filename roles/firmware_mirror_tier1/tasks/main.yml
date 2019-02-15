@@ -1,0 +1,10 @@
+---
+- name: Add rsyncd config fagment
+  vars:
+    firmwaredir: /opt/{{ site.code }}/firmware
+  template:
+    src: '{{ "etc/rsyncd.fragment.d/100-rsyncd-{{ site.code }}.conf" }}'
+    dest: /etc/rsyncd.fragment.d/100-rsyncd-{{ site.code }}.conf
+  notify:
+    - rebuild rsyncd config
+  tags: firmware_mirror_tier1
