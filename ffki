@@ -25,3 +25,6 @@ ffki-gw6
 
 [peering_ffrl6]
 ffki-gw0
+
+[firmware_mirror_tier2]
+ffki-gw0
