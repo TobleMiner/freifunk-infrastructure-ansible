@@ -37,32 +37,10 @@
     dest: /etc/apt/preferences.d/batman-adv-dkms
   tags: batman_adv_dkms
 
-# Install dkms and related recommended packages
-- name: Ensure dkms and kernel headers are installed
-  apt:
-    name: dkms
-    state: present
-    install_recommends: yes
-  tags: batman_adv_dkms
-
 # Install required packages
 - name: Ensure required networking packages are installed
   apt:
     name: batman-adv-dkms
-    state: present
-  tags: batman_adv_dkms
-
-# Extract required header version
-- name: Ensure current kernel version is known
-  shell: uname -r
-  register: kernel_version
-  changed_when: no
-  tags: batman_adv_dkms
-
-# Install kernel headers
-- name: Ensure kernel headers for currently booted kernel are installed
-  apt:
-    name: linux-headers-{{ kernel_version.stdout }}
     state: present
   tags: batman_adv_dkms
 

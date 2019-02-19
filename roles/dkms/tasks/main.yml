@@ -1,0 +1,22 @@
+---
+# Install dkms and related recommended packages
+- name: Ensure dkms and kernel headers are installed
+  apt:
+    name: dkms
+    state: present
+    install_recommends: yes
+  tags: dkms
+
+# Extract required header version
+- name: Ensure current kernel version is known
+  shell: uname -r
+  register: kernel_version
+  changed_when: no
+  tags: dkms
+
+# Install kernel headers
+- name: Ensure kernel headers for currently booted kernel are installed
+  apt:
+    name: linux-headers-{{ kernel_version.stdout }}
+    state: present
+  tags: dkms
