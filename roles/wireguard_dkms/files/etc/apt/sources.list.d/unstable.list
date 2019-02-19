@@ -1,0 +1,2 @@
+deb https://debian.netcologne.de/debian/ sid main
+deb-src https://debian.netcologne.de/debian/ sid main
