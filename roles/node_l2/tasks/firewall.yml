@@ -1,0 +1,9 @@
+---
+- name: Ensure firewall rules are deployed
+  template:
+    src: "{{ item }}"
+    dest: /etc/iptables.d/{{ item | basename | regex_replace('\.j2','') }}
+  with_fileglob:
+    - ../templates/etc/iptables.d/*.j2
+  notify:
+    - restart firewall

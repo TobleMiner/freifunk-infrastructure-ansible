@@ -1,0 +1,9 @@
+---
+- name: Ensure required sysctl config files are present
+  copy:
+    src: "{{ item }}"
+    dest: /etc/sysctl.d/{{ item | basename }}
+  with_fileglob:
+    - etc/sysctl.d/*.conf
+  notify:
+    - reload sysctl

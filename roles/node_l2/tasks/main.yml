@@ -1,8 +1,4 @@
 ---
-- name: Setup iproute2 related stuff
-  import_tasks: iproute2.yml
-  tags: iproute2, network
-
 - name: Setup sysctl
   import_tasks: sysctl.yml
   tags: sysctl, network
@@ -11,6 +7,6 @@
   import_tasks: firewall.yml
   tags: firewall, network
 
-- name: Setup ntp
-  import_tasks: ntp.yml
-  tags: ntp
+- name: Setup interfaces
+  import_tasks: interfaces.yml
+  tags: interfaces, network

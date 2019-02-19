@@ -1,3 +1,4 @@
 ---
 dependencies:
+  - { role: node }
   - { role: batman_adv_dkms }
