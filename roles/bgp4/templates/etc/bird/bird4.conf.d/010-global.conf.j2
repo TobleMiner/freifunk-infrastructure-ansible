@@ -3,5 +3,3 @@ router id {{ interface.mesh_bridge.address.ipv4 | ipaddr('address') }};
 define router_id = {{ interface.mesh_bridge.address.ipv4 | ipaddr('address') }};
 
 define asn  = {{ site.bgp.as }};
-
-include "/etc/bird/bird4.conf.d/*.conf";

@@ -9,14 +9,6 @@
   tags: bgp4
 
 # Create directories
-- name: Ensure bird config directory exists
-  file:
-    path: /etc/bird/bird4.conf.d
-    state: directory
-  notify:
-    - restart bird
-  tags: bgp4
-
 - name: Ensure bird peer directory exists
   file:
     path: /etc/bird/bird4.peers.d
@@ -42,14 +34,6 @@
   tags: bgp4
 
 # Create static configs
-- name: Ensure bird mesh device protocol exists
-  copy:
-    src: etc/bird/bird4.conf.d/050-proto-devices.conf
-    dest: /etc/bird/bird4.conf.d/050-proto-devices.conf
-  notify:
-    - configure bird
-  tags: bgp4
-
 - name: Ensure bird mesh kernel table exists
   copy:
     src: etc/bird/bird4.conf.d/100-kernel-table-mesh.conf
@@ -59,10 +43,10 @@
   tags: bgp4
 
 # Create dynamic configs
-- name: Ensure bird config exists
+- name: Ensure bird global defines exist
   template:
-    src: etc/bird/bird.conf.j2
-    dest: /etc/bird/bird.conf
+    src: etc/bird/bird4.conf.d/010-global.conf.j2
+    dest: /etc/bird/bird4.conf.d/010-global.conf
   notify:
     - configure bird
   tags: bgp4
@@ -100,11 +84,3 @@
   notify:
     - restart firewall
   tags: bgp4, firewall
-
-# Services
-- name: Ensure bird service is enabled
-  service:
-    name: bird.service
-    enabled: yes
-    state: started
-  tags: bgp4
