@@ -17,6 +17,22 @@
     - restart bird6
   tags: bird6
 
+- name: Ensure bird6 filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bird6
+
+- name: Ensure bird6 mesh kernel filter directory exists
+  file:
+    path: /etc/bird/bird6.filters.d/mesh_kernel.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bird6
+
 # Drop static config files
 - name: Ensure bird6 config exists
   copy:
@@ -38,6 +54,14 @@
   copy:
     src: etc/bird/bird6.conf.d/010-util.conf
     dest: /etc/bird/bird6.conf.d/010-util.conf
+  notify:
+    - configure bird6
+  tags: bird6
+
+- name: Ensure bird6 mesh kernel table exists
+  copy:
+    src: etc/bird/bird6.conf.d/100-kernel-table-mesh.conf
+    dest: /etc/bird/bird6.conf.d/100-kernel-table-mesh.conf
   notify:
     - configure bird6
   tags: bird6
