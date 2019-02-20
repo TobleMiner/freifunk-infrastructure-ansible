@@ -4,6 +4,7 @@ ffki-gw1
 ffki-gw2
 ffki-gw4
 ffki-gw6
+ffki-installation-gutes-leben
 
 [gateways]
 ffki-gw0
@@ -28,3 +29,6 @@ ffki-gw0
 
 [firmware_mirror_tier2]
 ffki-gw0
+
+[installations]
+ffki-installation-gutes-leben
