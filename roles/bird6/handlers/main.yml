@@ -5,4 +5,6 @@
     state: restarted
 
 - name: configure bird6
-  shell: birdc6 configure || systemctl restart bird6
+  shell: |
+    birdc6 configure || systemctl restart bird6
+    birdc6 configure 2> /dev/null | grep -iq 'reconfigur'
