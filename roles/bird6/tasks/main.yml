@@ -42,6 +42,15 @@
     - configure bird6
   tags: bird6
 
+# Create dynamic configs
+- name: Ensure router id is configured
+  template:
+    src: etc/bird/bird6.conf.d/005-router_id.conf.j2
+    dest: /etc/bird/bird6.conf.d/005-router_id.conf
+  notify:
+    - configure bird
+  tags: bird6
+
 - name: Ensure bird6 service is enabled
   service:
     name: bird6.service
