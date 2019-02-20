@@ -1,0 +1,5 @@
+---
+- name: restart wireguard
+  shell: |
+    ifdown wg-{{ site.code }} || ( ip link set down wg-{{ site.code }} && ip link del wg-{{ site.code }} ) || true
+    ifup wg-{{ site.code }}
