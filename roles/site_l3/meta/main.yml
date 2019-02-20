@@ -2,3 +2,5 @@
 dependencies:
  - { role: node }
  - { role: wireguard_dkms }
+ - { role: bird4 }
+ - { role: bird6 }

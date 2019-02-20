@@ -62,9 +62,9 @@
     - firmware_mirror_tier2
   tags: gateway
 
-- name: Ensure installations are set up
-  hosts: installations
+- name: Ensure Layer 3 sites are set up
+  hosts: site_l3
   roles:
-    - installation
+    - site_l3
     - wireguard_p2p
-  tags: installation
+  tags: site_l3
