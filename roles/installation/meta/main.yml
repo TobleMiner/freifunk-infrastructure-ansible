@@ -1,0 +1,4 @@
+---
+dependencies:
+ - { role: node }
+ - { role: wireguard_dkms }
