@@ -1,9 +1,23 @@
 ---
-- name: Ensure firewall allows wireguard traffic
-  template:
-    src: etc/iptables.d/500-Allow-wireguard
-    dest: /etc/iptables.d/500-Allow-wireguard
-  notify: restart firewall
+- name: Ensure wireguard related firewall config is set up
+  block:
+  - name: Ensure firewall allows wireguard traffic
+    template:
+      src: etc/iptables.d/500-Allow-wireguard.j2
+      dest: /etc/iptables.d/500-Allow-wireguard
+    notify: restart firewall
+
+  - name: Ensure input chain for wireguard is set up
+    template:
+      src: '{{ "etc/iptables.d/001-CHAINS-input_wg-{{ site.code }}.j2" }}'
+      dest: /etc/iptables.d/001-CHAINS-input_wg-{{ site.code }}.j2
+    notify: restart firewall
+
+  - name: Ensure delegation to wireguard input chain is set up
+    template:
+      src: '{{ "etc/iptables.d/100-device-wg-{{ site.code }}.j2" }}'
+      dest: /etc/iptables.d/100-device-wg-{{ site.code }}.j2
+    notify: restart firewall
   when: 'wireguard is defined'
   tags: wireguard_p2p, firewall
 
