@@ -1,0 +1,50 @@
+---
+# Packages
+- name: Ensure bird is installed
+  apt:
+    name: bird
+    state: present
+  notify:
+    - restart bird6
+  tags: bird6
+
+# Create directories
+- name: Ensure bird6 config directory exists
+  file:
+    path: /etc/bird/bird6.conf.d
+    state: directory
+  notify:
+    - restart bird6
+  tags: bird6
+
+# Drop static config files
+- name: Ensure bird6 config exists
+  copy:
+    src: etc/bird/bird6.conf
+    dest: /etc/bird/bird6.conf
+  notify:
+    - configure bird6
+  tags: bird6
+
+- name: Ensure bird6 device protocol exists
+  copy:
+    src: etc/bird/bird6.conf.d/050-proto-devices.conf
+    dest: /etc/bird/bird6.conf.d/050-proto-devices.conf
+  notify:
+    - configure bird6
+  tags: bird6
+
+- name: Ensure bird6 utility config exists
+  copy:
+    src: etc/bird/bird6.conf.d/010-util.conf
+    dest: /etc/bird/bird6.conf.d/010-util.conf
+  notify:
+    - configure bird6
+  tags: bird6
+
+- name: Ensure bird6 service is enabled
+  service:
+    name: bird6.service
+    enabled: yes
+    state: started
+  tags: bird6

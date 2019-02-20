@@ -9,14 +9,6 @@
   tags: bgp6
 
 # Create directories
-- name: Ensure bird6 config directory exists
-  file:
-    path: /etc/bird/bird6.conf.d
-    state: directory
-  notify:
-    - restart bird6
-  tags: bgp6
-
 - name: Ensure bird6 peer directory exists
   file:
     path: /etc/bird/bird6.peers.d
@@ -50,14 +42,6 @@
   tags: bgp6
 
 # Drop static config files
-- name: Ensure bird6 mesh device protocol exists
-  copy:
-    src: etc/bird/bird6.conf.d/050-proto-devices.conf
-    dest: /etc/bird/bird6.conf.d/050-proto-devices.conf
-  notify:
-    - configure bird6
-  tags: bgp6
-
 - name: Ensure bird6 mesh kernel table exists
   copy:
     src: etc/bird/bird6.conf.d/100-kernel-table-mesh.conf
@@ -76,10 +60,10 @@
 
 
 # Drop config files
-- name: Ensure bird6 config exists
+- name: Ensure bird6 global defines exist
   template:
-    src: etc/bird/bird6.conf.j2
-    dest: /etc/bird/bird6.conf
+    src: etc/bird/bird6.conf.d/010-global.conf.j2
+    dest: /etc/bird/bird6.conf.d/010-global.conf
   notify:
     - configure bird6
   tags: bgp6
@@ -107,10 +91,3 @@
   notify:
     - restart firewall
   tags: bgp6, firewall
-
-- name: Ensure bird6 service is enabled
-  service:
-    name: bird6.service
-    enabled: yes
-    state: started
-  tags: bgp6

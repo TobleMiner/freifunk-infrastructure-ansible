@@ -1,3 +1,4 @@
 ---
 dependencies:
+  - { role: bird6 }
   - { role: gateway }
