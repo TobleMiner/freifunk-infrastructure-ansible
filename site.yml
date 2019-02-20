@@ -61,3 +61,10 @@
   roles:
     - firmware_mirror_tier2
   tags: gateway
+
+- name: Ensure installations are set up
+  hosts: installations
+  roles:
+    - installation
+    - wireguard_p2p
+  tags: installation
