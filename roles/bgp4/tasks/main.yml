@@ -17,31 +17,6 @@
     - restart bird
   tags: bgp4
 
-- name: Ensure bird filter directory exists
-  file:
-    path: /etc/bird/bird4.filters.d
-    state: directory
-  notify:
-    - restart bird
-  tags: bgp4
-
-- name: Ensure bird kernel filter directory exists
-  file:
-    path: /etc/bird/bird4.filters.d/mesh_kernel.d
-    state: directory
-  notify:
-    - restart bird
-  tags: bgp4
-
-# Create static configs
-- name: Ensure bird mesh kernel table exists
-  copy:
-    src: etc/bird/bird4.conf.d/100-kernel-table-mesh.conf
-    dest: /etc/bird/bird4.conf.d/100-kernel-table-mesh.conf
-  notify:
-    - configure bird
-  tags: bgp4
-
 # Create dynamic configs
 - name: Ensure bird global defines exist
   template:
