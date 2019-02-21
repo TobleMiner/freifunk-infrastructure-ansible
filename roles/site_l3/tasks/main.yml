@@ -7,6 +7,20 @@
   notify: restart firewall
   tags: site_l3, firewall
 
+- name: Ensure traffic forwarding from gateway to site is allowed
+  template:
+    src: '{{ "etc/iptables.d/800-wg-{{ site.code }}-forward-ACCEPT-lan.j2" }}'
+    dest: /etc/iptables.d/800-wg-{{ site.code }}-forward-ACCEPT-lan
+  notify: restart firewall
+  tags: site_l3, firewall
+
+- name: Ensure traffic forwarding from site to gateway is allowed
+  template:
+    src: '{{ "etc/iptables.d/800-lan-forward-ACCEPT-wg-{{ site.code }}.j2" }}'
+    dest: /etc/iptables.d/800-lan-forward-ACCEPT-wg-{{ site.code }}
+  notify: restart firewall
+  tags: site_l3, firewall
+
 # Create required directories
 - name: Ensure bird peer directory exists
   file: 
