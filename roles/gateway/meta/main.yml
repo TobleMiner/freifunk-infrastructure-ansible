@@ -1,3 +1,4 @@
 ---
 dependencies:
   - { role: node_l2 }
+  - { role: router }

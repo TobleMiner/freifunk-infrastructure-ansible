@@ -1,8 +1,4 @@
 ---
-- name: Setup sysctl
-  import_tasks: sysctl.yml
-  tags: sysctl, network
-
 - name: Setup firewall
   import_tasks: firewall.yml
   tags: firewall, network
