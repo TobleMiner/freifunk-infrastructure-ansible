@@ -2,3 +2,19 @@
 dependencies:
   - { role: node_l2 }
   - { role: router }
+  - role: dhcp_server
+    vars:
+      dhcp_iface: br-{{ site.code }}
+      dhcp_network: '{{ interface.mesh_bridge.address.ipv4 | ipaddr("0") }}'
+      dhcp_options:
+        routers: '{{ interface.mesh_bridge.dhcp_gateway | strip_prefixlen if interface.mesh_bridge.dhcp_gateway is defined else interface.mesh_bridge.address.ipv4 | strip_prefixlen }}'
+        domain-name-servers:
+          - '{{ interface.mesh_bridge.address.ipv4 | strip_prefixlen }}'
+          - '{{ interface.mesh_bridge.address.ipv4 | strip_prefixlen }}'
+        domain-name: '"{{ site.tld if site.tld is defined else site.code }}"'
+        ntp-servers: '{{ interface.mesh_bridge.address.ipv4 | strip_prefixlen }}'
+      dhcp_range: '{{ interface.mesh_bridge.dhcp_range }}'
+      dhcp_lease_time:
+        min: 120
+        default: 300
+        max: 600

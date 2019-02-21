@@ -14,12 +14,6 @@
     name: respondd
     state: restarted
 
-- name: restart dhcpd
-  service:
-    name: isc-dhcp-server
-    state: restarted
-  listen: 'restart mesh bridge'
-
 - name: restart unbound
   service:
     name: unbound
