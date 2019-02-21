@@ -1,0 +1,90 @@
+---
+# Install packages
+- name: Ensure dhcpd is installed
+  apt:
+    name: isc-dhcp-server
+    state: present
+  notify:
+    - restart dhcpd
+  tags: dhcp_server
+
+# Deploy firwall rules
+- name: Ensure firewall allows dhcp traffic
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-dhcpd_{{ dhcp_iface }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-dhcpd_{{ dhcp_iface }}
+  notify:
+    - restart firewall
+  tags: dhcp_server, firewall
+
+# Configure dhcpd
+- name: Ensure dhcpd config directory exists
+  file:
+    path: /etc/dhcp/dhcpd.conf.d
+    state: directory
+  tags: dhcp_server
+
+- name: Ensure dhcpd config fragment directory exists
+  file:
+    path: /etc/dhcp/dhcpd.fragment.d
+    state: directory
+  tags: dhcp_server
+
+- name: Ensure dhcp config for interface {{ dhcp_iface }} is in place
+  template:
+    src: "{{ 'etc/dhcp/dhcpd.conf.d/interface_{{ dhcp_iface }}.conf.j2' }}"
+    dest: /etc/dhcp/dhcpd.conf.d/interface_{{ dhcp_iface }}.conf
+  notify:
+    - restart dhcpd
+  tags: dhcp_server
+
+- name: Ensure dhcp config fragment for defaults is in place
+  template:
+    src: "{{ 'etc/dhcp/dhcpd.fragment.d/050-defaults.j2' }}"
+    dest: /etc/dhcp/dhcpd.fragment.d/050-defaults
+  notify:
+    - rebuild dhcpd config
+    - restart dhcpd
+  tags: dhcp_server
+
+- name: Ensure dhcp config fragment for interface {{ dhcp_iface }} is in place
+  template:
+    src: "{{ 'etc/dhcp/dhcpd.fragment.d/100-{{ dhcp_iface }}.j2' }}"
+    dest: /etc/dhcp/dhcpd.fragment.d/100-{{ dhcp_iface }}
+  notify:
+    - rebuild dhcpd config
+    - restart dhcpd
+  tags: dhcp_server
+
+- name: Ensure dhcpd interface config initializes INTERFACESv4
+  lineinfile:
+    path: /etc/default/isc-dhcp-server
+    regexp: '^INTERFACESv4=""\s.*'
+    line: 'INTERFACESv4=""'
+    state: present
+  notify:
+    - restart dhcpd
+  tags: dhcp_server
+
+- name: Ensure dhcpd interface config adds {{ dhcp_iface }} to INTERFACESv4
+  lineinfile:
+    path: /etc/default/isc-dhcp-server
+    regexp: '^INTERFACESv4="\$INTERFACESv4 {{ dhcp_iface }}"\s.*'
+    line: 'INTERFACESv4="$INTERFACESv4 {{ dhcp_iface }}"'
+    state: present
+  notify:
+    - restart dhcpd
+  tags: dhcp_server
+
+- name: Ensure dhcpd config is rebuilt
+  assemble:
+    src: /etc/dhcp/dhcpd.fragment.d
+    dest: /etc/dhcp/dhcpd.conf
+  tags: dhcp_server
+
+- name: Ensure dhcpd service is enabled and started
+  service:
+    name: isc-dhcp-server.service
+    enabled: yes
+    state: started
+  tags: dhcp_server

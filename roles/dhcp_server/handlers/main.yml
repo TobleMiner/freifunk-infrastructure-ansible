@@ -1,0 +1,11 @@
+---
+- name: rebuild dhcpd config
+  assemble:
+    src: /etc/dhcp/dhcpd.fragment.d
+    dest: /etc/dhcp/dhcpd.conf
+
+- name: restart dhcpd
+  service:
+    name: isc-dhcp-server
+    state: restarted
+  listen: 'restart {{ dhcp_iface }}'
