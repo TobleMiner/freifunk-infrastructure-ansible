@@ -7,9 +7,9 @@
 {% endif %}
 
 {% if dns_acl is string %}
-  access-control: {{ dns_acl }}
+  access-control: {{ dns_acl }} allow
 {% else %}
 {% for addr in dns_acl %}
-  access-control: {{ addr }}
+  access-control: {{ addr }} allow
 {% endfor %}
 {% endif %}
