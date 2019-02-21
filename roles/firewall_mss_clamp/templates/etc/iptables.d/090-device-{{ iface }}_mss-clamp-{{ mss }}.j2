@@ -1,0 +1,2 @@
+ip46tables -A forward -o {{ iface }} -j mss-clamp-{{ mss }}
+ip46tables -A forward -i {{ iface }} -j mss-clamp-{{ mss }}

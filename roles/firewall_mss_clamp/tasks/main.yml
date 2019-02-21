@@ -1,0 +1,26 @@
+---
+# Enable mss clamping on the mesh bridge interface
+# This is a workaround for broken path MTU discovery
+- name: Ensure mss clamping firewall chain exists
+  template:
+    src: '{{ "etc/iptables.d/001-CHAINS_mss-clamp-{{ mss }}.j2" }}'
+    dest: /etc/iptables.d/001-CHAINS_mss-clamp-{{ mss }}
+  notify:
+    - restart firewall
+  tags: mss_clamp, firewall
+
+- name: Ensure mss clamping firewall chain is populated
+  template:
+    src: '{{ "etc/iptables.d/050-mss-clamp-PreProcessing-{{ mss }}.j2" }}'
+    dest: /etc/iptables.d/050-mss-clamp-PreProcessing-{{ mss }}
+  notify:
+    - restart firewall
+  tags: mss_clamp, firewall
+
+- name: Ensure mss on {{ iface }} is clamped
+  template:
+    src: "{{ 'etc/iptables.d/090-device-{{ iface }}_mss-clamp-{{ mss }}.j2' }}"
+    dest: "/etc/iptables.d/090-device-{{ iface }}_mss-clamp-{{ mss }}"
+  notify:
+    - restart firewall
+  tags: mss_clamp, firewall

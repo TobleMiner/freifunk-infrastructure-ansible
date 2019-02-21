@@ -1,1 +1,0 @@
-ip46tables -A {{ site.code }}-mss-clamp -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200

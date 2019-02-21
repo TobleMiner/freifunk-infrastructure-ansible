@@ -1,0 +1,1 @@
+ip46tables -A mss-clamp-{{ mss }} -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss {{ mss }}

@@ -1,2 +1,0 @@
-ip46tables -A forward -o br-{{ site.code }} -j {{ site.code}}-mss-clamp
-ip46tables -A forward -i br-{{ site.code }} -j {{ site.code}}-mss-clamp
