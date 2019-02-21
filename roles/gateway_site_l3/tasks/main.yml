@@ -7,6 +7,13 @@
   notify: restart firewall
   tags: gateway_site_l3, firewall
 
+- name: Ensure forwarding from sites to exit is allowed
+  template:
+    src: '{{ "etc/iptables.d/800-wg-{{ site.code }}-forward-ACCEPT-exit.j2" }}'
+    dest: /etc/iptables.d/800-wg-{{ site.code }}-forward-ACCEPT-exit
+  notify: restart firewall
+  tags: gateway_site_l3, firewall
+
 # Setup BGP
 - name: Ensure BGP defines are in place
   template:
@@ -27,4 +34,12 @@
     src: '{{ "etc/bird/bird4.peers.d/site_l3_{{ site.code }}.conf.j2" }}'
     dest: /etc/bird/bird4.peers.d/site_l3_{{ site.code }}.conf
   notify: configure bird
+  tags: gateway_site_l3
+
+# Setup wireguard interface traffic rules
+- name: Ensure traffic rules are in place
+  template:
+    src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}_rules.j2" }}'
+    dest: /etc/network/interfaces.d/wg-{{ site.code }}_rules
+  notify: restart wireguard
   tags: gateway_site_l3

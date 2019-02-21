@@ -1,0 +1,2 @@
+# Accept forwarding from l3 sites to exit
+ip46tables -A exit-out-forward -i wg-{{ site.code }} -j ACCEPT
