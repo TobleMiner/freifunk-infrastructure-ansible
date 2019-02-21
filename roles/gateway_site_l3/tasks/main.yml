@@ -1,0 +1,30 @@
+---
+# Firewall
+- name: Ensure BGP traffic is allowed
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-BGP_wg-{{ site.code }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-BGP_wg-{{ site.code }}
+  notify: restart firewall
+  tags: gateway_site_l3, firewall
+
+# Setup BGP
+- name: Ensure BGP defines are in place
+  template:
+    src: '{{ "etc/bird/bird4.conf.d/020-site_l3-defines-{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird4.conf.d/020-site_l3-defines-{{ site.code }}.conf
+  notify: configure bird
+  tags: gateway_site_l3
+
+- name: Ensure BGP config is in place
+  template:
+    src: '{{ "etc/bird/bird4.conf.d/200-site_l3-{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird4.conf.d/200-site_l3-{{ site.code }}.conf
+  notify: configure bird
+  tags: gateway_site_l3
+
+- name: Ensure BGP peers are in place
+  template:
+    src: '{{ "etc/bird/bird4.peers.d/site_l3_{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird4.peers.d/site_l3_{{ site.code }}.conf
+  notify: configure bird
+  tags: gateway_site_l3

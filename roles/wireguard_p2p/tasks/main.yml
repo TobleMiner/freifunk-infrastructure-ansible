@@ -10,13 +10,13 @@
   - name: Ensure input chain for wireguard is set up
     template:
       src: '{{ "etc/iptables.d/001-CHAINS-input_wg-{{ site.code }}.j2" }}'
-      dest: /etc/iptables.d/001-CHAINS-input_wg-{{ site.code }}.j2
+      dest: /etc/iptables.d/001-CHAINS-input_wg-{{ site.code }}
     notify: restart firewall
 
   - name: Ensure delegation to wireguard input chain is set up
     template:
       src: '{{ "etc/iptables.d/100-device-wg-{{ site.code }}.j2" }}'
-      dest: /etc/iptables.d/100-device-wg-{{ site.code }}.j2
+      dest: /etc/iptables.d/100-device-wg-{{ site.code }}
     notify: restart firewall
   when: 'wireguard is defined'
   tags: wireguard_p2p, firewall

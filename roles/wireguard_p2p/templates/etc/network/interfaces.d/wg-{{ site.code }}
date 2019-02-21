@@ -1,23 +1,29 @@
+{% set ifaddr4 = interface.wireguard.address.ipv4 %}
 auto wg-{{ site.code }}
 iface wg-{{ site.code }} inet manual
   pre-up    ip link add $IFACE type wireguard || true
   pre-up    wg set $IFACE listen-port {{ site.wireguard.port }} private-key {{ wg_key }}
-  pre-up    ip addr add {{ interface.wireguard.address.ipv4 }} scope link dev $IFACE || true
+  pre-up    ip addr add {{ ifaddr4 }} {% if ifaddr4 | ipaddr('169.254.0.0/16') %} scope link {% endif %} dev $IFACE || true
 {% for peer in wireguard.peers %}
-{% set host = hostvars[peer] %}
-{% set endpoint = host.interface.wan.address.ipv4 %}
-{% if host.interface.wan.address.nat is defined %}
-{% set endpoint = host.interface.wan.address.nat %}
-{% endif %}
-{% if host.wireguard.endpoint is defined %}
-{% set endpoint = host.wireguard.endpoint %}
-{% endif %}
-  pre-up    wg set $IFACE peer {{ host.wireguard.key.public }} allowed-ips 0.0.0.0/0 allowed-ips ::/0 endpoint {{ endpoint | regex_replace('/[0-9]+$', '')}}:{{ site.wireguard.port }} persistent-keepalive 10
-  post-down wg set $IFACE peer {{ host.wireguard.key.public }} remove
+  {% set host = hostvars[peer] %}
+  {% if wireguard_alias is defined %}
+    {% set host_wg = host[wireguard_alias] %}
+  {% else %}
+    {% set host_wg = host.wireguard %}
+  {% endif %}
+  {% set endpoint = host.interface.wan.address.ipv4 %}
+  {% if host.interface.wan.address.nat is defined %}
+    {% set endpoint = host.interface.wan.address.nat %}
+  {% endif %}
+  {% if host_wg.endpoint is defined %}
+    {% set endpoint = host_wg.endpoint %}
+  {% endif %}
+  pre-up    wg set $IFACE peer {{ host_wg.key.public }} allowed-ips 0.0.0.0/0 allowed-ips ::/0 endpoint {{ endpoint | regex_replace('/[0-9]+$', '')}}:{{ site.wireguard.port }} persistent-keepalive 10
+  post-down wg set $IFACE peer {{ host_wg.key.public }} remove
 {% endfor %}
   up        ip link set $IFACE up
   down      ip link set $IFACE down
-  post-down ip addr del {{ interface.wireguard.address.ipv4 }} scope link dev $IFACE || true
+  post-down ip addr del {{ ifaddr4 }} {% if ifaddr4 | ipaddr('169.254.0.0/16') %} scope link {% endif %} dev $IFACE || true
 
 iface wg-{{ site.code }} inet6 manual
   pre-up    ip addr add {{ interface.wireguard.address.ipv6 }} dev $IFACE || true

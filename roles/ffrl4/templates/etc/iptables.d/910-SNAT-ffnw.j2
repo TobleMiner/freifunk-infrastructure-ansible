@@ -1,2 +1,0 @@
-# SNAT all traffic sent out via ffrl to our public ffrl IP address
-ip4tables -t nat -A POSTROUTING -s {{ site.mesh.network.ipv4 }} -o ffrl-+ -j SNAT --to-source {{ interface.ffrl.address.ipv4 | ipaddr('address') }}

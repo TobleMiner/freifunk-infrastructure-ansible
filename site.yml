@@ -17,7 +17,6 @@
     - mesh_gre
     - bgp4 # Required for default route distribution
     - gateway_mss_clamp
-    - wireguard_p2p
   tags: gateway
 
 - name: Ensure hetzner cloud servers have bird quirk workaround installed
@@ -66,5 +65,10 @@
   hosts: site_l3
   roles:
     - site_l3
-    - wireguard_p2p
   tags: site_l3
+
+- name: Ensure gateways for layer 3 sites are set up
+  hosts: gateway_site_l3
+  roles:
+    - gateway_site_l3
+  tags: gateway_site_l3

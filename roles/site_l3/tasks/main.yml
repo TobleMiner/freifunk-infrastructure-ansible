@@ -1,0 +1,38 @@
+---
+# Configure firewall
+- name: Ensure BGP traffic is allowed
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-BGP_wg-{{ site.code }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-BGP_wg-{{ site.code }}
+  notify: restart firewall
+  tags: site_l3, firewall
+
+# Create required directories
+- name: Ensure bird peer directory exists
+  file: 
+    path: /etc/bird/bird4.peers.d
+    state: directory
+  tags: site_l3
+
+# Configure LAN interface
+- name: Ensure LAN interface is configured
+  template:
+    src: etc/network/interfaces.d/lan.j2
+    dest: /etc/network/interfaces.d/lan
+  notify: restart lan interface
+  tags: site_l3  
+
+# Configure BIRD
+- name: Ensure bird peering template is set up
+  template:
+    src: '{{ "etc/bird/bird4.conf.d/200-site-bgp-{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird4.conf.d/200-site-bgp-{{ site.code }}.conf
+  notify: configure bird
+  tags: site_l3
+
+- name: Ensure bird peers are set up
+  template:
+    src: '{{ "etc/bird/bird4.peers.d/{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird4.peers.d/{{ site.code }}.conf
+  notify: configure bird
+  tags: site_l3

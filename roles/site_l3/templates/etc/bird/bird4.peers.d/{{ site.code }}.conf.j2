@@ -1,0 +1,8 @@
+# BGP peerings with site gateways
+{% for peer in site_l3.peers %}
+  {% set host = hostvars[peer] %}
+protocol bgp 'wg_peer_{{ site.code }}_{{ peer }}' from 'wg_peer_{{ site.code }}' {
+  neighbor {{ host.interface.wireguard.address.ipv4 | strip_prefixlen }} as {{ site.bgp.as }};
+};
+
+{% endfor %}

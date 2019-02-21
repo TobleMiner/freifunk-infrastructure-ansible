@@ -1,2 +1,2 @@
 # Deliver all incoming traffic on wg-{{ site.code }} to appropriate input chain
-ip64tables -A input -i wg-{{ site.code }} -j wg-{{ site.code }}-input
+ip46tables -A input -i wg-{{ site.code }} -j wg-{{ site.code }}-input

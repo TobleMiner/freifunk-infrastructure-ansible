@@ -1,0 +1,9 @@
+# SNAT all traffic sent out via ffrl to our public ffrl IP address
+ip4tables -t nat -A POSTROUTING -s {{ site.mesh.network.ipv4 }} -o ffrl-+ -j SNAT --to-source {{ interface.ffrl.address.ipv4 | ipaddr('address') }}
+
+# SNAT all Layer 3 sites
+{# Ugly hack, visit all L3 sites and SNAT them, too #}
+{% for hostname in groups['site_l3'] %}
+{% set host = hostvars[hostname] %}
+ip4tables -t nat -A POSTROUTING -s {{ host.interface.lan.address.ipv4 | ipaddr('0') }} -o ffrl-+ -j SNAT --to-source {{ interface.ffrl.address.ipv4 | ipaddr('address') }}
+{% endfor %}

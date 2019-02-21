@@ -1,0 +1,11 @@
+---
+dependencies:
+  - { role: gateway }
+  - { role: bgp4 }
+  - { role: bgp6 }
+  - role: wireguard_p2p
+    vars:
+      wireguard:
+        peers: '{{ gateway_site_l3.peers }}'
+        key:   '{{ gateway_site_l3.key }}'
+      wireguard_alias: site_l3

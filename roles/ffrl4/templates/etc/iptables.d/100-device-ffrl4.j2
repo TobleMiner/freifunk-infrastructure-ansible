@@ -1,0 +1,7 @@
+{% for sitename, _ in ffrl.site.items() %}
+
+ip4tables -A input -i ffrl-{{ sitename }} -j ffrl-input
+ip4tables -A forward -i ffrl-{{ sitename }} -j exit-in-forward
+ip4tables -A forward -o ffrl-{{ sitename }} -j exit-out-forward
+
+{% endfor %}

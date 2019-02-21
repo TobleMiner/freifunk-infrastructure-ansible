@@ -1,6 +1,10 @@
 ---
 dependencies:
- - { role: node }
- - { role: wireguard_dkms }
- - { role: bird4 }
- - { role: bird6 }
+  - role: wireguard_p2p
+    vars:
+      wireguard:
+        peers: '{{ site_l3.peers }}'
+        key:   '{{ site_l3.key }}'
+      wireguard_alias: gateway_site_l3
+  - { role: bird4 }
+  - { role: bird6 }

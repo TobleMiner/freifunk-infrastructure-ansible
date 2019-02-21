@@ -32,3 +32,6 @@ ffki-gw0
 
 [site_l3]
 ffki-site-gutes-leben
+
+[gateway_site_l3]
+ffki-gw0

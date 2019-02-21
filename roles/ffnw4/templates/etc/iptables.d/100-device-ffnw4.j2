@@ -1,5 +1,7 @@
 {% for sitename, _ in ffnw.site.items() %}
 
 ip4tables -A input -i ffnw-{{ sitename }} -j ffnw-input
+ip4tables -A forward -i ffnw-{{ sitename }} -j exit-in-forward
+ip4tables -A forward -o ffnw-{{ sitename }} -j exit-out-forward
 
 {% endfor %}
