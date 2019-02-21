@@ -1,3 +1,4 @@
+allow-hotplug {{ interface.lan.name }}
 auto {{ interface.lan.name }}
 iface {{ interface.lan.name }} inet static
   address {{ interface.lan.address.ipv4 }}
