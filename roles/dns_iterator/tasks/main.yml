@@ -1,0 +1,67 @@
+---
+# Packages
+- name: Ensure unbound is installed
+  apt:
+    name: unbound
+    state: present
+  notify:
+    - restart unbound
+  tags: dns_iterator
+
+# Firewall
+- name: Ensure firewall allows DNS traffic
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-dns_{{ dns_iface }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-dns_{{ dns_iface }}.j2
+  notify:
+    - restart firewall
+  tags: dns_iterator, firewall
+
+# Unbound config
+- name: Ensure unbound dynamic config directory exists
+  file:
+    path: /etc/unbound/unbound.conf.d
+    state: directory
+  tags: dns_iterator
+
+- name: Ensure unbound dynamic server config directory exists
+  file:
+    path: /etc/unbound/unbound.server.d
+    state: directory
+  tags: dns_iterator
+
+- name: Ensure unbound config file is in place
+  copy:
+    src: etc/unbound/unbound.conf
+    dest: /etc/unbound/unbound.conf
+  notify:
+    - restart unbound
+  tags: dns_iterator
+
+- name: Ensure unbound server config is deployed
+  template:
+    src: '{{ "etc/unbound/unbound.server.d/100-{{ dns_iface }}.conf.j2" }}'
+    dest: /etc/unbound/unbound.server.d/100-{{ dns_iface }}.conf.j2
+  notify:
+    - restart unbound
+  tags: dns_iterator
+
+- name: Ensure unbound zone configs are deployed
+  vars:
+    zonename: '{{ item }}'
+    zone: '{{ dns_zones[zonename] }}'
+  template:
+    src: '{{ "etc/unbound/unbound.conf.d/100-{{ zonename }}.conf.j2" }}'
+    dest: /etc/unbound/unbound.conf.d/100-{{ zonename }}.conf
+  loop: '{{ dns_zones.keys() | list }}'
+  notify:
+    - restart unbound
+  when: 'dns_zones is defined'
+  tags: dns_iterator
+
+- name: Ensure unbound service is enabled and started
+  service:
+    name: unbound.service
+    enabled: yes
+    state: started
+  tags: dns_iterator

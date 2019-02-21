@@ -1,0 +1,5 @@
+forward-zone:
+  name: {{ zonename }}
+{% for server in zone.servers %}
+  forward-addr: {{ server }}
+{% endfor %}

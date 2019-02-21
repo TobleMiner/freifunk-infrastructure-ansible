@@ -1,0 +1,15 @@
+{% if dns_listen is string %}
+  interface: {{ dns_listen }}
+{% else %}
+{% for addr in dns_listen %}
+  interface: {{ addr }}
+{% endfor %}
+{% endif %}
+
+{% if dns_acl is string %}
+  access-control: {{ dns_acl }}
+{% else %}
+{% for addr in dns_acl %}
+  access-control: {{ addr }}
+{% endfor %}
+{% endif %}
