@@ -13,3 +13,19 @@ dependencies:
       wireguard_alias: gateway_site_l3
   - { role: bird4 }
   - { role: bird6 }
+  - role: dhcp_server
+    vars:
+      dhcp_iface: '{{ interface.lan.name }}'
+      dhcp_network: '{{ interface.lan.address.ipv4 | ipaddr("0") }}'
+      dhcp_options:
+        routers: '{{ interface.lan.address.ipv4 | strip_prefixlen }}'
+        domain-name-servers:
+          - '{{ interface.lan.address.ipv4 | strip_prefixlen }}'
+          - '{{ interface.lan.address.ipv4 | strip_prefixlen }}'
+        domain-name: '"{{ site.tld if site.tld is defined else site.code }}"'
+        ntp-servers: '{{ interface.lan.address.ipv4 | strip_prefixlen }}'
+      dhcp_range: '{{ interface.lan.dhcp_range }}'
+      dhcp_lease_time:
+        min: 300
+        default: 21600
+        max: 86400
