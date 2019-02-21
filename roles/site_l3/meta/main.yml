@@ -29,3 +29,13 @@ dependencies:
         min: 300
         default: 21600
         max: 86400
+  - role: dns_iterator
+    vars:
+      dns_iface: '{{ interface.lan.name }}'
+      dns_listen:
+        - '{{ interface.lan.address.ipv4 | strip_prefixlen }}'
+        - '{{ interface.lan.address.ipv6 | strip_prefixlen }}'
+      dns_acl:
+        - '{{ interface.lan.address.ipv4 | ipaddr("0") }}'
+        - '{{ interface.lan.address.ipv6 | ipaddr("0") }}'
+      dns_zones: '{{ site.dns | merge({ ".": site_l3.dns }) }}'
