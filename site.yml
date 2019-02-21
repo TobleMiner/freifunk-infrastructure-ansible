@@ -16,7 +16,7 @@
     - mesh_vpn_ci_access
     - mesh_gre
     - bgp4 # Required for default route distribution
-    - gateway_mss_clamp
+    - { role: firewall_mss_clamp, vars: { mss: 1200 }}
   tags: gateway
 
 - name: Ensure hetzner cloud servers have bird quirk workaround installed
