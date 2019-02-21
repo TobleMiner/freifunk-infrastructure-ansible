@@ -1,0 +1,5 @@
+# Chains for package forwarding
+
+# Default Forward Chains
+
+ip46tables -N forward

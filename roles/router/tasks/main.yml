@@ -1,0 +1,24 @@
+---
+- name: Ensure required sysctl config files are present
+  copy:
+    src: etc/sysctl.d/50-forwarding.conf
+    dest: /etc/sysctl.d/50-forwarding.conf
+  notify:
+    - reload sysctl
+  tags: router, sysctl
+
+- name: Ensure forward chain exists
+  copy:
+    src: etc/iptables.d/001-CHAINS-forward_router
+    dest: /etc/iptables.d/001-CHAINS-forward_router
+  notify:
+    - restart firewall
+  tags: router, firewall
+
+- name: Ensure NEW connections are passed to forward chain
+  copy:
+    src: etc/iptables.d/050-FORWARD-PreProcessing
+    dest: /etc/iptables.d/050-FORWARD-PreProcessing
+  notify:
+    - restart firewall
+  tags: router, firewall
