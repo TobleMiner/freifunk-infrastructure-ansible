@@ -41,7 +41,7 @@
 
     - name: Ensure wireguard interface is configured
       template:
-        src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}" }}'
+        src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}.j2" }}'
         dest: /etc/network/interfaces.d/wg-{{ site.code }}
       notify: restart wireguard
   when: 'wireguard is defined'
