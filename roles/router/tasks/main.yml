@@ -22,3 +22,11 @@
   notify:
     - restart firewall
   tags: router, firewall
+
+- name: Ensure connections which have not been forwarded are dropped
+  copy:
+    src: etc/iptables.d/900-FORWARD-drop_router
+    dest: /etc/iptables.d/900-FORWARD-drop_router
+  notify:
+    - restart firewall
+  tags: router, firewall
