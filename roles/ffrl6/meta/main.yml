@@ -2,3 +2,12 @@
 dependencies:
   - { role: ffrl }
   - { role: bgp6 }
+  - role: radvd
+    vars:
+      ra_iface: br-{{ site.code }}
+      ra_default_lifetime: 1200
+      ra_prefixes:
+        - prefix: '{{ interface.mesh_bridge.ffrl.ipv6 | ipaddr("network/prefix") }}'
+          lifetime:
+            preferred: 300
+            valid: 600
