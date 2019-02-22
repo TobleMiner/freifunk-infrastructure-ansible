@@ -57,26 +57,6 @@
     - configure bird6
   tags: ffnw6
 
-# radvd
-- name: Ensure public ipv6 prefix is announced via radvd
-  template:
-    src: "{{ 'etc/radvd.fragment.d/br-{{ site.code }}-200-ffnw-public-prefix.fragment.j2' }}"
-    dest: /etc/radvd.fragment.d/br-{{ site.code }}-200-ffnw-public-prefix.fragment
-  notify:
-    - rebuild radvd config
-    - restart radvd
-  tags: ffnw6
-
-- name: Ensure default advertisement lifetime is set
-  lineinfile:
-    path: /etc/radvd.fragment.d/br-{{ site.code }}-110-default-lifetime.fragment
-    regexp: '^.*AdvDefaultLifetime.*$'
-    line: ' AdvDefaultLifetime 1200;'
-  notify:
-    - rebuild radvd config
-    - restart radvd
-  tags: ffnw6
-
 # Firewall
 - name: Ensure ffnw-input firewall chain exists
   copy:
