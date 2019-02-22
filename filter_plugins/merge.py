@@ -1,5 +1,3 @@
-import hashlib
-
 def merge(d1, d2):
   d = d1.copy()
   d.update(d2)
