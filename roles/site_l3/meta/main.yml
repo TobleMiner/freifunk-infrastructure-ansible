@@ -42,3 +42,14 @@ dependencies:
   - role: dns_authoritative
     vars:
       dns_zones: '{{ site.dns }}'
+  - role: radvd
+    vars:
+      ra_iface: '{{ interface.lan.name }}'
+      ra_default_lifetime: 1200
+      ra_prefixes:
+        - prefix: '{{ interface.lan.address.ipv6 | ipaddr("network/prefix") }}'
+          lifetime:
+            preferred: 300
+            valid: 600
+      ra_dns_servers:
+        - '{{ interface.lan.address.ipv6 | strip_prefixlen }}'
