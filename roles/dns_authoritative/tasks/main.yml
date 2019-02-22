@@ -1,10 +1,14 @@
 ---
 # Authoritative DNS, isc software, use only behind unbound!
 # Packages
-- name: Ensure BIND is installed
+- name: Ensure BIND and git are installed
   apt:
-    name: bind9
+    name: '{{ packages }}'
     state: present
+  vars:
+    packages:
+      - bind9
+      - git
   notify:
     - restart bind
   register: apt_bind
