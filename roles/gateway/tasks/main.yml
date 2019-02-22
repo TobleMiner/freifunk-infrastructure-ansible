@@ -11,10 +11,6 @@
   import_tasks: mesh-announce.yml
   tags: mesh-announce, respondd, dhcpd
 
-- name: Setup bind
-  import_tasks: bind.yml
-  tags: bind, dns, network
-
 - name: Setup prometheus-node-exporter
   import_tasks: prometheus-node-exporter.yml
   tags: prometheus-node-exporter, monitoring
