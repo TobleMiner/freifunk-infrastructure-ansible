@@ -39,3 +39,6 @@ dependencies:
         - '{{ interface.lan.address.ipv4 | ipaddr("0") }}'
         - '{{ interface.lan.address.ipv6 | ipaddr("0") }}'
       dns_zones: '{{ site.dns | merge({ ".": site_l3.dns }) }}'
+  - role: dns_authoritative
+    vars:
+      dns_zones: '{{ site.dns }}'
