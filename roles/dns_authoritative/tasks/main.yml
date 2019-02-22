@@ -1,0 +1,106 @@
+---
+# Authoritative DNS, isc software, use only behind unbound!
+# Packages
+- name: Ensure BIND is installed
+  apt:
+    name: bind9
+    state: present
+  notify:
+    - restart bind
+  register: apt_bind
+  tags: dns_authoritative
+
+# Stopping bind here is required to make sure config changes are applied before starting
+- name: Ensure bind service is stopped after installation
+  service:
+    name: bind9
+    state: stopped
+  when: apt_bind.changed
+  tags: dns_authoritative
+
+# Config
+- name: Ensure bind config directory exists
+  file:
+    path: /etc/bind
+    state: directory
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure bind config is in place
+  copy:
+    src: etc/bind/named.conf
+    dest: /etc/bind/named.conf
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure bind options are in place
+  copy:
+    src: etc/bind/named.conf.options
+    dest: /etc/bind/named.conf.options
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure bind config directory exists
+  file:
+    path: /etc/bind/conf.d
+    state: directory
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure bind zone include config exists
+  file:
+    path: /etc/bind/conf.d/zones.conf
+    access_time: preserve
+    modification_time: preserve
+    state: touch
+  notify:
+    - restart bind
+  tags: dns_authoritative  
+
+- name: Ensure zone directory exists
+  file:
+    path: /etc/bind/zones/
+    state: directory
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure all zone directories exist
+  file:
+    path: "/etc/bind/zones/{{ item.key }}"
+    state: directory
+  loop: "{{ dns_zones | dict2items }}"
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure all zone files are included
+  lineinfile:
+    path: /etc/bind/conf.d/zones.conf
+    line: "include \"/etc/bind/zones/{{ item.key }}/{{ item.key }}.conf\";"
+    state: present
+  loop: "{{ dns_zones | dict2items }}"
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure bind zone configs are in place
+  git:
+    repo: "{{ dns_zones[item.key].git }}"
+    dest: "/etc/bind/zones/{{ item.key }}"
+    force: yes
+  loop: "{{ dns_zones | dict2items }}"
+  notify:
+    - restart bind
+  tags: dns_authoritative
+
+- name: Ensure bind service is enabled and started
+  service:
+    name: bind9.service
+    enabled: yes
+    state: started
+  tags: dns_authoritative
