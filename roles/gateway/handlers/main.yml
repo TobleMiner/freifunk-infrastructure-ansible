@@ -1,14 +1,4 @@
 ---
-- name: rebuild radvd config
-  assemble:
-    src: /etc/radvd.fragment.d
-    dest: /etc/radvd.conf
-
-- name: restart radvd
-  service:
-    name: radvd
-    state: restarted
-
 - name: restart respondd
   service:
     name: respondd
