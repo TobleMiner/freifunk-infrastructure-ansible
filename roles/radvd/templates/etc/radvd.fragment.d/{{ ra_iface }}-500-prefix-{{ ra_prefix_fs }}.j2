@@ -1,0 +1,11 @@
+  prefix {{ ra_prefix.prefix }}
+  {
+{% if ra_prefix.lifetime is defined %}
+{% if ra_prefix.lifetime.preferred is defined %}
+    AdvPreferredLifetime {{ ra_prefix.lifetime.preferred }};
+{% endif %}
+{% if ra_prefix.lifetime.valid is defined %}
+    AdvValidLifetime {{ ra_prefix.lifetime.valid }};
+{% endif %}
+{% endif %}
+  };

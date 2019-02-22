@@ -1,0 +1,108 @@
+---
+# Packages
+- name: Ensure radvd is installed
+  apt:
+    name: radvd
+    state: present
+  notify:
+    - restart radvd
+  tags: radvd
+
+# Directories
+- name: Ensure radvd fragment directory exist
+  file:
+    path: /etc/radvd.fragment.d/
+    state: directory
+  notify:
+    - restart radvd
+  tags: radvd
+
+# Config fragments
+- name: Ensure radvd interface config head is in place
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-100-interface.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-100-interface
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+- name: Ensure radvd interface config globals are in place
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-110-global.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-110-global
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+- name: Ensure radvd interface config global MaxRtrAdvInterval is in place
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-120-global-MaxRtrAdvInterval.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-120-global-MaxRtrAdvInterval
+  when: 'ra_interval.max is defined'
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+- name: Ensure radvd interface config global AdvDefaultLifetime is in place
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-130-global-AdvDefaultLifetime.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-130-global-AdvDefaultLifetime
+  when: 'ra_default_lifetime is defined'
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+- name: Ensure radvd interface prefix configs are in place
+  vars:
+    ra_prefix: '{{ item }}'
+    ra_prefix_fs: '{{ ra_prefix.prefix | regex_replace("/", "_") }}'
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-500-prefix-{{ ra_prefix_fs }}.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-500-prefix-{{ ra_prefix_fs }}
+  loop: '{{ ra_prefixes }}'
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+- name: Ensure radvd interface dns server configs are in place
+  vars:
+    ra_dns_server: '{{ item }}'
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-500-rdnss-{{ ra_dns_server }}.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-500-rdnss-{{ ra_dns_server }}
+  loop: '{{ ra_dns_servers }}'
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+- name: Ensure radvd interface config tail is in place
+  template:
+    src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-900-interface-end.j2" }}'
+    dest: /etc/radvd.fragment.d/{{ ra_iface }}-900-interface-end
+  notify:
+    - rebuild radvd config
+    - restart radvd
+  tags: radvd
+
+# Fragment assembly
+- name: Ensure radvd config build is up to date
+  assemble:
+    src: /etc/radvd.fragment.d
+    dest: /etc/radvd.conf
+  notify:
+    - restart radvd
+  tags: radvd
+
+# Service
+- name: Ensure radvd service is enabled
+  service:
+    name: radvd.service
+    enabled: yes
+    state: started
+  tags: radvd
