@@ -30,5 +30,4 @@ dependencies:
       dns_zones: '{{ site.dns }}'
   - role: dns_authoritative
     vars:
-      dns_iface: br-{{ site.code }}
       dns_zones: '{{ site.dns }}'
