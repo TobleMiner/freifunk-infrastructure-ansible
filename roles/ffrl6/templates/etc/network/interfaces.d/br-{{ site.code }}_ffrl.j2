@@ -1,11 +1,17 @@
 iface br-{{ site.code }} inet6 static
 #  pre-up    echo 0 > /proc/sys/net/ipv6/conf/$IFACE/accept_dad
-  pre-up    /sbin/ip -6 rule del from {{ site.ffrl.network.ipv6 }} lookup ffrl || true
-  pre-up    /sbin/ip -6 rule del to {{ site.ffrl.network.ipv6 }} lookup ffrl || true
-  pre-up    /sbin/ip -6 rule add from {{ site.ffrl.network.ipv6 }} lookup ffrl
-  pre-up    /sbin/ip -6 rule add to {{ site.ffrl.network.ipv6 }} lookup ffrl
-  post-down /sbin/ip -6 rule del from {{ site.ffrl.network.ipv6 }} lookup ffrl || true
-  post-down /sbin/ip -6 rule del to {{ site.ffrl.network.ipv6 }} lookup ffrl || true
+  pre-up    /sbin/ip -6 rule del from {{ site.ffrl.network.ipv6 }} pref 30100 lookup ffrl || true
+  pre-up    /sbin/ip -6 rule del from {{ site.ffrl.network.ipv6 }} pref 30101 unreachable || true
+  pre-up    /sbin/ip -6 rule del to {{ site.ffrl.network.ipv6 }} pref 30100 lookup ffrl || true
+  pre-up    /sbin/ip -6 rule del to {{ site.ffrl.network.ipv6 }} pref 30101 unreachable || true
+  pre-up    /sbin/ip -6 rule add from {{ site.ffrl.network.ipv6 }} pref 30100 lookup ffrl
+  pre-up    /sbin/ip -6 rule add from {{ site.ffrl.network.ipv6 }} pref 30101 unreachable
+  pre-up    /sbin/ip -6 rule add to {{ site.ffrl.network.ipv6 }} pref 30100 lookup ffrl
+  pre-up    /sbin/ip -6 rule add to {{ site.ffrl.network.ipv6 }} pref 30101 unreachable
+  post-down /sbin/ip -6 rule del from {{ site.ffrl.network.ipv6 }} pref 30100 lookup ffrl || true
+  post-down /sbin/ip -6 rule del from {{ site.ffrl.network.ipv6 }} pref 30101 unreachable || true
+  post-down /sbin/ip -6 rule del to {{ site.ffrl.network.ipv6 }} pref 30100 lookup ffrl || true
+  post-down /sbin/ip -6 rule del to {{ site.ffrl.network.ipv6 }} pref 30101 unreachable || true
   dad-attempts 0
   accept_ra 0
   address {{ interface.mesh_bridge.ffrl.ipv6 }}
