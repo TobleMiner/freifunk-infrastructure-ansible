@@ -16,7 +16,7 @@ iface {{ wg_iface }} inet manual
 {% if host_wg.endpoint is defined %}
 {% set endpoint = host_wg.endpoint %}
 {% endif %}
-  pre-up    wg set $IFACE peer {{ host_wg.key.public }} allowed-ips 0.0.0.0/0 allowed-ips ::/0 endpoint {{ endpoint | strip_prefixlen }}:{{ wg_remote_port }} persistent-keepalive 10
+  pre-up    wg set $IFACE peer {{ host_wg.key.public }} allowed-ips 0.0.0.0/0 allowed-ips ::/0 {% if (not host_wg.float is defined) or not host_wg.float %}endpoint {{ endpoint | strip_prefixlen }}:{{ wg_remote_port }} {% endif %}persistent-keepalive 10
   post-down wg set $IFACE peer {{ host_wg.key.public }} remove
   up        ip link set $IFACE up
   down      ip link set $IFACE down
