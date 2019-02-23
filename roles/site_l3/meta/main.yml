@@ -11,8 +11,12 @@ dependencies:
         peers: '{{ site_l3.peers }}'
         key:   '{{ site_l3.key }}'
       wireguard_alias: gateway_site_l3
-  - { role: bird4 }
-  - { role: bird6 }
+  - role: bird4
+    vars:
+      bird_device_routes: yes
+  - role: bird6
+    vars:
+      bird6_device_routes: yes
   - role: dhcp_server
     vars:
       dhcp_iface: '{{ interface.lan.name }}'
