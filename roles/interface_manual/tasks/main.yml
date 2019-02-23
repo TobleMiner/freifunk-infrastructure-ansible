@@ -6,3 +6,16 @@
   notify:
     - restart manual interface
   tags: interface_manual
+
+- name: Check if interface {{ iface }} is down
+  shell: ip link show {{ iface }} | grep -q 'state DOWN'
+  check_mode: no
+  register: iface_down
+  tags: interface_manual
+
+- name: Ensure {{ iface }} is up
+  shell: |
+    ifdown {{ iface }} || true
+    ifup {{ iface }}
+  when: 'iface_down.rc == 0'
+  tags: interface_manual
