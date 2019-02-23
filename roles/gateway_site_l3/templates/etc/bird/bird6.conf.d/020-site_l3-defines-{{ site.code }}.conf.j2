@@ -1,0 +1,4 @@
+function is_{{ site.code }}_site() {
+  return (net ~ [ {{ site.site_l3.network.ipv6 }}+ ]);
+}
+

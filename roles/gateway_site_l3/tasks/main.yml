@@ -36,6 +36,28 @@
   notify: configure bird
   tags: gateway_site_l3
 
+# Setup BGP6
+- name: Ensure BGP6 defines are in place
+  template:
+    src: '{{ "etc/bird/bird6.conf.d/020-site_l3-defines-{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird6.conf.d/020-site_l3-defines-{{ site.code }}.conf
+  notify: configure bird6
+  tags: gateway_site_l3
+
+- name: Ensure BGP6 config is in place
+  template:
+    src: '{{ "etc/bird/bird6.conf.d/200-site_l3-{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird6.conf.d/200-site_l3-{{ site.code }}.conf
+  notify: configure bird6
+  tags: gateway_site_l3
+
+- name: Ensure BGP6 peers are in place
+  template:
+    src: '{{ "etc/bird/bird6.peers.d/site_l3_{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird6.peers.d/site_l3_{{ site.code }}.conf
+  notify: configure bird6
+  tags: gateway_site_l3
+
 # Setup wireguard interface traffic rules
 - name: Ensure traffic rules are in place
   template:

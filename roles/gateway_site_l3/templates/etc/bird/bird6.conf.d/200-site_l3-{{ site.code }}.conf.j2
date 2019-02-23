@@ -1,0 +1,28 @@
+table site_l3_{{ site.code }};
+
+protocol pipe {
+  table site_l3_{{ site.code }};
+  peer table mesh_{{ site.code }};
+  export where is_{{ site.code }}_site();
+  import all;
+};
+
+protocol pipe {
+  table site_l3_{{ site.code }};
+  peer table exit_{{ site.code }};
+  export none;
+  import all;
+};
+
+# Template for peers inside layer 3 sites
+template bgp bgp_site_l3_{{ site.code }} {
+  table site_l3_{{ site.code }};
+  source address {{ interface.wireguard.address.ipv6 | strip_prefixlen }};
+  local as asn;
+  direct;
+  next hop self;
+  import all;
+  export all;
+};
+
+include "/etc/bird/bird6.peers.d/site_l3_{{ site.code }}.conf";
