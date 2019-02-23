@@ -58,7 +58,9 @@
 
 - name: Ensure radvd interface prefix configs are in place
   vars:
-    ra_prefix: '{{ item }}'
+    ra_prefix:
+      prefix: '{{ item.prefix | ipsubnet(64, 0) }}'
+      lifetime: '{{ item.lifetime }}'
     ra_prefix_fs: '{{ ra_prefix.prefix | regex_replace("/", "_") }}'
   template:
     src: '{{ "etc/radvd.fragment.d/{{ ra_iface }}-500-prefix-{{ ra_prefix_fs }}.j2" }}'
