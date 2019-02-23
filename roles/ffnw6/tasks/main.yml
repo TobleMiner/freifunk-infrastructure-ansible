@@ -51,8 +51,8 @@
 
 - name: Ensure ffnw bgp6 config is in place
   template:
-    src: etc/bird/bird6.conf.d/200-ffnw.conf.j2
-    dest: /etc/bird/bird6.conf.d/200-ffnw.conf
+    src: etc/bird/bird6.conf.d/300-ffnw.conf.j2
+    dest: /etc/bird/bird6.conf.d/300-ffnw.conf
   notify:
     - configure bird6
   tags: ffnw6
