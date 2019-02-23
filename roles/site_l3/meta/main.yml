@@ -17,6 +17,20 @@ dependencies:
   - role: bird6
     vars:
       bird6_device_routes: yes
+  - role: interface_manual
+    vars:
+      iface: '{{ interface.lan.name }}'
+      iface_hotplug: yes
+      iface_scripts:
+        inet:
+          pre-up:    ip addr add {{ interface.lan.address.ipv4 }} dev $IFACE || true
+          up:        ip link set up dev $IFACE
+          post-up:   systemctl restart dhcpd || true
+          post-down: ip addr del {{ interface.lan.address.ipv4 }} dev $IFACE || true
+        inet6:
+          pre-up:    ip addr add {{ interface.lan.address.ipv6 }} dev $IFACE || true
+          up:        ip link set up dev $IFACE
+          post-down: ip addr del {{ interface.lan.address.ipv6 }} dev $IFACE || true
   - role: dhcp_server
     vars:
       dhcp_iface: '{{ interface.lan.name }}'

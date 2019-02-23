@@ -35,13 +35,6 @@
   tags: site_l3
 
 # Configure LAN interface
-- name: Ensure LAN interface is configured
-  template:
-    src: etc/network/interfaces.d/lan.j2
-    dest: /etc/network/interfaces.d/lan
-  notify: restart lan interface
-  tags: site_l3  
-
 - name: Ensure Wireguard interface rules are configured
   template:
     src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}_rules.j2" }}'

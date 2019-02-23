@@ -1,6 +1,0 @@
----
-- name: restart lan interface
-  shell: |
-    ifdown {{ interface.lan.name }} || ( ip link set down {{ interface.lan.name }} && ip link del {{ interface.lan.name }} ) || true
-    ifup {{ interface.lan.name }}
-  listen: 'restart network'

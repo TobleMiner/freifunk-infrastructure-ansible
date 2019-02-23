@@ -1,7 +1,0 @@
-allow-hotplug {{ interface.lan.name }}
-auto {{ interface.lan.name }}
-iface {{ interface.lan.name }} inet static
-  address {{ interface.lan.address.ipv4 }}
-
-iface {{ interface.lan.name }} inet6 static
-  address {{ interface.lan.address.ipv6 }}
