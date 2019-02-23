@@ -105,11 +105,3 @@
   notify:
     - restart firewall
   tags: ffrl6, firewall
-
-- name: Ensure non-matching traffic on ffrl interface is dropped
-  copy:
-    src: etc/iptables.d/900-FORWARD-drop_ffrl
-    dest: /etc/iptables.d/900-FORWARD-drop_ffrl
-  notify:
-    - restart firewall
-  tags: ffrl6, firewall

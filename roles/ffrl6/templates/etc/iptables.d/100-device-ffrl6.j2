@@ -1,6 +1,7 @@
 {% for sitename, _ in ffrl.site.items() %}
 
 ip6tables -A input -i ffrl-{{ sitename }} -j ffrl-input
-ip6tables -A forward -i ffrl-{{ sitename }} -j ffrl-forward
+ip6tables -A forward -i ffrl-{{ sitename }} -j exit-in-forward
+ip6tables -A forward -o ffrl-{{ sitename }} -j exit-out-forward
 
 {% endfor %}
