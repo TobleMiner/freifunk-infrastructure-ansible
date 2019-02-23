@@ -4,6 +4,7 @@ protocol kernel {
   table 'mesh_kernel';
   scan time 20;
   kernel table 42;
+  device routes {{ 'yes' if bird_device_routes else 'no' }};
   import filter {
     include "/etc/bird/bird4.filters.d/mesh_kernel.d/*.import";
     accept;
