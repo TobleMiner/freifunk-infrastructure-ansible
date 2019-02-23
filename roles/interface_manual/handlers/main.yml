@@ -1,0 +1,5 @@
+---
+- name: restart manual interface
+  shell: |
+    ifdown {{ iface }} || ( ip link set down {{ iface }} && ip link del {{ iface }} ) || true
+    ifup {{ iface }}

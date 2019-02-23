@@ -1,0 +1,35 @@
+{% if iface_hotplug is defined and iface_hotplug %}
+allow-hotplug {{ iface }}
+{% endif %}
+auto {{ iface }}
+{% if iface_scripts.inet is defined %}
+{% set scripts = iface_scripts.inet %}
+iface {{ iface }} inet manual
+{% for handler in ['pre-up', 'up', 'post-up', 'pre-down', 'down', 'post-down'] %}
+{% if handler in scripts %}
+{% if scripts[handler] is string %}
+  {{ handler }} {{ scripts[handler] }}
+{% else %}
+{% for script in scripts[handler] %}
+  {{ handler }} {{ script }}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if iface_scripts.inet6 is defined %}
+{% set scripts = iface_scripts.inet6 %}
+iface {{ iface }} inet6 manual
+{% for handler in ['pre-up', 'up', 'post-up', 'pre-down', 'down', 'post-down'] %}
+{% if handler in scripts %}
+{% if scripts[handler] is string %}
+  {{ handler }} {{ scripts[handler] }}
+{% else %}
+{% for script in scripts[handler] %}
+  {{ handler }} {{ script }}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
