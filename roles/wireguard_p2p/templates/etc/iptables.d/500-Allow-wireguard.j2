@@ -1,2 +1,0 @@
-# Allow wireguard traffic
-ip46tables -A wan-input -p udp --dport {{ site.wireguard.port }} -j ACCEPT

@@ -1,0 +1,32 @@
+---
+- name: Ensure firewall allows wireguard traffic
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-wireguard_{{ wg_peer }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-wireguard_{{ wg_peer }}
+  notify: restart firewall
+  tags: wireguard_p2p, firewall
+
+- name: Ensure wireguard VPN ist set up for {{ wg_peer }}
+  vars:
+    wg_key_dir: /root/wg_keys
+    wg_key: '{{ wg_key_dir }}/{{ site.code }}'
+  block:
+    - name: Ensure wireguard key directory exists
+      file:
+        path: '{{ wg_key_dir }}'
+        state: directory
+        owner: root
+        mode: 0700
+
+    - name: Ensure wireguard key is installed
+      copy:
+        dest: '{{ wg_key }}'
+        content: '{{ wireguard.key.private }}'
+      notify: restart wireguard
+
+    - name: Ensure wireguard interface is configured
+      template:
+        src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}_{{ wg_peer }}.j2" }}'
+        dest: /etc/network/interfaces.d/wg-{{ site.code }}_{{ wg_peer }}
+      notify: restart wireguard
+  tags: wireguard_p2p

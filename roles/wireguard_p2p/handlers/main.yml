@@ -1,5 +1,8 @@
 ---
 - name: restart wireguard
+  vars:
+    wg_iface: '{{ ("wg-" ~ site.code ~ "-" ~ (item.key | sha256)) | trunc(15) }}'
   shell: |
-    ifdown wg-{{ site.code }} || ( ip link set down wg-{{ site.code }} && ip link del wg-{{ site.code }} ) || true
-    ifup wg-{{ site.code }}
+    ifdown {{ wg_iface }} || ( ip link set down {{ wg_iface }} && ip link del {{ wg_iface }} ) || true
+    ifup {{ wg_iface }}
+  loop: '{{ wireguard.peers | dict2items }}'
