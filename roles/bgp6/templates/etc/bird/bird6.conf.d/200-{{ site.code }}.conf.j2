@@ -34,6 +34,8 @@ template bgp local_mesh {
   next hop self;
 };
 
+table 'exit_{{ site.code }}';
+
 table 'mesh_{{ site.code }}';
 
 protocol static 'static_{{ site.code }}' {
