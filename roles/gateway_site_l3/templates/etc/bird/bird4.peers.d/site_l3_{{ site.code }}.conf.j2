@@ -1,8 +1,9 @@
 # BGP peerings with external layer 3 sites
-{% for peer in gateway_site_l3.peers %}
-  {% set host = hostvars[peer] %}
+{% for peer in gateway_site_l3.peers.keys() %}
+{% set host = hostvars[peer] %}
 protocol bgp 'bgp_site_l3_{{ site.code }}_{{ peer }}' from 'bgp_site_l3_{{ site.code }}' {
-  neighbor {{ host.interface.wireguard.address.ipv4 | strip_prefixlen }} as {{ site.bgp.as }};
+  source address {{ gateway_site_l3.peers[peer].address.ipv4 | strip_prefixlen }};
+  neighbor {{ host.site_l3.peers[inventory_hostname].address.ipv4 | strip_prefixlen }} as {{ site.bgp.as }};
 };
 
 {% endfor %}

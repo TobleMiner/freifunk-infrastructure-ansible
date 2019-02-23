@@ -17,7 +17,6 @@ protocol pipe {
 # Template for peers inside local mesh
 template bgp bgp_site_l3_{{ site.code }} {
   table site_l3_{{ site.code }};
-  source address {{ interface.wireguard.address.ipv4 | strip_prefixlen }};
   local as asn;
   direct;
   next hop self;
