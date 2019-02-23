@@ -1,0 +1,26 @@
+table bgp_{{ site.code }};
+
+protocol pipe {
+  table bgp_{{ site.code }};
+  peer table mesh;
+  export all;
+  import none;
+};
+
+protocol direct {
+  table bgp_{{ site.code }};
+  interface "{{ interface.lan.name }}";
+  export all;
+};
+
+template bgp wg_peer_{{ site.code }} {
+  table bgp_{{ site.code }};
+  local as {{ site.bgp.as }};
+  direct;
+  source address {{ interface.wireguard.address.ipv6 | strip_prefixlen }};
+  next hop self;
+  import all;
+  export where net ~ [ {{ interface.lan.address.ipv6 | ipaddr('0') }}+ ];
+};
+
+include "/etc/bird/bird6.peers.d/{{ site.code }}.conf";

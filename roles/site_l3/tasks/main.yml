@@ -28,12 +28,25 @@
     state: directory
   tags: site_l3
 
+- name: Ensure bird6 peer directory exists
+  file: 
+    path: /etc/bird/bird6.peers.d
+    state: directory
+  tags: site_l3
+
 # Configure LAN interface
 - name: Ensure LAN interface is configured
   template:
     src: etc/network/interfaces.d/lan.j2
     dest: /etc/network/interfaces.d/lan
   notify: restart lan interface
+  tags: site_l3  
+
+- name: Ensure Wireguard interface rules are configured
+  template:
+    src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}_rules.j2" }}'
+    dest: /etc/network/interfaces.d/wg-{{ site.code }}_rules
+  notify: restart wireguard
   tags: site_l3  
 
 # Configure BIRD
@@ -49,4 +62,19 @@
     src: '{{ "etc/bird/bird4.peers.d/{{ site.code }}.conf.j2" }}'
     dest: /etc/bird/bird4.peers.d/{{ site.code }}.conf
   notify: configure bird
+  tags: site_l3
+
+# Configure BIRD6
+- name: Ensure bird6 peering template is set up
+  template:
+    src: '{{ "etc/bird/bird6.conf.d/200-site-bgp-{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird6.conf.d/200-site-bgp-{{ site.code }}.conf
+  notify: configure bird6
+  tags: site_l3
+
+- name: Ensure bird6 peers are set up
+  template:
+    src: '{{ "etc/bird/bird6.peers.d/{{ site.code }}.conf.j2" }}'
+    dest: /etc/bird/bird6.peers.d/{{ site.code }}.conf
+  notify: configure bird6
   tags: site_l3
