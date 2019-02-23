@@ -1,19 +1,23 @@
-iface wg-{{ site.code }} inet manual
+{% for peer in wireguard.peers %}
+{% set host = hostvars[peer] %}
+{% set iface = ('wg-' ~ site.code ~ '-' ~ (peer | sha256)) | trunc(15) %}
+iface {{ iface }} inet manual
   pre-up    ip rule add pref 31020 iif $IFACE lookup mesh
   pre-up    ip rule add pref 31021 iif $IFACE unreachable
   post-down ip rule del pref 31020 iif $IFACE lookup mesh || true
   post-down ip rule del pref 31021 iif $IFACE unreachable || true
-  pre-up    ip rule add pref 31020 iif {{ interface.lan.name }} lookup mesh
-  pre-up    ip rule add pref 31021 iif {{ interface.lan.name }} unreachable
+  pre-up    ip rule add pref 31020 iif {{ interface.lan.name }} lookup mesh || true
+  pre-up    ip rule add pref 31021 iif {{ interface.lan.name }} unreachable || true
   post-down ip rule del pref 31020 iif {{ interface.lan.name }} lookup mesh || true
   post-down ip rule del pref 31021 iif {{ interface.lan.name }} unreachable || true
 
-iface wg-{{ site.code }} inet6 manual
+iface {{ iface }} inet6 manual
   pre-up    ip -6 rule add pref 31020 iif $IFACE lookup mesh
   pre-up    ip -6 rule add pref 31021 iif $IFACE unreachable
   post-down ip -6 rule del pref 31020 iif $IFACE lookup mesh || true
   post-down ip -6 rule del pref 31021 iif $IFACE unreachable || true
-  pre-up    ip -6 rule add pref 31020 iif {{ interface.lan.name }} lookup mesh
-  pre-up    ip -6 rule add pref 31021 iif {{ interface.lan.name }} unreachable
+  pre-up    ip -6 rule add pref 31020 iif {{ interface.lan.name }} lookup mesh || true
+  pre-up    ip -6 rule add pref 31021 iif {{ interface.lan.name }} unreachable || true
   post-down ip -6 rule del pref 31020 iif {{ interface.lan.name }} lookup mesh || true
   post-down ip -6 rule del pref 31021 iif {{ interface.lan.name }} unreachable || true
+{% endfor %}

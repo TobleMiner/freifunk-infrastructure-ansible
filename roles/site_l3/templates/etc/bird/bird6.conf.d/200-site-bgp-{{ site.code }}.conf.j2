@@ -17,7 +17,6 @@ template bgp wg_peer_{{ site.code }} {
   table bgp_{{ site.code }};
   local as {{ site.bgp.as }};
   direct;
-  source address {{ interface.wireguard.address.ipv6 | strip_prefixlen }};
   next hop self;
   import all;
   export where net ~ [ {{ interface.lan.address.ipv6 | ipaddr('0') }}+ ];

@@ -1,2 +1,2 @@
 # Allow forward from wg-{{ site.code }} -> {{ interface.lan.name }}
-ip46tables -A forward -i wg-{{ site.code }} -o {{ interface.lan.name }} -j ACCEPT
+ip46tables -A forward -i wg-{{ site.code }}+ -o {{ interface.lan.name }} -j ACCEPT

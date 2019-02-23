@@ -3,7 +3,7 @@ dependencies:
   - role: router
   - role: firewall_mss_clamp
     vars:
-      iface: wg-{{ site.code }}
+      iface: wg-{{ site.code }}+
       mss: 1350
   - role: wireguard_p2p
     vars:
