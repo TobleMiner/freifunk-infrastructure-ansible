@@ -8,4 +8,6 @@
   service:
     name: isc-dhcp-server
     state: restarted
-  listen: 'restart {{ dhcp_iface }}'
+  listen:
+    - 'restart {{ dhcp_iface }} interface'
+    - 'restart manual interface'
