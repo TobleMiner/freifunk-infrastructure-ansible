@@ -1,0 +1,2 @@
+# Accept forwarding from mesh bridge to exit
+ip46tables -A exit-out-forward -i br-{{ site.code }} -j ACCEPT
