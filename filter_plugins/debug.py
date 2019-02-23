@@ -1,9 +1,9 @@
 def debug(val, name=None):
   if name:
-    print('[DEBUG] {}: {}'.format(name,val))
+    print('[DEBUG] {}: {}'.format(name, val))
   else:
     print('[DEBUG]: {}'.format(val))
-  return ''
+  return val
 
 class FilterModule(object):
   def filters(self):
