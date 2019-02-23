@@ -23,7 +23,9 @@ site:
       ipv6: ::/0
 
   wireguard:
-    port: 52342
+    port_range:
+      start: 32768
+      end:   65535
 
   bgp:
     as: 65525
