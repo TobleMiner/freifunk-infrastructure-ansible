@@ -11,3 +11,4 @@
   listen:
     - 'restart {{ dhcp_iface }} interface'
     - 'restart manual interface'
+    - 'restart mesh bridge'
