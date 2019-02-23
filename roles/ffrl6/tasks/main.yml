@@ -51,8 +51,8 @@
 
 - name: Ensure ffrl bgp6 config is in place
   template:
-    src: etc/bird/bird6.conf.d/200-ffrl.conf.j2
-    dest: /etc/bird/bird6.conf.d/200-ffrl.conf
+    src: etc/bird/bird6.conf.d/300-ffrl.conf.j2
+    dest: /etc/bird/bird6.conf.d/300-ffrl.conf
   notify:
     - configure bird6
   tags: ffrl6

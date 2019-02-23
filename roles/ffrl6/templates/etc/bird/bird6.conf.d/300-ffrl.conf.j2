@@ -1,37 +1,51 @@
-function ffrl_is_ours() {
+function ffrl_is_{{ site.code }}() {
   return net ~ [ {{ site.ffrl.network.ipv6 }}+ ];
 }
 
 table 'ffrl_{{ site.code }}';
 
+table 'ffrl';
+
 # Import all routes on interface br-{{ site.code }}
 protocol direct {
   table 'ffrl_{{ site.code }}';
   interface "br-{{ site.code }}";
-  import where ffrl_is_ours();
+  import where ffrl_is_{{ site.code }}();
 };
 
 protocol pipe {
   table 'ffrl_{{ site.code }}';
-  peer table ffrl_kernel;
-  export where ffrl_is_ours();
+  peer table ffrl;
+  export where ffrl_is_{{ site.code }}();
   import none;
 };
 
 protocol pipe {
   table 'ffrl_{{ site.code }}';
   peer table 'mesh_{{ site.code }}';
-  export where ffrl_is_ours();
+  export where ffrl_is_{{ site.code }}();
+  import where ffrl_is_{{ site.code }}();
+};
+
+protocol pipe {
+  table 'ffrl';
+  peer table 'ffrl_kernel';
+  export all;
+  import all;
+};
+
+protocol pipe {
+  table 'ffrl';
+  peer table 'exit_{{ site.code }}';
+  export all;
   import none;
 };
 
 template bgp bgp_ffrl {
-  table ffrl_kernel;
+  table ffrl;
   local as asn;
-  # accept all routes
-  import where net ~ [ ::/0+ ];
-  # export only routes from our subnet
-  export where ffrl_is_ours() && source != RTS_BGP;
+  import all;
+  export all;
   direct;
 };
 
