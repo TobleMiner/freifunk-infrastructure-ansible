@@ -74,4 +74,4 @@
   hosts: gateway_site_l3
   roles:
     - gateway_site_l3
-  tags: gateway_site_l3
+  tags: gateway_site_l3, gateway
