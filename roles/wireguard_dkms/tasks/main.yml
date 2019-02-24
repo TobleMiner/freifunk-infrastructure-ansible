@@ -1,4 +1,10 @@
 ---
+- name: Ensure apt-transport-https is installed
+  apt:
+    name: apt-transport-https
+    state: present
+  tags: wireguard_dkms
+
 - name: Ensure apt repo preferences are set
   copy:
     src: etc/apt/preferences.d/unstable
