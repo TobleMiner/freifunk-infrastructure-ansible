@@ -5,6 +5,7 @@ ffki-gw2
 ffki-gw4
 ffki-gw6
 ffki-site-gutes-leben
+ffki-site-gutes-leben2
 
 [gateways]
 ffki-gw0
@@ -32,6 +33,7 @@ ffki-gw0
 
 [site_l3]
 ffki-site-gutes-leben
+ffki-site-gutes-leben2
 
 [gateway_site_l3]
 ffki-gw0
