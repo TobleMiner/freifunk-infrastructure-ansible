@@ -6,6 +6,7 @@ ffki-gw4
 ffki-gw6
 ffki-site-gutes-leben
 ffki-site-gutes-leben2
+ffki-site-moritz-home
 
 [gateways]
 ffki-gw0
@@ -34,6 +35,7 @@ ffki-gw0
 [site_l3]
 ffki-site-gutes-leben
 ffki-site-gutes-leben2
+ffki-site-moritz-home
 
 [gateway_site_l3]
 ffki-gw0
