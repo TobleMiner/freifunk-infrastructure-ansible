@@ -7,4 +7,5 @@ dependencies:
         peers: '{{ gretap.peers }}'
         key:   '{{ gretap.key }}'
         p2p_route: yes
+        ifpref: '{{ gretap.ifpref | default(gt_ifpref_default) | int - 20 }}'
       wireguard_alias: gretap

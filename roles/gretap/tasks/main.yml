@@ -14,6 +14,7 @@
       local:  '{{ item.value.address.ipv4 }}'
       remote: '{{ hostvars[gt_peer].gretap.peers[inventory_hostname].address.ipv4 }}'
     gt_master: '{{ item.value.master | default("") }}'
+    gt_ifpref: '{{ gretap.ifpref | default(gt_ifpref_default) }}'
   include_tasks: peer.yml
   loop: '{{ gretap.peers | dict2items }}'
   when: 'gretap is defined'

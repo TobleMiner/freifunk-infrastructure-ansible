@@ -1,7 +1,7 @@
 ---
 - name: Ensure GRE tunnel ist set up for {{ gt_peer }}
   template:
-    src: '{{ "etc/network/interfaces.d/gt-{{ site.code }}_{{ gt_peer }}.j2" }}'
-    dest: /etc/network/interfaces.d/gt-{{ site.code }}_{{ gt_peer }}
+    src: '{{ "etc/network/interfaces.d/{{ gt_ifpref }}-gt-{{ site.code }}_{{ gt_peer }}.j2" }}'
+    dest: /etc/network/interfaces.d/{{ gt_ifpref }}-gt-{{ site.code }}_{{ gt_peer }}
   notify: restart gretap
   tags: gretap
