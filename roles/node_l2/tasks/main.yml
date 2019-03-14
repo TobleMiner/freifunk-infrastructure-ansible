@@ -1,12 +1,12 @@
 ---
 - name: Setup sysctl
   import_tasks: sysctl.yml
-  tags: sysctl, network
+  tags: node_l2, sysctl, network
 
 - name: Setup firewall
   import_tasks: firewall.yml
-  tags: firewall, network
+  tags: node_l2, firewall, network
 
 - name: Setup interfaces
   import_tasks: interfaces.yml
-  tags: interfaces, network
+  tags: node_l2, interfaces, network
