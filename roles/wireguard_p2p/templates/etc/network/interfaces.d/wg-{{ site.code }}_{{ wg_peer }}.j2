@@ -2,7 +2,9 @@ auto {{ wg_iface }}
 iface {{ wg_iface }} inet manual
   pre-up    ip link add $IFACE type wireguard || true
   pre-up    wg set $IFACE listen-port {{ wg_local_port }} private-key {{ wg_key }}
-  pre-up    ip addr add {{ wg_ifaddr4 }} dev $IFACE || true
+{% if wg_addr.ipv4 is defined %}
+  pre-up    ip addr add {{ wg_addr.ipv4 }} dev $IFACE || true
+{% endif %}
 {% set host = hostvars[wg_peer] %}
 {% if wireguard_alias is defined %}
 {% set host_wg = host[wireguard_alias] %}
@@ -24,8 +26,12 @@ iface {{ wg_iface }} inet manual
 {% endif %}
   up        ip link set $IFACE up
   down      ip link set $IFACE down
-  post-down ip addr del {{ wg_ifaddr4 }} dev $IFACE || true
+{% if wg_addr.ipv4 is defined %}
+  post-down ip addr del {{ wg_addr.ipv4 }} dev $IFACE || true
+{% endif %}
 
+{% if wg_addr.ipv6 is defined %}
 iface {{ wg_iface }} inet6 manual
-  pre-up    ip addr add {{ wg_ifaddr6 }} dev $IFACE || true
-  post-down ip addr del {{ wg_ifaddr6 }} dev $IFACE || true
+  pre-up    ip addr add {{ wg_addr.ipv6 }} dev $IFACE || true
+  post-down ip addr del {{ wg_addr.ipv6 }} dev $IFACE || true
+{% endif %}
