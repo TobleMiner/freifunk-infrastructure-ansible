@@ -18,6 +18,10 @@ iface {{ wg_iface }} inet manual
 {% endif %}
   pre-up    wg set $IFACE peer {{ host_wg.key.public }} allowed-ips 0.0.0.0/0 allowed-ips ::/0 {% if (not host_wg.float is defined) or not host_wg.float %}endpoint {{ endpoint | strip_prefixlen }}:{{ wg_remote_port }} {% endif %}persistent-keepalive 10
   post-down wg set $IFACE peer {{ host_wg.key.public }} remove
+{% if wg_p2p_route %}
+  pre-up    ip route add {{ host_wg.peers[inventory_hostname].address.ipv4 | strip_prefixlen }}/32 dev $IFACE || true
+  post-up   ip route del {{ host_wg.peers[inventory_hostname].address.ipv4 | strip_prefixlen }}/32 dev $IFACE || true
+{% endif %}
   up        ip link set $IFACE up
   down      ip link set $IFACE down
   post-down ip addr del {{ wg_ifaddr4 }} dev $IFACE || true

@@ -17,10 +17,11 @@
 
 - name: Ensure wireguard peerings are set up
   vars:
+    wg_p2p_route_default: '{{ wireguard.p2p_route | default(no) }}'
     wg_peer: '{{ item.key }}'
     wg_iface: '{{ ("wg-" ~ site.code ~ "-" ~ (wg_peer | sha256)) | trunc(15) }}'
-    wg_ifaddr4: '{{ item.value.address.ipv4 }}'
-    wg_ifaddr6: '{{ item.value.address.ipv6 }}'
+    wg_addr: '{{ item.value.address }}'
+    wg_p2p_route: '{{ item.value.p2p_route | default(wg_p2p_route_default) }}'
     wg_local_port:  '{{ ("wg-" ~ site.code ~ "-" ~ inventory_hostname ~ wg_peer) | hashnum(site.wireguard.port_range.start, site.wireguard.port_range.end) }}'
     wg_remote_port: '{{ ("wg-" ~ site.code ~ "-" ~ wg_peer ~ inventory_hostname) | hashnum(site.wireguard.port_range.start, site.wireguard.port_range.end) }}'
   include_tasks: peer.yml
