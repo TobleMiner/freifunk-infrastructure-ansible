@@ -1,0 +1,18 @@
+auto {{ gt_iface }}
+iface {{ gt_iface }} inet manual
+  pre-up    ip link add $IFACE type gretap local {{ gt_addr.local | strip_prefixlen }} remote {{ gt_addr.remote | strip_prefixlen }} || true
+{# {% if gt_addr.address.ipv4 is defined %} #}
+{#  pre-up    ip addr add {{ gt_addr.ipv4 }} dev $IFACE || true #}
+{#  post-down ip addr del {{ gt_addr.ipv4 }} dev $IFACE || true #}
+{# {% endif %} #}
+{# {% if gt_addr.address.ipv6 is defined %} #}
+{#  pre-up    ip addr add {{ gt_addr.ipv6 }} dev $IFACE || true #}
+{#  post-down ip addr del {{ gt_addr.ipv6 }} dev $IFACE || true #}
+{# {% endif %} #}
+  up        ip link set $IFACE up
+{% if gt_master != '' %}
+  post-up   ip link set $IFACE master {{ gt_master }} || true
+{% endif %}
+  pre-down  ip link set $IFACE nomaster
+  down      ip link set $IFACE down
+  post-down ip link del $IFACE

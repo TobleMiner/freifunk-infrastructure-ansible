@@ -1,0 +1,10 @@
+---
+dependencies:
+  - role: node
+  - role: wireguard_p2p
+    vars:
+      wireguard:
+        peers: '{{ gretap.peers }}'
+        key:   '{{ gretap.key }}'
+        p2p_route: yes
+      wireguard_alias: gretap

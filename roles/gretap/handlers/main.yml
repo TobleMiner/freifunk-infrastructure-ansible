@@ -1,0 +1,8 @@
+---
+- name: restart gretap
+  vars:
+    gt_iface: '{{ ("gt-" ~ site.code ~ "-" ~ (item.key | sha256)) | trunc(15) }}'
+  shell: |
+    ifdown {{ gt_iface }} || ( ip link set down {{ gt_iface }} && ip link del {{ gt_iface }} ) || true
+    ifup {{ gt_iface }}
+  loop: '{{ gretap.peers | dict2items }}'

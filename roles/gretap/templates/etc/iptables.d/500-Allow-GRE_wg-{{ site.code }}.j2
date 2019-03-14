@@ -1,0 +1,2 @@
+# Allow GRE traffic on wg-{{ site.code }}
+ip4tables -A wg-{{ site.code }}-input -p gre -j ACCEPT -m comment --comment 'GRE'

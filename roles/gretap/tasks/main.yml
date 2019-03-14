@@ -1,0 +1,20 @@
+---
+- name: Ensure firewall allows gre traffic
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-GRE_wg-{{ site.code }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-GRE_wg-{{ site.code }}
+  notify: restart firewall
+  tags: gretap
+
+- name: Ensure gre tunnels are set up
+  vars:
+    gt_peer: '{{ item.key }}'
+    gt_iface: '{{ ("gt-" ~ site.code ~ "-" ~ (gt_peer | sha256)) | trunc(15) }}'
+    gt_addr:
+      local:  '{{ item.value.address.ipv4 }}'
+      remote: '{{ hostvars[gt_peer].gretap.peers[inventory_hostname].address.ipv4 }}'
+    gt_master: '{{ item.value.master | default("") }}'
+  include_tasks: peer.yml
+  loop: '{{ gretap.peers | dict2items }}'
+  when: 'gretap is defined'
+  tags: gretap
