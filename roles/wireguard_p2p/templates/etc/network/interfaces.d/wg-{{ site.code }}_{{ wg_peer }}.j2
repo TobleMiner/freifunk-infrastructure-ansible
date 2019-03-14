@@ -11,12 +11,17 @@ iface {{ wg_iface }} inet manual
 {% else %}
 {% set host_wg = host.wireguard %}
 {% endif %}
+{% if host_wg.endpoint is defined %}
+{% set endpoint = host_wg.endpoint %}
+{% else %}
+{% if host.interface.wan.address.ipv6 is defined and interface.wan.address.ipv6 is defined %}
+{% set endpoint = host.interface.wan.address.ipv6 %}
+{% else %}
 {% set endpoint = host.interface.wan.address.ipv4 %}
 {% if host.interface.wan.address.nat is defined %}
 {% set endpoint = host.interface.wan.address.nat %}
 {% endif %}
-{% if host_wg.endpoint is defined %}
-{% set endpoint = host_wg.endpoint %}
+{% endif %}
 {% endif %}
   pre-up    wg set $IFACE peer {{ host_wg.key.public }} allowed-ips 0.0.0.0/0 allowed-ips ::/0 {% if (not host_wg.float is defined) or not host_wg.float %}endpoint {{ endpoint | strip_prefixlen }}:{{ wg_remote_port }} {% endif %}persistent-keepalive 10
   post-down wg set $IFACE peer {{ host_wg.key.public }} remove
