@@ -11,6 +11,7 @@ iface {{ wg_iface }} inet manual
 {% else %}
 {% set host_wg = host.wireguard %}
 {% endif %}
+{% if not host_wg.float is defined or not host_wg.float %}
 {% if host_wg.endpoint is defined %}
 {% set endpoint = host_wg.endpoint %}
 {% else %}
@@ -20,6 +21,7 @@ iface {{ wg_iface }} inet manual
 {% set endpoint = host.interface.wan.address.ipv4 %}
 {% if host.interface.wan.address.nat is defined %}
 {% set endpoint = host.interface.wan.address.nat %}
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}
