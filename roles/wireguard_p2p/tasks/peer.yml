@@ -26,7 +26,7 @@
 
     - name: Ensure wireguard interface is configured
       template:
-        src: '{{ "etc/network/interfaces.d/wg-{{ site.code }}_{{ wg_peer }}.j2" }}'
-        dest: /etc/network/interfaces.d/wg-{{ site.code }}_{{ wg_peer }}
+        src: '{{ "etc/network/interfaces.d/{{ wg_ifpref }}wg-{{ site.code }}_{{ wg_peer }}.j2" }}'
+        dest: /etc/network/interfaces.d/{{ wg_ifpref }}wg-{{ site.code }}_{{ wg_peer }}
       notify: restart wireguard
   tags: wireguard_p2p

@@ -24,6 +24,7 @@
     wg_p2p_route: '{{ item.value.p2p_route | default(wg_p2p_route_default) }}'
     wg_local_port:  '{{ ("wg-" ~ site.code ~ "-" ~ inventory_hostname ~ wg_peer) | hashnum(site.wireguard.port_range.start, site.wireguard.port_range.end) }}'
     wg_remote_port: '{{ ("wg-" ~ site.code ~ "-" ~ wg_peer ~ inventory_hostname) | hashnum(site.wireguard.port_range.start, site.wireguard.port_range.end) }}'
+    wg_ifpref: '{% if wireguard.ifpref is defined %}{{ wireguard.ifpref }}-{% else %}{% endif %}'
   include_tasks: peer.yml
   loop: '{{ wireguard.peers | dict2items }}'
   when: 'wireguard is defined'
