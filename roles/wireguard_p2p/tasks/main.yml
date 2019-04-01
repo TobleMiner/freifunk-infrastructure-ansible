@@ -17,7 +17,7 @@
 
 - name: Ensure wireguard peerings are set up
   vars:
-    wg_p2p_route_default: '{{ wireguard.p2p_route | default(no) }}'
+    wg_p2p_route_default: '{{ wireguard.p2p_route | default(False) }}'
     wg_peer: '{{ item.key }}'
     wg_iface: '{{ ("wg-" ~ site.code ~ "-" ~ (wg_peer | sha256)) | trunc(15) }}'
     wg_addr: '{{ item.value.address }}'
