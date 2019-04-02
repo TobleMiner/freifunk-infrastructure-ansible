@@ -11,6 +11,7 @@
   shell: ip link show {{ iface }} | grep -q 'state DOWN'
   check_mode: no
   register: iface_down
+  failed_when: no
   tags: interface_manual
 
 - name: Ensure {{ iface }} is up
