@@ -22,7 +22,7 @@
 - name: ensure bridge interface is present
   template:
     src: '{{ "etc/network/interfaces.d/200-br-{{ site.code }}.j2" }}'
-    dest: '{{ "/etc/network/interfaces.d/200-br-{{ site.code }}" }}'
+    dest: /etc/network/interfaces.d/200-br-{{ site.code }}
   notify:
     - restart mesh bridge
     - restart batman
