@@ -7,19 +7,6 @@
   tags: apt_upgrade
 
 - name: Reboot if kernel was updated
-  shell: |
-    sleep 5
-    reboot
-  async: 1
-  poll: 0
-  when: '"linux-image" in apt_upgrade.stdout'
-  tags: apt_upgrade
-
-- name: Wait for system reboot to complete if kernel was updated
-  wait_for_connection:
-    connect_timeout: 20
-    sleep: 5
-    delay: 5
-    timeout: 300
+  reboot:
   when: '"linux-image" in apt_upgrade.stdout'
   tags: apt_upgrade
