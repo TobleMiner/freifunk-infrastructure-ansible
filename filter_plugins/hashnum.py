@@ -1,5 +1,5 @@
 import hashlib
-import codecs 
+import codecs
 
 def sha256digest(s):
   return hashlib.sha256(str(s).encode('utf-8'))
