@@ -8,4 +8,5 @@ dependencies:
       wireguard:
         peers: '{{ gateway_site_l3.peers }}'
         key:   '{{ gateway_site_l3.key }}'
+        master: yes
       wireguard_alias: site_l3
