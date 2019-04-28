@@ -1,15 +1,10 @@
 # BGP peerings with site gateways
 {% for peer in site_l3.peers.keys() %}
 {% set host = hostvars[peer] %}
-protocol bgp 'wg_peer_{{ site.code }}_{{ peer }}' from 'wg_peer_{{ site.code }}' {
-{% set ifaddr6 = host.gateway_site_l3.peers[inventory_hostname].address.ipv6 %}
-  source address {{ site_l3.peers[peer].address.ipv6 | strip_prefixlen }};
-{% if ifaddr6 | ipaddr('fe80::/10') %}
 {% set ifname = ("wg-" ~ site.code ~ "-" ~ (peer | sha256)) | trunc(15) %}
-  neighbor {{ ifaddr6 | strip_prefixlen }}%'{{ ifname }}' as {{ site.bgp.as }};
-{% else %}
-  neighbor {{ ifaddr6 | strip_prefixlen }} as {{ site.bgp.as }};
-{% endif %}
+protocol bgp 'wg_peer_{{ site.code }}_{{ peer }}' from 'wg_peer_{{ site.code }}' {
+  source address fe80::2;
+  neighbor fe80::1%'{{ ifname }}' as {{ site.bgp.as }};
 };
 
 {% endfor %}
