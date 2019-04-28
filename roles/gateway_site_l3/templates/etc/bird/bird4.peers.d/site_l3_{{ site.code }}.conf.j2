@@ -1,9 +1,10 @@
 # BGP peerings with external layer 3 sites
 {% for peer in gateway_site_l3.peers.keys() %}
 {% set host = hostvars[peer] %}
+{% set ippool_id = site.code | ippoolid(inventory_hostname, peer) %}
 protocol bgp 'bgp_site_l3_{{ site.code }}_{{ peer }}' from 'bgp_site_l3_{{ site.code }}' {
-  source address {{ gateway_site_l3.peers[peer].address.ipv4 | strip_prefixlen }};
-  neighbor {{ host.site_l3.peers[inventory_hostname].address.ipv4 | strip_prefixlen }} as {{ site.bgp.as }};
+  source address {{ ippool_id | ippool4(site.code, ippool.transfer, 30) | ipaddr(1) | strip_prefixlen }};
+  neighbor {{ ippool_id | ippool4(site.code, ippool.transfer, 30) | ipaddr(2) | strip_prefixlen }} as {{ site.bgp.as }};
 };
 
 {% endfor %}
