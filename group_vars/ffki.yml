@@ -55,4 +55,4 @@ site:
 
 
 batman:
-  version: 2013.4.0-11
+  min_version: 2015
