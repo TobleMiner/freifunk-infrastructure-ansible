@@ -1,4 +1,8 @@
 function is_{{ site.code }}_site() {
-  return (net ~ [ {{ site.site_l3.network.ipv6 }}+ ]);
+  return (net ~ [
+{% for host in groups['site_l3'] %}
+	{{ hostvars[host].interface.lan.address.ipv6 | ipaddr('0') }}+{{ ',' if not loop.last else '' }}
+{% endfor %}
+	]);
 }
 
