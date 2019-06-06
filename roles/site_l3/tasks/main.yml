@@ -21,6 +21,13 @@
   notify: restart firewall
   tags: site_l3, firewall
 
+- name: Ensure traffic ingressing on lan is forwarded to mesh chain
+  template:
+    src: etc/iptables.d/100-device-lan.j2
+    dest: /etc/iptables.d/100-device-lan.j2
+  notify: restart firewall
+  tags: site_l3, firewall
+
 # Create required directories
 - name: Ensure bird peer directory exists
   file: 
