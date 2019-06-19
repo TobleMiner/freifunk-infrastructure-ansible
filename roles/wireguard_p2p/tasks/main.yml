@@ -29,6 +29,7 @@
     wg_id: '{% if wireguard.master | default(False) %}{{ wg_id_master }}{% else %}{{ wg_id_slave }}{% endif %}'
     wg_ipaddr_offset: '{% if wireguard.master | default(False) %}1{% else %}2{% endif %}'
     wg_addr: '{% if item.value.address is defined %}{{ item.value.address }}{% else %}{{ { "ipv4": wg_id | ippool4(site.code, ippool.transfer, 30) | ipaddr(wg_ipaddr_offset), "ipv6": "fe80::/64" | ipaddr(wg_ipaddr_offset) } }} {% endif %}'
+    wg_mtu: '{{ wireguard.mtu | default(False) }}'
   include_tasks: peer.yml
   loop: '{{ wireguard.peers | dict2items }}'
   when: 'wireguard is defined'

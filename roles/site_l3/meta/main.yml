@@ -4,12 +4,13 @@ dependencies:
   - role: firewall_mss_clamp
     vars:
       iface: wg-{{ site.code }}+
-      mss: 1350
+      mss: '{{ (site_l3.mtu | default(1410)) - 60 }}'
   - role: wireguard_p2p
     vars:
       wireguard:
         peers: '{{ site_l3.peers }}'
         key:   '{{ site_l3.key }}'
+        mtu:   '{{ site_l3.mtu | default(False) }}'
       wireguard_alias: gateway_site_l3
   - role: bird4
     vars:
