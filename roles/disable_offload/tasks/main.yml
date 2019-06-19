@@ -1,0 +1,52 @@
+---
+- name: Ensure ethool and udev are installed
+  apt:
+    name: ethtool,udev
+    state: present
+  tags: disable_offload
+
+- name: Deploy offload disable script
+  copy:
+    src: usr/local/bin/disable-offload
+    dest: /usr/local/bin/disable-offload
+  tags: disable_offload
+
+- name: Ensure offload disable script is executable
+  file:
+    path: /usr/local/bin/disable-offload
+    state: file
+    mode: '755'
+  tags: disable_offload
+
+- name: Deploy udev rules for disabling offload
+  copy:
+    src: etc/udev/rules.d/disable-offload.rules
+    dest: /etc/udev/rules.d/disable-offload.rules
+  register: udev_offload
+  tags: disable_offload
+
+- name: Reload udev rules if oddloading rules changed
+  command: udevadm control --reload
+  when: udev_offload.changed
+  tags: disable_offload
+
+- name: Ensure offloading is disabled
+  shell: |
+    params='generic-receive-offload large-receive-offload'
+    for dev in /sys/class/net/*; do
+      dev="$(basename "$dev")"
+      out="$(ethtool -k "$dev")"
+      for parm in $params; do
+        val="$(echo "$out" | grep "$parm" | cut -d':' -f2 | egrep -o 'on|off')"
+        if [ "$val" == on ]; then
+          echo changed
+          ethtool --offload "$dev" lro off 2> /dev/null
+          ethtool --offload "$dev" gro off 2> /dev/null
+        fi
+      done
+    done
+  args:
+    executable: /bin/bash
+  register: offload_enabled
+  changed_when: '"changed" in offload_enabled.stdout'
+  tags: disable_offload

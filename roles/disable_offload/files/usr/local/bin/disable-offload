@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ethtool --offload "$INTERFACE" lro off
+ethtool --offload "$INTERFACE" gro off

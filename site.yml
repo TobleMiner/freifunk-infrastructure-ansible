@@ -20,6 +20,7 @@
       vars:
         iface: br-{{ site.code }}
         mss: 1200
+    - disable_offload
   tags: gateway
 
 - name: Ensure hetzner cloud servers have bird quirk workaround installed
@@ -68,6 +69,7 @@
   hosts: site_l3
   roles:
     - site_l3
+    - disable_offload
   tags: site_l3
 
 - name: Ensure gateways for layer 3 sites are set up
