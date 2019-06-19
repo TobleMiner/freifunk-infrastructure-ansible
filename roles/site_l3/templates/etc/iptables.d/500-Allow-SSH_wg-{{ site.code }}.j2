@@ -1,0 +1,2 @@
+# Allow SSH traffic on wg-{{ site.code }}
+ip46tables -A wg-{{ site.code }}-input -p tcp -m tcp --dport 22 -j ACCEPT -m comment --comment 'SSH'

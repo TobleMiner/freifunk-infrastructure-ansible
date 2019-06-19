@@ -7,6 +7,13 @@
   notify: restart firewall
   tags: site_l3, firewall
 
+- name: Ensure SSH traffic is allowed
+  template:
+    src: '{{ "etc/iptables.d/500-Allow-SSH_wg-{{ site.code }}.j2" }}'
+    dest: /etc/iptables.d/500-Allow-SSH_wg-{{ site.code }}
+  notify: restart firewall
+  tags: site_l3, firewall
+
 - name: Ensure traffic forwarding from gateway to site is allowed
   template:
     src: '{{ "etc/iptables.d/800-wg-{{ site.code }}-forward-ACCEPT-lan.j2" }}'
