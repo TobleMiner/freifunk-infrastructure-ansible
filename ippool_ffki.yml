@@ -1,8 +1,16 @@
 transfer:
   allocated:
     addresses: {}
-    networks: {ffkiffki-gw0-ffki-site-gutes-leben2_4: 100.104.0.0/30, ffkiffki-gw0-ffki-site-gutes-leben_4: 100.72.0.0/30,
-      ffkiffki-gw0-ffki-site-moritz-home_4: 100.80.0.0/30, ffkiffki-gw1-ffki-site-moritz-home_4: 100.112.0.0/30,
-      ffkiffki-gw4-ffki-site-moritz-home_4: 100.88.0.0/30, ffkiffki-gw6-ffki-site-moritz-home_4: 100.120.0.0/30}
-  ranges: [100.64.0.0/10]
-  reserved: [100.64.0.0/16, 100.100.0.0/16]
+    networks:
+      ffkiffki-gw0-ffki-site-event_4: 100.108.0.0/30
+      ffkiffki-gw0-ffki-site-gutes-leben2_4: 100.104.0.0/30
+      ffkiffki-gw0-ffki-site-gutes-leben_4: 100.72.0.0/30
+      ffkiffki-gw0-ffki-site-moritz-home_4: 100.80.0.0/30
+      ffkiffki-gw1-ffki-site-moritz-home_4: 100.112.0.0/30
+      ffkiffki-gw4-ffki-site-moritz-home_4: 100.88.0.0/30
+      ffkiffki-gw6-ffki-site-moritz-home_4: 100.120.0.0/30
+  ranges:
+  - 100.64.0.0/10
+  reserved:
+  - 100.64.0.0/16
+  - 100.100.0.0/16
