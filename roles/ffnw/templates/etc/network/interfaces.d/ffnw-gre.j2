@@ -2,8 +2,13 @@
 
 auto ffnw-{{ sitename }}
 iface ffnw-{{ sitename }} inet tunnel
+{% if interface.ffnw.address.ipv4 is defined %}
+  address   {{ interface.ffnw.address.ipv4 | ipaddr('address') }}
+  netmask   {{ interface.ffnw.address.ipv4 | ipaddr('netmask') }}
+{% else %}
   address {{ peering.ffnw[sitename].transit.local | ipaddr('address') }}
   netmask {{ peering.ffnw[sitename].transit.local | ipaddr('netmask') }}
+{% endif %}
   mode gre
   endpoint {{ site.address.ipv4 | ipaddr('address') }}
   local {{ interface.wan.address.ipv4 | ipaddr('address') }}

@@ -8,7 +8,6 @@ iface ffnw-{{ sitename }} inet static
   pre-up   /sbin/ip rule add pref 31011 to {{ ffnw_addr }} lookup mesh
   post-down /sbin/ip rule del pref 31010 from {{ ffnw_addr }} lookup mesh || true
   post-down /sbin/ip rule del pref 31011 to {{ ffnw_addr }} lookup mesh || true
-  address   {{ ffnw_addr }}
-  netmask   {{ interface.ffnw.address.ipv4 | ipaddr('netmask') }}
-
+  address {{ peering.ffnw[sitename].transit.local | ipaddr('address') }}
+  netmask {{ peering.ffnw[sitename].transit.local | ipaddr('netmask') }}
 {% endfor %}
