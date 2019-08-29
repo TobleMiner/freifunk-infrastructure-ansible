@@ -1,0 +1,2 @@
+# Allow forwarding from br-{{ site.code }} to br-{{ site.code }}
+ip46tables -A FORWARD -i br-{{ site.code }} -o br-{{ site.code }} -j ACCEPT
