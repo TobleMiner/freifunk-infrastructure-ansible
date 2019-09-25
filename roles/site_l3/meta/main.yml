@@ -48,7 +48,7 @@ dependencies:
         min: 300
         default: 21600
         max: 86400
-  - role: dns_iterator
+  - role: dns_recursor
     vars:
       dns_iface: '{{ interface.lan.name }}'
       dns_listen:

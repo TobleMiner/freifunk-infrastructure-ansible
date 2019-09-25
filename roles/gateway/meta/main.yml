@@ -18,7 +18,7 @@ dependencies:
         min: 120
         default: 300
         max: 600
-  - role: dns_iterator
+  - role: dns_recursor
     vars:
       dns_iface: br-{{ site.code }}
       dns_listen:
