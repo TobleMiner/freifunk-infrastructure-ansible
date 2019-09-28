@@ -2,7 +2,7 @@
 - name: Ensure manual config for interface {{ iface }} exists
   template:
     src: '{{ "etc/network/interfaces.d/{{ iface }}.j2" }}'
-    dest: /etc/network/interfaces.d/{{ iface }}
+    dest: /etc/network/interfaces.d/{{ iface | regex_replace('\.', '') }}
   notify:
     - restart manual interface
   tags: interface_manual
