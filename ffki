@@ -8,6 +8,7 @@ ffki-site-gutes-leben
 ffki-site-gutes-leben2
 ffki-site-moritz-home
 ffki-site-event
+ffki-site-bahnhof-alfeld
 
 [gateways]
 ffki-gw0
@@ -38,6 +39,7 @@ ffki-site-gutes-leben
 ffki-site-gutes-leben2
 ffki-site-moritz-home
 ffki-site-event
+ffki-site-bahnhof-alfeld
 
 [gateway_site_l3]
 ffki-gw0
