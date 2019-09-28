@@ -5,6 +5,15 @@
     state: present
   tags: wireguard_dkms
 
+- name: Ensure required apt keys are present
+  apt_key:
+    id: '{{ item }}'
+    keyserver: keyserver.ubuntu.com
+  loop:
+    - 648ACFD622F3D138 # Buster automatic signing key
+    - 04EE7237B7D453EC # Stretch automatic signing key
+  tags: wireguard_dkms
+
 - name: Ensure apt repo preferences are set
   copy:
     src: etc/apt/preferences.d/unstable
