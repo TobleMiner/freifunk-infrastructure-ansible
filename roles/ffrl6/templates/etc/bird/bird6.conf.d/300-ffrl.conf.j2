@@ -45,7 +45,7 @@ template bgp bgp_ffrl {
   table ffrl;
   local as asn;
   import all;
-  export all;
+  export where net != ::/0;
   direct;
 };
 
