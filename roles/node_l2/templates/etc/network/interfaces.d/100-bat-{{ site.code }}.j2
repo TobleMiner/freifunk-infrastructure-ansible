@@ -10,5 +10,5 @@ iface bat-{{ site.code }} inet6 manual
   pre-up    /usr/sbin/batctl -m $IFACE gw_mode server
   pre-up    /sbin/ip link set $IFACE address {{ interface.batman.mac }}
   up        /sbin/ip link set dev $IFACE up
-  up        echo 60 > /sys/class/net/${IFACE}/mesh/hop_penalty
+  up        /usr/sbin/batctl -m $IFACE hop_penalty 60
   down      /sbin/ip link set dev $IFACE down
