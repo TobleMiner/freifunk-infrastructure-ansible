@@ -2,6 +2,8 @@
 {% set host = hostvars[peer] %}
 {% set iface = ('wg-' ~ site.code ~ '-' ~ (peer | sha256)) | trunc(15) %}
 iface {{ iface }} inet manual
+  pre-up    ip rule add pref 31020 from {{ interface.lan.address.ipv4 | ipaddr('0') }} lookup mesh
+  post-down ip rule del pref 31020 from {{ interface.lan.address.ipv4 | ipaddr('0') }} lookup mesh || true
   pre-up    ip rule add pref 31020 iif $IFACE lookup mesh
   pre-up    ip rule add pref 31021 iif $IFACE unreachable
   post-down ip rule del pref 31020 iif $IFACE lookup mesh || true
@@ -12,6 +14,8 @@ iface {{ iface }} inet manual
   post-down ip rule del pref 31021 iif {{ interface.lan.name }} unreachable || true
 
 iface {{ iface }} inet6 manual
+  pre-up    ip -6 rule add pref 31020 from {{ interface.lan.address.ipv6 | ipaddr('0') }} lookup mesh
+  post-down ip -6 rule del pref 31020 from {{ interface.lan.address.ipv6 | ipaddr('0') }} lookup mesh || true
   pre-up    ip -6 rule add pref 31020 iif $IFACE lookup mesh
   pre-up    ip -6 rule add pref 31021 iif $IFACE unreachable
   post-down ip -6 rule del pref 31020 iif $IFACE lookup mesh || true
