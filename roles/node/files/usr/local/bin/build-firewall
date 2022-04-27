@@ -3,16 +3,24 @@
 IP4TABLES=$(which iptables)
 IP6TABLES=$(which ip6tables)
 
+if ! "$IPTABLES" -V &> /dev/null; then
+  IPTABLES="$(command -v iptables-legacy)"
+fi
+
+if ! "$IP6TABLES" -V &> /dev/null; then
+  IP6TABLES="$(command -v ip6tables-legacy)"
+fi
+
 ## Wrapper function for iptables - IPv4 version
 function ip4tables() {
   echo -e "\t iptables $@"
-  $IP4TABLES "$@"
+  "$IP4TABLES" "$@"
 }
 
 ## Wrapper function for iptables - IPv6 version
 function ip6tables() {
   echo -e "\t ip6tables $@"
-  $IP6TABLES "$@"
+  "$IP6TABLES" "$@"
 }
 
 ## Wrapper function for iptables - IPv{4,6} version
