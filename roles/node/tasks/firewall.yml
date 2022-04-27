@@ -1,7 +1,9 @@
 ---
-- name: Ensure netfilter-persistent is installed
+- name: Ensure iptables and netfilter-persistent are installed
   apt:
-    name: netfilter-persistent
+    name:
+      - iptables
+      - netfilter-persistent
     state: present
 
 - name: Ensure build-firewall script is installed
