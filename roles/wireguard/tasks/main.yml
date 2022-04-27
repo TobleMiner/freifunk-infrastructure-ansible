@@ -1,0 +1,16 @@
+---
+- name: Check if wireguard can be installed by default
+  apt:
+    name:
+      - wireguard
+      - wireguard-tools
+    state: present
+  ignore_errors: yes
+  register: mainline_wireguard
+  tags: wireguard
+
+- name: Fall back to dkms wireguard
+  include_role:
+    name: wireguard_dkms
+  when: 'mainline_wireguard.failed'
+  tags: wireguard
